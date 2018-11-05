@@ -1,0 +1,37 @@
+{
+	"name_command": "Сжать",
+	"actions":{
+		"info_actions":
+		{
+			"iterable_actions": 0,
+			"num_act_rep": 1
+		},
+		"data_actions":
+		[
+			{	
+				"thumb_finger": 255,
+				"pointer_finger": 255,
+				"middle_finger": 255,
+				"ring_finder": 255,
+				"little_finger": 255,
+				"del_action": 1000,
+				"state_pos_brush": 1,
+				"state_pos_thumb": 0,
+				"min_max_time": [0, 10000],
+				"min_max_action": [0,255]
+			},
+			{
+				"thumb_finger": 250,
+				"pointer_finger": 250,
+				"middle_finger": 250,
+				"ring_finder": 250,
+				"little_finger": 250,
+				"del_action": 300,
+				"state_pos_brush": 0,
+				"state_pos_thumb": 1,
+				"min_max_time": [0, 10000],
+				"min_max_action": [0,255]
+			}
+		]
+	}
+}

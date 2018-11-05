@@ -1,0 +1,40 @@
+{
+	"name_command": "Клавиатура",
+	"actions":{
+		"info_actions":
+		{
+			"iterable_actions": 0,
+			"num_act_rep": 1,
+			"combined": 0,
+			"count_command": 2,
+			"date": "181027000632"
+		},
+		"data_actions":
+		[
+			{	
+				"thumb_finger": 255,
+				"pointer_finger": 120,
+				"middle_finger": 255,
+				"ring_finder": 255,
+				"little_finger": 255,
+				"del_action": 20,
+				"state_pos_brush": 255,
+				"state_pos_thumb": 255,
+				"min_max_time": [0,255],
+				"min_max_action": [0,255]
+			},
+			{
+				"thumb_finger": 0,
+				"pointer_finger": 120,
+				"middle_finger": 0,
+				"ring_finder": 0,
+				"little_finger": 0,
+				"del_action": 100,
+				"state_pos_brush": 255,
+				"state_pos_thumb": 255,
+				"min_max_time": [0,255],
+				"min_max_action": [0,255]
+			}
+		]
+	}
+}
