@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HandControl"
         mc:Ignorable="d"
-        Title="MainWindow" MinHeight="768" MinWidth="1024" MaxHeight="768" MaxWidth="1024" WindowStyle="SingleBorderWindow" Icon="/img/logo.ico">
+        Title="MainWindow" MinHeight="768" MinWidth="1024" WindowStyle="SingleBorderWindow" Icon="/img/logo.ico">
 
     <!--MaxHeight="768" MaxWidth="1024"-->
     <Window.Resources>

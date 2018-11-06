@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using HandControl.ViewModel;
 
 namespace HandControl
 {
@@ -20,9 +21,11 @@ namespace HandControl
     /// </summary>
     public partial class MainWindow : Window
     {
+        MainWindowViewModel dataModel = new MainWindowViewModel();
         public MainWindow()
         {
             InitializeComponent();
+            this.DataContext = dataModel;
         }
 
     }

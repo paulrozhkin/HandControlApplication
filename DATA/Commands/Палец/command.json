@@ -1,0 +1,24 @@
+{
+	"name_command": "Палец",
+	"info_actions":
+	{
+		"iterable_actions": false,
+		"num_act_rep": 1,
+		"combined": true,
+		"count_command": 1,
+		"date": "181027000632"
+	},
+	"data_actions":
+	[
+		{	
+			"thumb_finger": 88,
+			"pointer_finger": 88,
+			"middle_finger": 88,
+			"ring_finder": 88,
+			"little_finger": 88,
+			"del_action": 20,
+			"state_pos_brush": 88,
+			"state_pos_thumb": 73
+		}
+	]
+}
