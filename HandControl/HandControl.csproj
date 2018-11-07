@@ -67,7 +67,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Model\CommandModel.cs" />
+    <Compile Include="Services\CommunicationManager.cs" />
     <Compile Include="Services\FileIOManager.cs" />
+    <Compile Include="Services\IODevice\IIODevice.cs" />
+    <Compile Include="Services\IODevice\IODevice.cs" />
     <Compile Include="Services\JsonSerDer.cs" />
     <Compile Include="Services\LoaderModel.cs" />
     <Compile Include="Services\PathManager.cs" />

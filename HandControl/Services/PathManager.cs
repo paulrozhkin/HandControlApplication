@@ -8,6 +8,8 @@ namespace HandControl.Services
         public static readonly string MainDataPath = System.AppDomain.CurrentDomain.BaseDirectory + "\\Data\\";
         private static readonly string FileCommandsName = "\\command.json";
         private static readonly string FolderCommandsName = "Commands\\";
+        private static readonly string FolderConfig = "config\\";
+        private static readonly string FolderIODeviceConfig = "IODeviceConfig\\";
 
         public static string Txt = ".txt";
         public static string Json = ".json";
@@ -32,16 +34,30 @@ namespace HandControl.Services
 
         public static string GetCommandPath(string NameCommand)
         {
-            string sessionFolderPath = MainDataPath + FolderCommandsName + "\\" + NameCommand + "\\";
-            if (!Directory.Exists(sessionFolderPath))
-                Directory.CreateDirectory(sessionFolderPath);
+            string commandFolderPath = MainDataPath + FolderCommandsName + NameCommand + "\\";
+            if (!Directory.Exists(commandFolderPath))
+                Directory.CreateDirectory(commandFolderPath);
 
-            string sessionPath = sessionFolderPath + "\\" + FileCommandsName;
+            string sessionPath = commandFolderPath + "\\" + FileCommandsName;
             if (!File.Exists(sessionPath))
             {
                 File.Create(sessionPath).Close();
             }
             return sessionPath;
+        }
+
+        public static string IODevicePath(string nameDevice)
+        {
+            string IODeviceFolderPath = MainDataPath + FolderConfig + FolderIODeviceConfig;
+            if (!Directory.Exists(IODeviceFolderPath))
+                Directory.CreateDirectory(IODeviceFolderPath);
+            string configFilePath = IODeviceFolderPath + "IODevice" + nameDevice + ".conf";
+            if (!File.Exists(configFilePath))
+            {
+                File.Create(configFilePath).Close();
+            }
+
+            return configFilePath;
         }
         
     }

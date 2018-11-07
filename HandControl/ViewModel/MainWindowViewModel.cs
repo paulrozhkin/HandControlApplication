@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HandControl.Model;
+using HandControl.Services;
 
 namespace HandControl.ViewModel
 {
@@ -14,6 +15,7 @@ namespace HandControl.ViewModel
         public MainWindowViewModel()
         {
             commands = CommandModel.GetCommands();
+            CommunicationManager.SaveCommands(commands);
         }
     }
 }

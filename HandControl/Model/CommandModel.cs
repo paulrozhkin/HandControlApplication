@@ -9,7 +9,7 @@ using System.Collections.ObjectModel;
 
 namespace HandControl.Model
 {
-    class CommandModel : ICloneable
+    public class CommandModel : ICloneable
     {
 
         [JsonProperty(PropertyName = "name_command")]
@@ -19,6 +19,50 @@ namespace HandControl.Model
         [JsonProperty(PropertyName = "data_actions")]
         public List<Action> dataAction { get; set; }
 
+        public byte[] BinaryDate
+        {
+            get {
+                byte[] byteArray = new byte[20 + 12 + 4 + this.infoCommand.countCommand * 8];
+
+                byte[] byteName = System.Text.Encoding.UTF8.GetBytes(this.Name);
+                
+                for (int i = 0; i < 20; i++)
+                {
+                    if (byteName.Length > i)
+                        byteArray[i] = byteName[i];
+                    else
+                        byteArray[i] = Convert.ToByte('\0');
+                }
+
+                byte[] byteDate = System.Text.Encoding.UTF8.GetBytes(this.infoCommand.Date);
+                for (int i = 0; i < 12; i++)
+                {
+                    byteArray[20 + i] = byteDate[i];
+                }
+
+                byteArray[32] = Convert.ToByte(this.infoCommand.combinedCommand);
+                byteArray[33] = Convert.ToByte(this.infoCommand.iterableActions);
+                byteArray[34] = Convert.ToByte(this.infoCommand.numActRep);
+                byteArray[35] = Convert.ToByte(this.infoCommand.countCommand);
+
+                for (int i = 0; i < this.infoCommand.countCommand; i++)
+                {
+                    int index = 36 + (i * 8);
+                    byteArray[index] = Convert.ToByte(this.dataAction[i].littleFinger);
+                    byteArray[index + 1] = Convert.ToByte(this.dataAction[i].ringFinder);
+                    byteArray[index + 2] = Convert.ToByte(this.dataAction[i].middleFinger);
+                    byteArray[index + 3] = Convert.ToByte(this.dataAction[i].pointerFinger);
+                    byteArray[index + 4] = Convert.ToByte(this.dataAction[i].delAction);
+                    byteArray[index + 5] = Convert.ToByte(this.dataAction[i].statePosThumb);
+                    byteArray[index + 6] = Convert.ToByte(this.dataAction[i].statePosBrush);
+                    byteArray[index + 7] = Convert.ToByte(this.dataAction[i].thumbFinger);
+
+                }
+
+                return byteArray;
+            }
+            private set { }
+        }
 
         public static ObservableCollection<CommandModel> GetCommands()
         {
@@ -47,7 +91,7 @@ namespace HandControl.Model
         }
     }
 
-    class Action : ICloneable
+    public class Action : ICloneable
     {
         [JsonProperty(PropertyName = "thumb_finger")]
         public int thumbFinger { get; set; }
@@ -90,7 +134,7 @@ namespace HandControl.Model
         }
     }
 
-    class InfoCommand : ICloneable
+    public class InfoCommand : ICloneable
     {
         [JsonProperty(PropertyName = "iterable_actions")]
         public bool iterableActions { get; set; }
