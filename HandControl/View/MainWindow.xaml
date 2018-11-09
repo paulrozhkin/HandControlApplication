@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HandControl"
         mc:Ignorable="d"
-        Title="MainWindow" MinHeight="768" MinWidth="1024" MaxHeight="768" MaxWidth="1024" WindowStyle="SingleBorderWindow" Icon="/img/logo.ico">
+        Title="MainWindow" MinHeight="768" MinWidth="1024" WindowStyle="SingleBorderWindow" Icon="/img/logo.ico">
 
     <!--MaxHeight="768" MaxWidth="1024"-->
     <Window.Resources>
@@ -28,7 +28,7 @@
             </Setter>
         </Style>
 
-        <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">
+        <Style x:Key="ScrollBarStyle" TargetType="{x:Type ScrollBar}">
             <Setter Property="Stylus.IsFlicksEnabled" Value="false" />
             <Setter Property="Foreground" Value="LightGray" />
             <Setter Property="Background" Value="DarkGray" />
@@ -88,7 +88,7 @@
             </Setter>
         </Style>
 
-        <Style x:Key="{x:Type ScrollViewer}" TargetType="{x:Type ScrollViewer}">
+        <Style x:Key="ScrollStyle" TargetType="{x:Type ScrollViewer}">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ScrollViewer}">
@@ -147,10 +147,14 @@
 
             <Image Grid.Column="1" HorizontalAlignment="Stretch" Stretch="Fill" VerticalAlignment="Stretch" Source="/img/fon1.jpg"/>
 
-            <ScrollViewer VerticalScrollBarVisibility="Visible">
-                <ItemsControl Grid.Column="0">
+            <ScrollViewer 
+                VerticalScrollBarVisibility="Visible"
+                Grid.Column="0"
+                Style="{StaticResource ScrollStyle}">
+                <ItemsControl >
                     <Button Height="350"/>
                     <Button Height="350"/>
+
                 </ItemsControl>
             </ScrollViewer>
 
