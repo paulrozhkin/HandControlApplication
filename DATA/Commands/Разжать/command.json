@@ -1,5 +1,5 @@
 {
-	"name_command": "Клавиатура",
+	"name_command": "Разжать",
 	"info_actions":
 	{
 		"iterable_actions": false,
@@ -12,13 +12,13 @@
 	[
 		{	
 			"thumb_finger": 255,
-			"pointer_finger": 120,
+			"pointer_finger": 255,
 			"middle_finger": 255,
 			"ring_finder": 255,
 			"little_finger": 255,
-			"del_action": 20,
-			"state_pos_brush": 255,
-			"state_pos_thumb": 255
+			"del_action": 300,
+			"state_pos_brush": 88,
+			"state_pos_thumb": 88
 		}
 	]
 }
