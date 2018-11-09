@@ -16,7 +16,7 @@
 				"middle_finger": 255,
 				"ring_finder": 255,
 				"little_finger": 255,
-				"del_action": 1000,
+				"del_action": 100,
 				"state_pos_brush": 88,
 				"state_pos_thumb": 88
 		},
@@ -26,7 +26,7 @@
 				"middle_finger": 250,
 				"ring_finder": 250,
 				"little_finger": 250,
-				"del_action": 300,
+				"del_action": 50,
 				"state_pos_brush": 88,
 				"state_pos_thumb": 88
 		}
