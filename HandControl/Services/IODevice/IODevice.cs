@@ -104,10 +104,31 @@ namespace HandControl.Services
         [JsonProperty(PropertyName = "BaudRate")]
         public int BaudRate { get; set; }
 
+        public static PortInfo GetDefault()
+        {
+            PortInfo newInfo = new PortInfo();
+            newInfo.BaudRate = 115200;
+            newInfo.NamePort = "None";
+            return newInfo;
+        }
+
+
         public static PortInfo InfoLoad()
         {
             PortInfo info = (PortInfo)JsonSerDer.LoadObject<PortInfo>(PathManager.IODevicePath("Com"));
+
+            if (info == null)
+            {
+                info = GetDefault();
+                InfoSave(info);
+            }
+
             return info;
+        }
+
+        public static void InfoSave(PortInfo info)
+        {
+            JsonSerDer.SaveObject(info, PathManager.IODevicePath("Com"));
         }
     }
 

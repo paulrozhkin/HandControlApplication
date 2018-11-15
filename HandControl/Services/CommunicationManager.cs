@@ -15,25 +15,13 @@ namespace HandControl.Services
         private static readonly IIODevice device = new IODeviceCom();
 
         private static readonly byte CommandSave = 0x15;
+        private static readonly byte address = 0x00;
+        private static readonly byte addressHand = 0x01;
+        private static readonly byte addressVoice = 0x02;
 
         private static readonly List<byte> versionProtocol = new List<byte>
         {
             Convert.ToByte(0), Convert.ToByte(1)
-        };
-
-        private static readonly List<byte> address = new List<byte>
-        {
-            Convert.ToByte(192), Convert.ToByte(168), Convert.ToByte(20), Convert.ToByte(0)
-        };
-
-        private static readonly List<byte> addressHand = new List<byte>
-        {
-            Convert.ToByte(192), Convert.ToByte(168), Convert.ToByte(20), Convert.ToByte(1)
-        };
-
-        private static readonly List<byte> addressVoice = new List<byte>
-        {
-            Convert.ToByte(192), Convert.ToByte(168), Convert.ToByte(20), Convert.ToByte(1)
         };
 
         private static readonly List<byte> startFiled = new List<byte> {
@@ -64,7 +52,7 @@ namespace HandControl.Services
                 {
                     dataField.AddRange(command.BinaryDate.ToList<byte>());
                 }
-                byte[] package = CreatePackage(addressHand ,dataField);
+                byte[] package = CreatePackage(addressHand, dataField);
                 device.SendToDevice(package);
             }
         }
@@ -75,22 +63,22 @@ namespace HandControl.Services
         /// <param name="distAddress"></param>
         /// <param name="dataField"></param>
         /// <returns></returns>
-        private static byte[] CreatePackage(List<byte> distAddress,List<byte> dataField)
+        private static byte[] CreatePackage(byte distAddress, List<byte> dataField)
         {
             // Стартовая константа
             List<byte> package = startFiled;
 
             // Заполнения поля информации пакета
             List<byte> infoField = versionProtocol;
-            infoField.AddRange(address);
-            infoField.AddRange(distAddress);
+            infoField.Add(address);
+            infoField.Add(distAddress);
             uint countField = Convert.ToUInt32(dataField.Count() + infoField.Count());
             // Заполнение поля размера информационного пакета
             byte[] countFieldByte = new byte[4];
             countFieldByte[3] = Convert.ToByte(countField & 0x000000FF);
-            countFieldByte[2] = Convert.ToByte((countField & 0x0000FF00)>>8);
-            countFieldByte[1] = Convert.ToByte((countField & 0x00FF0000)>>16);
-            countFieldByte[0] = Convert.ToByte((countField & 0xFF000000)>>24);
+            countFieldByte[2] = Convert.ToByte((countField & 0x0000FF00) >> 8);
+            countFieldByte[1] = Convert.ToByte((countField & 0x00FF0000) >> 16);
+            countFieldByte[0] = Convert.ToByte((countField & 0xFF000000) >> 24);
             infoField.AddRange(countFieldByte.ToList<byte>());
 
             // Создание основного контейнера данных(без CRC и стартовых и стоповых констант)
@@ -102,7 +90,7 @@ namespace HandControl.Services
             package.AddRange(mainField);
             package.Add(crc8);
             package.AddRange(endFiled);
-            
+
             return package.ToArray<byte>();
         }
         #endregion
@@ -127,7 +115,7 @@ namespace HandControl.Services
         87, 9, 235, 181, 54, 104, 138, 212, 149, 203, 41, 119, 244, 170, 72, 22,
         233, 183, 85, 11, 136, 214, 52, 106, 43, 117, 151, 201, 74, 20, 246, 168,
         116, 42, 200, 150, 21, 75, 169, 247, 182, 232, 10, 84, 215, 137, 107, 53
-    };
+        };
 
         public static byte Calculate(byte[] data, byte init = 0)
         {
