@@ -15,13 +15,13 @@ namespace HandControl.Services
         private static readonly IIODevice device = new IODeviceCom();
 
         private static readonly byte CommandSave = 0x15;
-        private static readonly byte address = 0x00;
+        private static readonly byte addressPC = 0x00;
         private static readonly byte addressHand = 0x01;
         private static readonly byte addressVoice = 0x02;
 
         private static readonly List<byte> versionProtocol = new List<byte>
         {
-            Convert.ToByte(0), Convert.ToByte(1)
+            Convert.ToByte('0'), Convert.ToByte('1')
         };
 
         private static readonly List<byte> startFiled = new List<byte> {
@@ -57,6 +57,16 @@ namespace HandControl.Services
             }
         }
 
+        public static void ExecuteTheCommand(string nameCommand = "")
+        {
+            if (device.StateDevice == true)
+            {
+                List<byte> dataField = new List<byte> { 2, 3 };
+                byte[] package = CreatePackage(addressHand, dataField);
+                device.SendToDevice(package);
+            }
+        }
+
         /// <summary>
         /// Создание байтового пакета отправляемого на устройство.
         /// </summary>
@@ -70,9 +80,9 @@ namespace HandControl.Services
 
             // Заполнения поля информации пакета
             List<byte> infoField = versionProtocol;
-            infoField.Add(address);
+            infoField.Add(addressPC);
             infoField.Add(distAddress);
-            uint countField = Convert.ToUInt32(dataField.Count() + infoField.Count());
+            uint countField = Convert.ToUInt32(dataField.Count());
             // Заполнение поля размера информационного пакета
             byte[] countFieldByte = new byte[4];
             countFieldByte[3] = Convert.ToByte(countField & 0x000000FF);
@@ -81,14 +91,14 @@ namespace HandControl.Services
             countFieldByte[0] = Convert.ToByte((countField & 0xFF000000) >> 24);
             infoField.AddRange(countFieldByte.ToList<byte>());
 
-            // Создание основного контейнера данных(без CRC и стартовых и стоповых констант)
+            // Создание основного контейнера данных(без CRC,стартовых и стоповых констант)
             List<byte> mainField = infoField; // info + data field
+            byte crc8 = CRC8.Calculate(dataField.ToArray<byte>());
             mainField.AddRange(dataField);
-            byte crc8 = CRC8.Calculate(package.ToArray<byte>());
+            mainField.Add(crc8);
 
             // Добавление в конечный пакет основного контейнера, crc кода и стоповой последовательности
             package.AddRange(mainField);
-            package.Add(crc8);
             package.AddRange(endFiled);
 
             return package.ToArray<byte>();

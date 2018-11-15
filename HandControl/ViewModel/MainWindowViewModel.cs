@@ -11,11 +11,11 @@ namespace HandControl.ViewModel
 {
     class MainWindowViewModel
     {
-        ObservableCollection<CommandModel> commands;
+        ObservableCollection<CommandModel> commands = CommandModel.GetCommands();
         public MainWindowViewModel()
         {
-            commands = CommandModel.GetCommands();
-            CommunicationManager.SaveCommands(commands);
+            // CommunicationManager.SaveCommands(commands);
+            CommunicationManager.ExecuteTheCommand();
         }
     }
 }
