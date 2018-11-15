@@ -11,8 +11,10 @@ namespace HandControl.Services
 {
     public static class CommunicationManager
     {
-        // Реализация CRC http://www.cyberforum.ru/csharp-beginners/thread1773550.html
+        #region Variables
         private static readonly IIODevice device = new IODeviceCom();
+
+        private static readonly byte CommandSave = 0x15;
 
         private static readonly List<byte> versionProtocol = new List<byte>
         {
@@ -43,42 +45,67 @@ namespace HandControl.Services
             Convert.ToByte('R'), Convert.ToByte('{'), Convert.ToByte('D'), Convert.ToByte('9'),
             Convert.ToByte('8'), Convert.ToByte('V'), Convert.ToByte('8'), Convert.ToByte('9')
         };
+        #endregion
 
-
+        #region Methods
+        /// <summary>
+        /// Создание и отправка пакета команды сохранения на устройство руки.
+        /// </summary>
+        /// <param name="commandsList"></param>
         public static void SaveCommands(ObservableCollection<CommandModel> commandsList)
         {
-            if (device.StateDevice == false)
+            if (device.StateDevice == true)
             {
-                device.SendToDevice(new byte[] { Convert.ToByte(0x02) });
-                List<byte> dataField = new List<byte>();
+                List<byte> dataField = new List<byte>
+                {
+                    CommandSave
+                };
                 foreach (CommandModel command in commandsList)
                 {
                     dataField.AddRange(command.BinaryDate.ToList<byte>());
                 }
-                CreatePackage(addressHand ,dataField);
-                // device.SendToDevice(package);
+                byte[] package = CreatePackage(addressHand ,dataField);
+                device.SendToDevice(package);
             }
         }
 
+        /// <summary>
+        /// Создание байтового пакета отправляемого на устройство.
+        /// </summary>
+        /// <param name="distAddress"></param>
+        /// <param name="dataField"></param>
+        /// <returns></returns>
         private static byte[] CreatePackage(List<byte> distAddress,List<byte> dataField)
         {
+            // Стартовая константа
             List<byte> package = startFiled;
 
+            // Заполнения поля информации пакета
             List<byte> infoField = versionProtocol;
             infoField.AddRange(address);
             infoField.AddRange(distAddress);
-            
+            uint countField = Convert.ToUInt32(dataField.Count() + infoField.Count());
+            // Заполнение поля размера информационного пакета
+            byte[] countFieldByte = new byte[4];
+            countFieldByte[3] = Convert.ToByte(countField & 0x000000FF);
+            countFieldByte[2] = Convert.ToByte((countField & 0x0000FF00)>>8);
+            countFieldByte[1] = Convert.ToByte((countField & 0x00FF0000)>>16);
+            countFieldByte[0] = Convert.ToByte((countField & 0xFF000000)>>24);
+            infoField.AddRange(countFieldByte.ToList<byte>());
 
+            // Создание основного контейнера данных(без CRC и стартовых и стоповых констант)
             List<byte> mainField = infoField; // info + data field
             mainField.AddRange(dataField);
             byte crc8 = CRC8.Calculate(package.ToArray<byte>());
 
+            // Добавление в конечный пакет основного контейнера, crc кода и стоповой последовательности
             package.AddRange(mainField);
             package.Add(crc8);
             package.AddRange(endFiled);
             
             return package.ToArray<byte>();
         }
+        #endregion
     }
 
     static class CRC8
