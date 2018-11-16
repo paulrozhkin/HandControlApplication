@@ -14,7 +14,12 @@ namespace HandControl.Services
         #region Variables
         private static readonly IIODevice device = new IODeviceCom();
 
+        // Возможные комманды
         private static readonly byte CommandSave = 0x15;
+        private static readonly byte CommandVoiceExex = 0x16;
+        private static readonly byte CommandExex = 0x17;
+
+        // Адреса устройств протокольного уровня
         private static readonly byte addressPC = 0x00;
         private static readonly byte addressHand = 0x01;
         private static readonly byte addressVoice = 0x02;
@@ -52,6 +57,17 @@ namespace HandControl.Services
                 {
                     dataField.AddRange(command.BinaryDate.ToList<byte>());
                 }
+                byte[] package = CreatePackage(addressHand, dataField);
+                device.SendToDevice(package);
+            }
+        }
+
+        public static void ExecuteTheCommand(CommandModel command)
+        {
+            if (device.StateDevice == true)
+            {
+                List<byte> dataField = new List<byte> { CommandExex };
+                dataField.AddRange(command.BinaryDate.ToList<byte>());
                 byte[] package = CreatePackage(addressHand, dataField);
                 device.SendToDevice(package);
             }

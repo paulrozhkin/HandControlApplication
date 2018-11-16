@@ -14,8 +14,9 @@ namespace HandControl.ViewModel
         ObservableCollection<CommandModel> commands = CommandModel.GetCommands();
         public MainWindowViewModel()
         {
-            // CommunicationManager.SaveCommands(commands);
-            CommunicationManager.ExecuteTheCommand();
+            CommunicationManager.SaveCommands(commands);
+            // CommunicationManager.ExecuteTheCommand("Сжать");
+            // CommunicationManager.ExecuteTheCommand(commands[0]);
         }
     }
 }
