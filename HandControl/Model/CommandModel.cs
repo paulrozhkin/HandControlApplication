@@ -24,8 +24,15 @@ namespace HandControl.Model
             get {
                 byte[] byteArray = new byte[20 + 12 + 4 + this.infoCommand.countCommand * 8];
 
-                byte[] byteName = System.Text.Encoding.UTF8.GetBytes(this.Name);
                 
+                byte[] byteName = Encoding.UTF8.GetBytes(this.Name);
+
+                if (byteName.Length == 20)
+                {
+                    byteName[18] = Convert.ToByte('\0');
+                    byteName[19] = Convert.ToByte('\0');
+                }
+
                 for (int i = 0; i < 20; i++)
                 {
                     if (byteName.Length > i)
@@ -56,7 +63,6 @@ namespace HandControl.Model
                     byteArray[index + 5] = Convert.ToByte(this.dataAction[i].statePosThumb);
                     byteArray[index + 6] = Convert.ToByte(this.dataAction[i].statePosBrush);
                     byteArray[index + 7] = Convert.ToByte(this.dataAction[i].thumbFinger);
-
                 }
 
                 return byteArray;

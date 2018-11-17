@@ -18,6 +18,12 @@ namespace HandControl.Services
         private static readonly byte CommandSave = 0x15;
         private static readonly byte CommandVoiceExex = 0x16;
         private static readonly byte CommandExex = 0x17;
+        private static readonly byte CommandChangeMode = 0x1;
+
+        // Режимы работы протеза
+        public static readonly byte ModeMIO = 0;
+        public static readonly byte ModeVoice = 1;
+        public static readonly byte ModeMixed = 2;
 
         // Адреса устройств протокольного уровня
         private static readonly byte addressPC = 0x00;
@@ -62,6 +68,18 @@ namespace HandControl.Services
             }
         }
 
+        public static void ChangeMode(byte newMode)
+        {
+            List<byte> dataField = new List<byte>
+                {
+                    CommandChangeMode
+                };
+            dataField.Add(newMode);
+            byte[] package = CreatePackage(addressHand, dataField);
+            device.SendToDevice(package);
+        }
+    
+
         public static void ExecuteTheCommand(CommandModel command)
         {
             if (device.StateDevice == true)
@@ -73,11 +91,29 @@ namespace HandControl.Services
             }
         }
 
-        public static void ExecuteTheCommand(string nameCommand = "")
+        public static void ExecuteTheCommand(string nameCommand)
         {
             if (device.StateDevice == true)
             {
-                List<byte> dataField = new List<byte> { 2, 3 };
+                List<byte> dataField = new List<byte> { CommandVoiceExex };
+
+                byte[] byteName = Encoding.UTF8.GetBytes(nameCommand);
+
+                if (byteName.Length == 20)
+                {
+                    byteName[18] = Convert.ToByte('\0');
+                    byteName[19] = Convert.ToByte('\0');
+                }
+
+                List<byte> Name = byteName.ToList<byte>();
+
+                for (int i = byteName.Count(); i < 20; i++)
+                {
+                    Name.Add(Convert.ToByte('\0'));
+                }
+
+                dataField.AddRange(Name);
+
                 byte[] package = CreatePackage(addressHand, dataField);
                 device.SendToDevice(package);
             }
