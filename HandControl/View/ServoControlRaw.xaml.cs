@@ -61,8 +61,8 @@ namespace HandControl.View
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             uint value = Convert.ToUInt32(Tim4Ch1Slider.Value);
-            CommunicationManager.ExecuteTheCommand("asdas");
             CommunicationManager.ExecuteTheRaw(value);
+            
         }
     }
 }

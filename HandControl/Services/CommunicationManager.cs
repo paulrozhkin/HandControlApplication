@@ -17,8 +17,8 @@ namespace HandControl.Services
         // Возможные комманды
 
         private static readonly byte CommandSave = 0x15;        // Сохранить комманды
-        private static readonly byte CommandVoiceExex = 0x16;   // Выполнить записанную комануду
-        private static readonly byte CommandExex = 0x17;        // Выполнить комманду по полученным данным
+        private static readonly byte CommandExecByName = 0x16;   // Выполнить записанную комануду
+        private static readonly byte CommandExecByMotion = 0x17;        // Выполнить комманду по полученным данным
         private static readonly byte CommandExexRaw = 0x18;     // Установить на все двигатели данное значение
         private static readonly byte CommandChangeMode = 0x1;   // Изменить режим работы протеза
 
@@ -138,10 +138,12 @@ namespace HandControl.Services
         private static byte[] CreatePackage(byte distAddress, List<byte> dataField)
         {
             // Стартовая константа
-            List<byte> package = startFiled;
+            List<byte> package = new List<byte>();
+            package.AddRange(startFiled);
 
             // Заполнения поля информации пакета
-            List<byte> infoField = versionProtocol;
+            List<byte> infoField = new List<byte>();
+            infoField.AddRange(versionProtocol);
             infoField.Add(addressPC);
             infoField.Add(distAddress);
             uint countField = Convert.ToUInt32(dataField.Count());
