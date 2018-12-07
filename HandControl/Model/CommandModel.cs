@@ -15,14 +15,14 @@ namespace HandControl.Model
         [JsonProperty(PropertyName = "name_command")]
         public string Name { get; set; }
         [JsonProperty(PropertyName = "info_actions")]
-        public InfoCommand infoCommand { get; set; }
+        public InfoCommand InfoCommand { get; set; }
         [JsonProperty(PropertyName = "data_actions")]
-        public List<Action> dataAction { get; set; }
+        public List<Action> DataAction { get; set; }
 
         public byte[] BinaryDate
         {
             get {
-                byte[] byteArray = new byte[20 + 12 + 4 + this.infoCommand.countCommand * 8];
+                byte[] byteArray = new byte[20 + 12 + 4 + this.InfoCommand.CountCommand * 8];
 
                 
                 byte[] byteName = Encoding.UTF8.GetBytes(this.Name);
@@ -41,28 +41,28 @@ namespace HandControl.Model
                         byteArray[i] = Convert.ToByte('\0');
                 }
 
-                byte[] byteDate = System.Text.Encoding.UTF8.GetBytes(this.infoCommand.Date);
+                byte[] byteDate = System.Text.Encoding.UTF8.GetBytes(this.InfoCommand.Date);
                 for (int i = 0; i < 12; i++)
                 {
                     byteArray[20 + i] = byteDate[i];
                 }
 
-                byteArray[32] = Convert.ToByte(this.infoCommand.combinedCommand);
-                byteArray[33] = Convert.ToByte(this.infoCommand.iterableActions);
-                byteArray[34] = Convert.ToByte(this.infoCommand.numActRep);
-                byteArray[35] = Convert.ToByte(this.infoCommand.countCommand);
+                byteArray[32] = Convert.ToByte(this.InfoCommand.CombinedCommand);
+                byteArray[33] = Convert.ToByte(this.InfoCommand.IterableActions);
+                byteArray[34] = Convert.ToByte(this.InfoCommand.NumActRep);
+                byteArray[35] = Convert.ToByte(this.InfoCommand.CountCommand);
 
-                for (int i = 0; i < this.infoCommand.countCommand; i++)
+                for (int i = 0; i < this.InfoCommand.CountCommand; i++)
                 {
                     int index = 36 + (i * 8);
-                    byteArray[index] = Convert.ToByte(this.dataAction[i].littleFinger);
-                    byteArray[index + 1] = Convert.ToByte(this.dataAction[i].ringFinder);
-                    byteArray[index + 2] = Convert.ToByte(this.dataAction[i].middleFinger);
-                    byteArray[index + 3] = Convert.ToByte(this.dataAction[i].pointerFinger);
-                    byteArray[index + 4] = Convert.ToByte(this.dataAction[i].delAction);
-                    byteArray[index + 5] = Convert.ToByte(this.dataAction[i].statePosThumb);
-                    byteArray[index + 6] = Convert.ToByte(this.dataAction[i].statePosBrush);
-                    byteArray[index + 7] = Convert.ToByte(this.dataAction[i].thumbFinger);
+                    byteArray[index] = Convert.ToByte(this.DataAction[i].LittleFinger);
+                    byteArray[index + 1] = Convert.ToByte(this.DataAction[i].RingFinder);
+                    byteArray[index + 2] = Convert.ToByte(this.DataAction[i].MiddleFinger);
+                    byteArray[index + 3] = Convert.ToByte(this.DataAction[i].PointerFinger);
+                    byteArray[index + 4] = Convert.ToByte(this.DataAction[i].DelAction);
+                    byteArray[index + 5] = Convert.ToByte(this.DataAction[i].StatePosThumb);
+                    byteArray[index + 6] = Convert.ToByte(this.DataAction[i].StatePosBrush);
+                    byteArray[index + 7] = Convert.ToByte(this.DataAction[i].ThumbFinger);
                 }
 
                 return byteArray;
@@ -91,7 +91,7 @@ namespace HandControl.Model
             return new CommandModel()
             {
                 Name = this.Name,
-                infoCommand = (InfoCommand)this.infoCommand.Clone()
+                InfoCommand = (InfoCommand)this.InfoCommand.Clone()
                 // dataAction = (List<Action>)this.dataAction.Clone()
             };
         }
@@ -100,21 +100,21 @@ namespace HandControl.Model
     public class Action : ICloneable
     {
         [JsonProperty(PropertyName = "thumb_finger")]
-        public int thumbFinger { get; set; }
+        public int ThumbFinger { get; set; }
         [JsonProperty(PropertyName = "pointer_finger")]
-        public int pointerFinger { get; set; }
+        public int PointerFinger { get; set; }
         [JsonProperty(PropertyName = "middle_finger")]
-        public int middleFinger { get; set; }
+        public int MiddleFinger { get; set; }
         [JsonProperty(PropertyName = "ring_finder")]
-        public int ringFinder { get; set; }
+        public int RingFinder { get; set; }
         [JsonProperty(PropertyName = "little_finger")]
-        public int littleFinger { get; set; }
+        public int LittleFinger { get; set; }
         [JsonProperty(PropertyName = "del_action")]
-        public int delAction { get; set; }
+        public int DelAction { get; set; }
         [JsonProperty(PropertyName = "state_pos_brush")]
-        public int statePosBrush { get; set; }
+        public int StatePosBrush { get; set; }
         [JsonProperty(PropertyName = "state_pos_thumb")]
-        public int statePosThumb { get; set; }
+        public int StatePosThumb { get; set; }
 
         public Action() { }
 
@@ -122,14 +122,14 @@ namespace HandControl.Model
         {
             Action result = new Action()
             {
-                thumbFinger = 0,
-                pointerFinger = 0,
-                middleFinger = 0,
-                ringFinder = 0,
-                littleFinger = 0,
-                delAction = 0,
-                statePosBrush = 0,
-                statePosThumb = 0
+                ThumbFinger = 0,
+                PointerFinger = 0,
+                MiddleFinger = 0,
+                RingFinder = 0,
+                LittleFinger = 0,
+                DelAction = 0,
+                StatePosBrush = 0,
+                StatePosThumb = 0
             };
             return result;
         }
@@ -143,13 +143,13 @@ namespace HandControl.Model
     public class InfoCommand : ICloneable
     {
         [JsonProperty(PropertyName = "iterable_actions")]
-        public bool iterableActions { get; set; }
+        public bool IterableActions { get; set; }
         [JsonProperty(PropertyName = "combined")]
-        public bool combinedCommand { get; set; }
+        public bool CombinedCommand { get; set; }
         [JsonProperty(PropertyName = "num_act_rep")]
-        public int numActRep { get; set; }
+        public int NumActRep { get; set; }
         [JsonProperty(PropertyName = "count_command")]
-        public int countCommand { get; set; }
+        public int CountCommand { get; set; }
         [JsonProperty(PropertyName = "date")]
         public string Date { get; set; }
 
@@ -160,10 +160,10 @@ namespace HandControl.Model
             InfoCommand result = new InfoCommand()
             {
                 Date = "",
-                iterableActions = false,
-                combinedCommand = false,
-                numActRep = 0,
-                countCommand = 0
+                IterableActions = false,
+                CombinedCommand = false,
+                NumActRep = 0,
+                CountCommand = 0
             };
             return result;
         }

@@ -106,9 +106,11 @@ namespace HandControl.Services
 
         public static PortInfo GetDefault()
         {
-            PortInfo newInfo = new PortInfo();
-            newInfo.BaudRate = 115200;
-            newInfo.NamePort = "None";
+            PortInfo newInfo = new PortInfo
+            {
+                BaudRate = 115200,
+                NamePort = "None"
+            };
             return newInfo;
         }
 

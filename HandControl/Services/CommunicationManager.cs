@@ -16,8 +16,8 @@ namespace HandControl.Services
 
         // Возможные комманды
         private static readonly byte CommandSave = 0x15;
-        private static readonly byte CommandVoiceExex = 0x16;
-        private static readonly byte CommandExex = 0x17;
+        private static readonly byte CommandExecByName = 0x16;
+        private static readonly byte CommandExecByMotion = 0x17;
         private static readonly byte CommandChangeMode = 0x1;
 
         // Режимы работы протеза
@@ -84,7 +84,7 @@ namespace HandControl.Services
         {
             if (device.StateDevice == true)
             {
-                List<byte> dataField = new List<byte> { CommandExex };
+                List<byte> dataField = new List<byte> { CommandExecByMotion };
                 dataField.AddRange(command.BinaryDate.ToList<byte>());
                 byte[] package = CreatePackage(addressHand, dataField);
                 device.SendToDevice(package);
@@ -95,7 +95,7 @@ namespace HandControl.Services
         {
             if (device.StateDevice == true)
             {
-                List<byte> dataField = new List<byte> { CommandVoiceExex };
+                List<byte> dataField = new List<byte> { CommandExecByName };
 
                 byte[] byteName = Encoding.UTF8.GetBytes(nameCommand);
 
