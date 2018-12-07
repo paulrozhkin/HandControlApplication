@@ -1,0 +1,44 @@
+﻿<Window x:Class="HandControl.View.ServoControlRaw"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HandControl.ViewModel"
+        mc:Ignorable="d"
+        Title="ServoControlRaw" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Margin="0 30 0 0">
+            <StackPanel Orientation="Horizontal" Margin="0 3 0 3">
+                <TextBlock Margin="20 0 0 0" 
+                           HorizontalAlignment="Left" 
+                           Text="Положения"
+                           Width="100"/>
+                <TextBox Width="100"
+                         Name="Tim4Ch1Txt"
+                         Text="0"
+                         PreviewTextInput="NumberValidationTextBox" 
+                         TextChanged="Tim4Ch1Txt_TextChanged"
+                         />
+                <Button
+                Content="Отправить"
+                Margin="40 0 0 0"
+                Width="100"
+                Click="Button_Click"
+                />
+            </StackPanel>
+            <Slider Maximum="20000" Minimum="0" 
+                    Name="Tim4Ch1Slider"
+                    Margin="10 0 10 0"
+                    HorizontalAlignment="Stretch"
+                    TickFrequency="1" 
+                    IsSnapToTickEnabled="True"
+                    ValueChanged="Tim4Ch1Slider_ValueChanged"
+                    ></Slider>
+        </StackPanel>
+        
+    </Grid>
+</Window>
