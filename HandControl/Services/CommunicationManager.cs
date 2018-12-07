@@ -15,10 +15,12 @@ namespace HandControl.Services
         private static readonly IIODevice device = new IODeviceCom();
 
         // Возможные комманды
-        private static readonly byte CommandSave = 0x15;
-        private static readonly byte CommandExecByName = 0x16;
-        private static readonly byte CommandExecByMotion = 0x17;
-        private static readonly byte CommandChangeMode = 0x1;
+
+        private static readonly byte CommandSave = 0x15;        // Сохранить комманды
+        private static readonly byte CommandVoiceExex = 0x16;   // Выполнить записанную комануду
+        private static readonly byte CommandExex = 0x17;        // Выполнить комманду по полученным данным
+        private static readonly byte CommandExexRaw = 0x18;     // Установить на все двигатели данное значение
+        private static readonly byte CommandChangeMode = 0x1;   // Изменить режим работы протеза
 
         // Режимы работы протеза
         public static readonly byte ModeMIO = 0;
@@ -70,15 +72,23 @@ namespace HandControl.Services
 
         public static void ChangeMode(byte newMode)
         {
-            List<byte> dataField = new List<byte>
-                {
-                    CommandChangeMode
-                };
-            dataField.Add(newMode);
-            byte[] package = CreatePackage(addressHand, dataField);
-            device.SendToDevice(package);
         }
-    
+
+        public static void ExecuteTheRaw(UInt32 newValueServo)
+        {
+            if (device.StateDevice == true)
+            {
+                List<byte> dataField = new List<byte>
+                {
+                    CommandExexRaw
+                };
+                List<byte> valueByte = BitConverter.GetBytes(newValueServo).ToList<byte>();
+                dataField.AddRange(valueByte);
+                byte[] package = CreatePackage(addressHand, dataField);
+                device.SendToDevice(package);
+            }
+        }
+
 
         public static void ExecuteTheCommand(CommandModel command)
         {

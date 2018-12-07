@@ -15,9 +15,11 @@ namespace HandControl.ViewModel
         public MainWindowViewModel()
         {
             // CommunicationManager.SaveCommands(commands);
-            CommunicationManager.ExecuteTheCommand("Сжать");
+            // CommunicationManager.ExecuteTheCommand("Сжать");
             // CommunicationManager.ExecuteTheCommand("ModeVoice");
             // CommunicationManager.ExecuteTheCommand(commands[0]);
+            // CommunicationManager.ExecuteTheRaw(15000);
         }
+
     }
 }
