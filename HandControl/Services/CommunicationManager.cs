@@ -20,7 +20,7 @@ namespace HandControl.Services
         private static readonly byte CommandExecByName = 0x16;   // Выполнить записанную комануду
         private static readonly byte CommandExecByMotion = 0x17;        // Выполнить комманду по полученным данным
         private static readonly byte CommandExexRaw = 0x18;     // Установить на все двигатели данное значение
-        private static readonly byte CommandChangeMode = 0x1;   // Изменить режим работы протеза
+        private static readonly byte CommandSaveToVoice = 0x19; // Сохранить комманду в устройство распознования речи
 
         // Режимы работы протеза
         public static readonly byte ModeMIO = 0;
@@ -28,9 +28,9 @@ namespace HandControl.Services
         public static readonly byte ModeMixed = 2;
 
         // Адреса устройств протокольного уровня
-        private static readonly byte addressPC = 0x00;
-        private static readonly byte addressHand = 0x01;
-        private static readonly byte addressVoice = 0x02;
+        public static readonly byte addressPC = 0x00;
+        public static readonly byte addressHand = 0x01;
+        public static readonly byte addressVoice = 0x02;
 
         private static readonly List<byte> versionProtocol = new List<byte>
         {
@@ -55,78 +55,77 @@ namespace HandControl.Services
         /// <param name="commandsList"></param>
         public static void SaveCommands(ObservableCollection<CommandModel> commandsList)
         {
-            if (device.StateDevice == true)
-            {
-                List<byte> dataField = new List<byte>
+            List<byte> dataField = new List<byte>
                 {
                     CommandSave
                 };
-                foreach (CommandModel command in commandsList)
-                {
-                    dataField.AddRange(command.BinaryDate.ToList<byte>());
-                }
-                byte[] package = CreatePackage(addressHand, dataField);
-                device.SendToDevice(package);
+            foreach (CommandModel command in commandsList)
+            {
+                dataField.AddRange(command.BinaryDate.ToList<byte>());
             }
+            byte[] package = CreatePackage(addressHand, dataField);
+            device.SendToDevice(package);
         }
 
-        public static void ChangeMode(byte newMode)
+        public static void SaveCommandsToVoice(ObservableCollection<CommandModel> commandsList)
         {
+            List<byte> dataField = new List<byte>
+                {
+                    CommandSaveToVoice
+                };
+
+            foreach (CommandModel command in commandsList)
+            {
+                dataField.AddRange(command.BinaryInfo.ToList<byte>());
+            }
+            byte[] package = CreatePackage(addressVoice, dataField);
+            device.SendToDevice(package);
         }
 
         public static void ExecuteTheRaw(UInt32 newValueServo)
         {
-            if (device.StateDevice == true)
-            {
-                List<byte> dataField = new List<byte>
+            List<byte> dataField = new List<byte>
                 {
                     CommandExexRaw
                 };
-                List<byte> valueByte = BitConverter.GetBytes(newValueServo).ToList<byte>();
-                dataField.AddRange(valueByte);
-                byte[] package = CreatePackage(addressHand, dataField);
-                device.SendToDevice(package);
-            }
+            List<byte> valueByte = BitConverter.GetBytes(newValueServo).ToList<byte>();
+            dataField.AddRange(valueByte);
+            byte[] package = CreatePackage(addressHand, dataField);
+            device.SendToDevice(package);
         }
 
 
         public static void ExecuteTheCommand(CommandModel command)
         {
-            if (device.StateDevice == true)
-            {
-                List<byte> dataField = new List<byte> { CommandExecByMotion };
-                dataField.AddRange(command.BinaryDate.ToList<byte>());
-                byte[] package = CreatePackage(addressHand, dataField);
-                device.SendToDevice(package);
-            }
+            List<byte> dataField = new List<byte> { CommandExecByMotion };
+            dataField.AddRange(command.BinaryDate.ToList<byte>());
+            byte[] package = CreatePackage(addressHand, dataField);
+            device.SendToDevice(package);
         }
 
         public static void ExecuteTheCommand(string nameCommand)
         {
-            if (device.StateDevice == true)
+            List<byte> dataField = new List<byte> { CommandExecByName };
+
+            byte[] byteName = Encoding.UTF8.GetBytes(nameCommand);
+
+            if (byteName.Length == 20)
             {
-                List<byte> dataField = new List<byte> { CommandExecByName };
-
-                byte[] byteName = Encoding.UTF8.GetBytes(nameCommand);
-
-                if (byteName.Length == 20)
-                {
-                    byteName[18] = Convert.ToByte('\0');
-                    byteName[19] = Convert.ToByte('\0');
-                }
-
-                List<byte> Name = byteName.ToList<byte>();
-
-                for (int i = byteName.Count(); i < 20; i++)
-                {
-                    Name.Add(Convert.ToByte('\0'));
-                }
-
-                dataField.AddRange(Name);
-
-                byte[] package = CreatePackage(addressHand, dataField);
-                device.SendToDevice(package);
+                byteName[18] = Convert.ToByte('\0');
+                byteName[19] = Convert.ToByte('\0');
             }
+
+            List<byte> Name = byteName.ToList<byte>();
+
+            for (int i = byteName.Count(); i < 20; i++)
+            {
+                Name.Add(Convert.ToByte('\0'));
+            }
+
+            dataField.AddRange(Name);
+
+            byte[] package = CreatePackage(addressHand, dataField);
+            device.SendToDevice(package);
         }
 
         /// <summary>

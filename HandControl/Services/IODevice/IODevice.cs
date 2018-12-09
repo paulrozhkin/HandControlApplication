@@ -7,15 +7,17 @@ namespace HandControl.Services
     class IODeviceCom: IIODevice
     {
         #region Variables
-        public bool StateDevice { get; private set; }
+        public bool StateDeviceHand { get; private set; }
+        public bool StateDeviceVoice { get; private set; }
 
-        private SerialPort serialPort = new SerialPort();
+        private SerialPort serialPortHand = new SerialPort();
+        private SerialPort serialPortVoice = new SerialPort();
         private PortInfo infoCom;
         #endregion
 
         public IODeviceCom()
         {
-            StateDevice = SerialSetup();
+            SerialSetup();
         }
 
 
@@ -23,74 +25,122 @@ namespace HandControl.Services
         bool IIODevice.SendToDevice(byte[] dataTx)
         {
             bool stateTx = false;
-            if (StateDevice == true)
+
+            if (dataTx[11] == CommunicationManager.addressHand)
             {
-                serialPort.Write(dataTx, 0, dataTx.Length);
-                stateTx = true;
+                if (StateDeviceHand == true)
+                {
+                    serialPortHand.Write(dataTx, 0, dataTx.Length);
+                    stateTx = true;
+                }
+            }
+            if (dataTx[11] == CommunicationManager.addressVoice)
+            {
+                if (StateDeviceVoice == true)
+                {
+                    serialPortVoice.Write(dataTx, 0, dataTx.Length);
+                    stateTx = true;
+                }
             }
             return stateTx;
-
         }
 
         byte[] IIODevice.ReceiveFromDevice(byte commandRx)
         {
             byte[] newData = null;
 
-            if (StateDevice == true)
+            if (StateDeviceHand == true)
             {
             }
 
             return newData;
         }
 
-        private bool SerialSetup()
+        private void SerialSetup()
         {
-            bool stateConnect = false;
+            bool stateConnectHand = false;
+            bool stateConnectVoice = false;
+
             List<string> comPorts = new List<string>(SerialPort.GetPortNames());
             infoCom = PortInfo.InfoLoad();
             foreach (string realnamePort in comPorts)
             {
-                if (realnamePort == infoCom.NamePort)
+                if (realnamePort == infoCom.NamePortHand)
                 {
-                    serialPort.PortName = infoCom.NamePort;
-                    serialPort.BaudRate = infoCom.BaudRate;
-                    serialPort.Parity = Parity.None;
-                    serialPort.StopBits = StopBits.One;
-                    serialPort.DataBits = 8;
-                    serialPort.Handshake = Handshake.None;
-                    serialPort.RtsEnable = true;
+                    serialPortHand.PortName = infoCom.NamePortHand;
+                    serialPortHand.BaudRate = infoCom.BaudRateHand;
+                    serialPortHand.Parity = Parity.None;
+                    serialPortHand.StopBits = StopBits.One;
+                    serialPortHand.DataBits = 8;
+                    serialPortHand.Handshake = Handshake.None;
+                    serialPortHand.RtsEnable = true;
                     
                     try
                     {
-                        serialPort.Open();
-                        serialPort.DiscardInBuffer();
-                        serialPort.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandler);
-                        stateConnect = true;
+                        serialPortHand.Open();
+                        serialPortHand.DiscardInBuffer();
+                        serialPortHand.DataReceived += new SerialDataReceivedEventHandler(DataReceivedHandHandler);
+                        stateConnectHand = true;
                     }
                     catch 
                     {
-                        stateConnect = false;
+                        stateConnectHand = false;
                     }
                     
                 }
+
+                if (realnamePort == infoCom.NamePortVoice)
+                {
+                    serialPortVoice.PortName = infoCom.NamePortVoice;
+                    serialPortVoice.BaudRate = infoCom.BaudRateVoice;
+                    serialPortVoice.Parity = Parity.None;
+                    serialPortVoice.StopBits = StopBits.One;
+                    serialPortVoice.DataBits = 8;
+                    serialPortVoice.Handshake = Handshake.None;
+                    serialPortVoice.RtsEnable = true;
+
+                    try
+                    {
+                        serialPortVoice.Open();
+                        serialPortVoice.DiscardInBuffer();
+                        serialPortVoice.DataReceived += new SerialDataReceivedEventHandler(DataReceivedVoiceHandler);
+                        stateConnectVoice = true;
+                    }
+                    catch
+                    {
+                        stateConnectVoice = false;
+                    }
+
+                }
+
             }
 
-            return stateConnect;
+            StateDeviceVoice = stateConnectVoice;
+            StateDeviceHand = stateConnectHand;
         }
 
-        private void DataReceivedHandler(object sender, SerialDataReceivedEventArgs e)
+        private void DataReceivedHandHandler(object sender, SerialDataReceivedEventArgs e)
         {
 
         }
 
+        private void DataReceivedVoiceHandler(object sender, SerialDataReceivedEventArgs e)
+        {
 
-            #endregion
+        }
+
+        #endregion
 
         private void Dispose()
         {
-            if (serialPort.IsOpen)
+            if (serialPortHand.IsOpen)
             {
-                serialPort.Close();
+                serialPortHand.Close();
+            }
+
+            if (serialPortVoice.IsOpen)
+            {
+                serialPortVoice.Close();
             }
         }
 
@@ -99,17 +149,24 @@ namespace HandControl.Services
     class PortInfo
     {
 
-        [JsonProperty(PropertyName = "Port")]
-        public string NamePort { get; set; }
-        [JsonProperty(PropertyName = "BaudRate")]
-        public int BaudRate { get; set; }
+        [JsonProperty(PropertyName = "PortHand")]
+        public string NamePortHand { get; set; }
+        [JsonProperty(PropertyName = "BaudRateHand")]
+        public int BaudRateHand { get; set; }
+        [JsonProperty(PropertyName = "PortVoice")]
+        public string NamePortVoice { get; set; }
+        [JsonProperty(PropertyName = "BaudRateVoice")]
+        public int BaudRateVoice { get; set; }
+
 
         public static PortInfo GetDefault()
         {
             PortInfo newInfo = new PortInfo
             {
-                BaudRate = 115200,
-                NamePort = "None"
+                BaudRateHand = 115200,
+                NamePortHand = "None",
+                BaudRateVoice = 115200,
+                NamePortVoice = "None"
             };
             return newInfo;
         }

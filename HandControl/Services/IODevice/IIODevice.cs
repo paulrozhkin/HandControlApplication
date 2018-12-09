@@ -11,7 +11,7 @@ namespace HandControl.Services
         /// <summary>
         /// Состояние устройства
         /// </summary>
-        bool StateDevice { get; }
+        bool StateDeviceHand { get; }
 
         /// <summary>
         /// Отправка данных на устройство.

@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HandControl"
         mc:Ignorable="d"
-        Title="MainWindow" WindowStyle="SingleBorderWindow" Icon="/img/logo.ico">
+        Title="MainWindow" WindowStyle="SingleBorderWindow" Icon="/img/logo.ico"
+        >
 
     <!--MaxHeight="768" MaxWidth="1024"-->
     <Window.Resources>
@@ -147,16 +148,39 @@
 
             <Image Grid.Column="1" HorizontalAlignment="Stretch" Stretch="Fill" VerticalAlignment="Stretch" Source="/img/fon1.jpg"/>
 
+            
+            <ListBox 
+                Background="Transparent"
+                BorderThickness="0"
+                ItemsSource="{Binding Commands}" 
+                SelectedItem="{Binding SelectedCommand}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Margin="3" Text="{Binding Name}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+
+            <!--
             <ScrollViewer 
                 VerticalScrollBarVisibility="Visible"
                 Grid.Column="0"
+                
                 Style="{StaticResource ScrollStyle}">
-                <ItemsControl >
-                    <Button Height="350"/>
-                    <Button Height="350"/>
-
+                <ItemsControl ItemsSource="{Binding Commands}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Background="Transparent">
+                                <StackPanel Orientation="Vertical">
+                                    <Button Content="{Binding Name}"/>
+                                </StackPanel>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
                 </ItemsControl>
-            </ScrollViewer>
+            </ScrollViewer>-->
 
         </Grid>
 

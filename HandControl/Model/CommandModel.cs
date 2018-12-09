@@ -6,26 +6,76 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using HandControl.Services;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace HandControl.Model
 {
-    public class CommandModel : ICloneable
+    public class CommandModel : ICloneable, INotifyPropertyChanged
     {
+        string name = "";
 
         [JsonProperty(PropertyName = "name_command")]
-        public string Name { get; set; }
+        public string Name { get  { return name; } set { name = value; OnPropertyChanged(); } }
         [JsonProperty(PropertyName = "info_actions")]
         public InfoCommand InfoCommand { get; set; }
         [JsonProperty(PropertyName = "data_actions")]
         public List<Action> DataAction { get; set; }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            var handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        /// <summary>
+        /// Возвращает имя команды и дату ее изменения в бинарном виде
+        /// </summary>
+        public byte[] BinaryInfo
+        {
+            get
+            {
+                byte[] byteArray = new byte[20 + 12];
+
+                byte[] byteName = Encoding.GetEncoding(1251).GetBytes(this.Name);
+
+                if (byteName.Length == 20)
+                {
+                    byteName[18] = Convert.ToByte('\0');
+                    byteName[19] = Convert.ToByte('\0');
+                }
+
+                for (int i = 0; i < 20; i++)
+                {
+                    if (byteName.Length > i)
+                        byteArray[i] = byteName[i];
+                    else
+                        byteArray[i] = Convert.ToByte('\0');
+                }
+
+                byte[] byteDate = System.Text.Encoding.UTF8.GetBytes(this.InfoCommand.Date);
+                for (int i = 0; i < 12; i++)
+                {
+                    byteArray[20 + i] = byteDate[i];
+                }
+
+                return byteArray;
+            }
+            private set { }
+        }
+
+        /// <summary>
+        /// Возвращает полную информацию и данные команды в бинарном виде
+        /// </summary>
         public byte[] BinaryDate
         {
             get {
                 byte[] byteArray = new byte[20 + 12 + 4 + this.InfoCommand.CountCommand * 8];
 
-                
-                byte[] byteName = Encoding.UTF8.GetBytes(this.Name);
+
+                byte[] byteName = Encoding.GetEncoding(1251).GetBytes(this.Name);
 
                 if (byteName.Length == 20)
                 {
