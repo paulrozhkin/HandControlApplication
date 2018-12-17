@@ -78,6 +78,7 @@
     <Compile Include="Services\JsonSerDer.cs" />
     <Compile Include="Services\LoaderModel.cs" />
     <Compile Include="Services\PathManager.cs" />
+    <Compile Include="Services\RelayCommand.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="View\ServoControlRaw.xaml.cs">
       <DependentUpon>ServoControlRaw.xaml</DependentUpon>

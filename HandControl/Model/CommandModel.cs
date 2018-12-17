@@ -18,21 +18,21 @@ namespace HandControl.Model
         [JsonProperty(PropertyName = "name_command")]
         public string Name { get  { return name; } set { name = value; OnPropertyChanged(); } }
         [JsonProperty(PropertyName = "info_actions")]
-        public InfoCommand InfoCommand { get; set; }
+        public InfoCommandModel InfoCommand { get; set; }
         [JsonProperty(PropertyName = "data_actions")]
-        public List<Action> DataAction { get; set; }
+        public ObservableCollection<ActionModel> DataAction { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
-            var handler = PropertyChanged;
-            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         /// <summary>
         /// Возвращает имя команды и дату ее изменения в бинарном виде
         /// </summary>
+        [JsonIgnore]
         public byte[] BinaryInfo
         {
             get
@@ -69,6 +69,7 @@ namespace HandControl.Model
         /// <summary>
         /// Возвращает полную информацию и данные команды в бинарном виде
         /// </summary>
+        [JsonIgnore]
         public byte[] BinaryDate
         {
             get {
@@ -131,7 +132,7 @@ namespace HandControl.Model
             return sessionLoaded;
         }
 
-        public static void SaveSession(CommandModel command)
+        public static void SaveCommand(CommandModel command)
         {
             JsonSerDer.SaveObject(command, PathManager.GetCommandPath(command.Name));
         }
@@ -141,37 +142,40 @@ namespace HandControl.Model
             return new CommandModel()
             {
                 Name = this.Name,
-                InfoCommand = (InfoCommand)this.InfoCommand.Clone()
+                InfoCommand = (InfoCommandModel)this.InfoCommand.Clone()
                 // dataAction = (List<Action>)this.dataAction.Clone()
             };
         }
     }
 
-    public class Action : ICloneable
+    public class ActionModel : ICloneable
     {
-        [JsonProperty(PropertyName = "thumb_finger")]
+        [JsonProperty(PropertyName = "name_action")]
+        public string NameAction { get; set; }
+        [JsonProperty(PropertyName = "thumb_finger")]       // Большой палец
         public int ThumbFinger { get; set; }
-        [JsonProperty(PropertyName = "pointer_finger")]
+        [JsonProperty(PropertyName = "pointer_finger")]     // Указательный палец
         public int PointerFinger { get; set; }
-        [JsonProperty(PropertyName = "middle_finger")]
+        [JsonProperty(PropertyName = "middle_finger")]      // Средний палец
         public int MiddleFinger { get; set; }
-        [JsonProperty(PropertyName = "ring_finder")]
+        [JsonProperty(PropertyName = "ring_finder")]        // Безымянный палец
         public int RingFinder { get; set; }
-        [JsonProperty(PropertyName = "little_finger")]
+        [JsonProperty(PropertyName = "little_finger")]      // Мезинец
         public int LittleFinger { get; set; }
-        [JsonProperty(PropertyName = "del_action")]
+        [JsonProperty(PropertyName = "del_action")]         // Задержка между действиями
         public int DelAction { get; set; }
-        [JsonProperty(PropertyName = "state_pos_brush")]
+        [JsonProperty(PropertyName = "state_pos_brush")]    // Положение кисти
         public int StatePosBrush { get; set; }
-        [JsonProperty(PropertyName = "state_pos_thumb")]
+        [JsonProperty(PropertyName = "state_pos_thumb")]    // Положение большого пальца
         public int StatePosThumb { get; set; }
 
-        public Action() { }
+        public ActionModel() { }
 
-        public static Action GetDefault()
+        public static ActionModel GetDefault(string numNameAction)
         {
-            Action result = new Action()
+            ActionModel result = new ActionModel()
             {
+                NameAction = numNameAction,
                 ThumbFinger = 0,
                 PointerFinger = 0,
                 MiddleFinger = 0,
@@ -190,7 +194,7 @@ namespace HandControl.Model
         }
     }
 
-    public class InfoCommand : ICloneable
+    public class InfoCommandModel : ICloneable
     {
         [JsonProperty(PropertyName = "iterable_actions")]
         public bool IterableActions { get; set; }
@@ -203,11 +207,11 @@ namespace HandControl.Model
         [JsonProperty(PropertyName = "date")]
         public string Date { get; set; }
 
-        public InfoCommand() { }
+        public InfoCommandModel() { }
 
-        public static InfoCommand GetDefault()
+        public static InfoCommandModel GetDefault()
         {
-            InfoCommand result = new InfoCommand()
+            InfoCommandModel result = new InfoCommandModel()
             {
                 Date = "",
                 IterableActions = false,
