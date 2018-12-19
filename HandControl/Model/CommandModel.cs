@@ -15,10 +15,37 @@ namespace HandControl.Model
     {
         string name = "";
 
+        /// <summary>
+        /// Имя команды
+        /// </summary>
         [JsonProperty(PropertyName = "name_command")]
-        public string Name { get  { return name; } set { name = value; OnPropertyChanged(); } }
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+            set
+            {
+                string lastName = name;
+                name = value;
+                if (InfoCommand != null && DataAction != null)
+                {
+                    FileIOManager.DeleteFolder(PathManager.GetCommandFolderPath(lastName)); // Сначала удаляем прдыдущую папку с командой
+                    SaveCommand(this);
+                }
+                OnPropertyChanged();
+            }
+        }
+        /// <summary>
+        /// Содержит информацию о команде, такую как время, кол-во действий, кол-во повторений действия и итеративность действий
+        /// </summary>
         [JsonProperty(PropertyName = "info_actions")]
         public InfoCommandModel InfoCommand { get; set; }
+
+        /// <summary>
+        /// Список данных действий
+        /// </summary>
         [JsonProperty(PropertyName = "data_actions")]
         public ObservableCollection<ActionModel> DataAction { get; set; }
 
@@ -126,7 +153,12 @@ namespace HandControl.Model
             ObservableCollection<CommandModel> sessionLoaded = new ObservableCollection<CommandModel>();
             foreach (var item in PathManager.GetCommandsFilesPaths())
             {
-                sessionLoaded.Add((CommandModel)JsonSerDer.LoadObject<CommandModel>(item));
+                CommandModel loadedCommand = (CommandModel)JsonSerDer.LoadObject<CommandModel>(item);
+
+                if (loadedCommand.InfoCommand == null)
+                    loadedCommand.InfoCommand = InfoCommandModel.GetDefault();
+
+                sessionLoaded.Add(loadedCommand);
             }
             // var profilesSorted = sessionLoaded.OrderBy(x => x.Id).ToList();
             return sessionLoaded;

@@ -34,9 +34,7 @@ namespace HandControl.Services
 
         public static string GetCommandPath(string NameCommand)
         {
-            string commandFolderPath = MainDataPath + FolderCommandsName + NameCommand + "\\";
-            if (!Directory.Exists(commandFolderPath))
-                Directory.CreateDirectory(commandFolderPath);
+            string commandFolderPath = GetCommandFolderPath(NameCommand);
 
             string sessionPath = commandFolderPath + "\\" + FileCommandsName;
             if (!File.Exists(sessionPath))
@@ -44,6 +42,15 @@ namespace HandControl.Services
                 File.Create(sessionPath).Close();
             }
             return sessionPath;
+        }
+
+        public static string GetCommandFolderPath(string NameCommand)
+        {
+            string commandFolderPath = MainDataPath + FolderCommandsName + NameCommand + "\\";
+            if (!Directory.Exists(commandFolderPath))
+                Directory.CreateDirectory(commandFolderPath);
+
+            return commandFolderPath;
         }
 
         public static string IODevicePath(string nameDevice)

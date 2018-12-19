@@ -38,7 +38,7 @@ namespace HandControl.ViewModel
         }
 
         ObservableCollection<ActionModel> commandActions = new ObservableCollection<ActionModel>();
-        public ObservableCollection<ActionModel> CommandActions
+        public ObservableCollection<ActionModel> SelectedListCommandActions
         {
             get
             {
@@ -47,9 +47,12 @@ namespace HandControl.ViewModel
             set
             {
                 commandActions = new ObservableCollection<ActionModel>();
-                foreach (ActionModel action in value)
+                if (value != null)
                 {
-                    commandActions.Add((ActionModel)action.Clone());
+                    foreach (ActionModel action in value)
+                    {
+                        commandActions.Add((ActionModel)action.Clone());
+                    }
                 }
                 SelectedAction = null;
                 OnPropertyChanged();
@@ -67,7 +70,7 @@ namespace HandControl.ViewModel
                 selectedCommand = value;
                 if (selectedCommand != null)
                 {
-                    CommandActions = selectedCommand.DataAction;
+                    SelectedListCommandActions = selectedCommand.DataAction;
                 }
                 OnPropertyChanged();
             }
@@ -117,7 +120,7 @@ namespace HandControl.ViewModel
 
         private void SaveActions()
         {
-            SelectedCommand.DataAction = CommandActions;
+            SelectedCommand.DataAction = SelectedListCommandActions;
             SelectedCommand.InfoCommand.Date = DateTime.Now.ToString("yyMMddHHmmss");
             CommandModel.SaveCommand(SelectedCommand);
             OnPropertyChanged();
@@ -130,19 +133,32 @@ namespace HandControl.ViewModel
 
         private void AddAction()
         {
-            string newName = "Действие " + (CommandActions.Count + 1);
+            string newName = "Действие " + (SelectedListCommandActions.Count + 1);
             ActionModel newAction = Model.ActionModel.GetDefault(newName);
-            CommandActions.Add(newAction);
+            SelectedListCommandActions.Add(newAction);
         }
 
         public ICommand DeleteItemCommand
         {
-            get { return new RelayCommand((object obj) => this.DeleteItem()); }
+            get { return new RelayCommand((object obj) => this.DeleteItem(obj)); }
         }
 
-        private void DeleteItem()
+        private void DeleteItem(object obj)
         {
-            CommandActions.Remove(SelectedAction);
+            if (obj == null)
+                return;
+
+            string deletNameAction = obj as string;
+
+            foreach(ActionModel actionModel in SelectedListCommandActions)
+            {
+                if (actionModel.NameAction == deletNameAction)
+                {
+                    SelectedListCommandActions.Remove(actionModel);
+                    break;
+                }
+            }
+
             OnPropertyChanged();
         }
         #endregion

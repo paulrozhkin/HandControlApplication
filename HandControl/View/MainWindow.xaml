@@ -150,11 +150,11 @@
             </Grid.ColumnDefinitions>
 
             <Grid Grid.Column="1" >
-                <!--
+                
                 <Grid.Background>
                     <ImageBrush ImageSource="/img/fon1.jpg" />
                 </Grid.Background>
-                -->
+                
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="200"/>
@@ -223,7 +223,7 @@
                 </Button>
                 <ListBox 
                     Grid.Row="4"
-                    ItemsSource="{Binding CommandActions}" 
+                    ItemsSource="{Binding SelectedListCommandActions}" 
                     SelectedItem="{Binding SelectedAction}"
                     BorderThickness="0"
                     x:Name="ListBoxActions"
@@ -233,9 +233,11 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Vertical">
-                                <TextBlock Margin="3" Text="{Binding NameAction}"/>
+                                <TextBox Margin="3" Text="{Binding NameAction}"/>
                                 <Button Content="[x]" 
-                                     Command="{Binding Path=DataContext.DeleteItemCommand,RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
+                                        Command="{Binding Path=DataContext.DeleteItemCommand,
+                                            RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
+                                        CommandParameter="{Binding NameAction}"
                                    />
                             </StackPanel>
                         </DataTemplate>
@@ -381,7 +383,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Vertical">
-                            <TextBlock Margin="3" Text="{Binding Name}"/>
+                            <TextBox Margin="3" Text="{Binding Name, UpdateSourceTrigger=LostFocus}"/>
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
