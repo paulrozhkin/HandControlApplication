@@ -124,6 +124,14 @@
   <ItemGroup>
     <Resource Include="img\fon1.jpg" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="img\Header\icon_usb.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\Header\rec2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="img\Header\menu.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -11,7 +11,79 @@
 
     <!---->
     <Window.Resources>
-        <Style x:Key="ScrollThumbs" TargetType="{x:Type Thumb}">
+        
+        <Style TargetType="{x:Type ListBoxItem}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                        <Border x:Name="Bd"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Background="{TemplateBinding Background}"
+                                Padding="{TemplateBinding Padding}"
+                                SnapsToDevicePixels="true">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="Selector.IsSelectionActive"
+                                                Value="False" />
+                                    <Condition Property="IsSelected"
+                                                Value="True" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background"
+                                        TargetName="Bd"
+                                        Value="Yellow" />
+                            </MultiTrigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="Selector.IsSelectionActive"
+                                                Value="True" />
+                                    <Condition Property="IsSelected"
+                                                Value="True" />
+                                </MultiTrigger.Conditions>
+                                <Setter Property="Background"
+                                        TargetName="Bd"
+                                        Value="Yellow" />
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <Style x:Key="StylePushButton" TargetType="{x:Type Button}">
+
+            <Style.Triggers>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="RenderTransform">
+                        <Setter.Value>
+                            <ScaleTransform ScaleX="0.85" ScaleY="0.85"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+            
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="BorderBrush" Value="{x:Null}"/>
+            <Setter Property="RenderTransformOrigin" Value="0.5, 0.5"/>
+            
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="brdr" TextBlock.Foreground="{TemplateBinding Foreground}" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Content="{TemplateBinding Content}" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Background" Value="Transparent"/>
+         </Style>
+        
+        <Style TargetType="{x:Type Thumb}">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Thumb}">
@@ -30,7 +102,7 @@
             </Setter>
         </Style>
 
-        <Style x:Key="ScrollBarStyle" TargetType="{x:Type ScrollBar}">
+        <Style TargetType="{x:Type ScrollBar}">
             <Setter Property="Stylus.IsFlicksEnabled" Value="false" />
             <Setter Property="Foreground" Value="LightGray" />
             <Setter Property="Background" Value="DarkGray" />
@@ -90,13 +162,13 @@
             </Setter>
         </Style>
 
-        <Style x:Key="ScrollStyle" TargetType="{x:Type ScrollViewer}">
+        <Style TargetType="{x:Type ScrollViewer}">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ScrollViewer}">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="220"/>
+                                <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="14"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
@@ -138,28 +210,65 @@
         </Grid.RowDefinitions>
 
         <!--Background="#182339"-->
-        <Rectangle Grid.Row="0" Fill="Black" />
-        <Rectangle Grid.Row="1" Fill="#182339" />
+    <Rectangle Grid.Row="0" Fill="Black" />
+    <Rectangle Grid.Row="1" Fill="#182339" />
 
-        <Grid Grid.Row="2">
+    <Grid Grid.Row="1">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="15"/>
+            <ColumnDefinition Width="62"/>
+            <ColumnDefinition Width="30"/>
+            <ColumnDefinition Width="62"/>
+            <ColumnDefinition Width="30"/>
+            <ColumnDefinition Width="62"/>
+            <ColumnDefinition Width="30"/>
+            <ColumnDefinition Width="62"/>
+        </Grid.ColumnDefinitions>
+
+        <Button Grid.Column="1"
+                Style="{StaticResource StylePushButton}"
+                >
+            <Image Source="/img/Header/menu.png" Width="40"/>
+        </Button>
+
+        <Button Grid.Column="3"
+                Style="{StaticResource StylePushButton}"
+                >
+            Синхронизация
+        </Button>
+
+        <Button Grid.Column="5"
+                Style="{StaticResource StylePushButton}"
+                >
+            <Image Source="/img/Header/icon_usb.png" Width="40"/>
+        </Button>
+
+        <Button Grid.Column="7"
+                Style="{StaticResource StylePushButton}"
+                >
+            <Image Source="/img/Header/rec2.png" Width="40"/>
+        </Button>
+    </Grid>
+
+    <Grid Grid.Row="2">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="230"/>
+            <ColumnDefinition>
+
+            </ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="1" >
+
+            <Grid.Background>
+                <ImageBrush ImageSource="/img/fon1.jpg" />
+            </Grid.Background>
+
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="230"/>
-                <ColumnDefinition>
-                    
-                </ColumnDefinition>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="180"/>
             </Grid.ColumnDefinitions>
-
-            <Grid Grid.Column="1" >
-                
-                <Grid.Background>
-                    <ImageBrush ImageSource="/img/fon1.jpg" />
-                </Grid.Background>
-                
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="200"/>
-                    <ColumnDefinition Width="180"/>
-                </Grid.ColumnDefinitions>
 
 
             <Grid Grid.Column="2">
@@ -198,7 +307,7 @@
                         X
                     </Button>
                 </Grid>
-                
+
                 <Border Grid.Row="2" BorderBrush="{x:Null}">
                     <TextBlock
                     
@@ -232,9 +341,14 @@
                     Background="White">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Vertical">
-                                <TextBox Margin="3" Text="{Binding NameAction}"/>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBox 
+                                    Margin="3" 
+                                    BorderBrush="{x:Null}"
+                                    Background="Transparent"
+                                    Text="{Binding NameAction}"/>
                                 <Button Content="[x]" 
+                                        Margin="50 0 0 0"
                                         Command="{Binding Path=DataContext.DeleteItemCommand,
                                             RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
                                         CommandParameter="{Binding NameAction}"
@@ -244,7 +358,7 @@
                     </ListBox.ItemTemplate>
                 </ListBox>
             </Grid>
-                
+
             <ItemsControl
                 Grid.Column="1"      
                 Background="White"
@@ -372,24 +486,31 @@
 
             </ItemsControl>
         </Grid>
-            
 
-            <ListBox Grid.Column="0"
+
+        <ListBox Grid.Column="0"
                 Background="Transparent"
                 BorderThickness="0"
                 ItemsSource="{Binding Commands}" 
                 ScrollViewer.VerticalScrollBarVisibility="Visible"
                 SelectedItem="{Binding SelectedCommand}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Vertical">
-                            <TextBox Margin="3" Text="{Binding Name, UpdateSourceTrigger=LostFocus}"/>
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Height="40" Orientation="Vertical">
+                        <TextBox 
+                            VerticalAlignment="Center"
+                            Margin="0 8 0 0" 
+                            FontSize="16"
+                            Foreground="White"
+                            BorderBrush="{x:Null}"
+                            Background="Transparent"
+                            Text="{Binding Name, UpdateSourceTrigger=LostFocus}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
 
-            <!--
+        <!--
             <ScrollViewer 
                 VerticalScrollBarVisibility="Visible"
                 Grid.Column="0"
@@ -408,7 +529,7 @@
                 </ItemsControl>
             </ScrollViewer>-->
 
-        </Grid>
+    </Grid>
 
     </Grid>
 </Window>
