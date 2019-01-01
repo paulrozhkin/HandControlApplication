@@ -180,10 +180,32 @@ namespace HandControl.Model
         }
     }
 
-    public class ActionModel : ICloneable
+    public class ActionModel : ICloneable, INotifyPropertyChanged
     {
-        [JsonProperty(PropertyName = "name_action")]
-        public string NameAction { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private int id;
+        /// <summary>
+        /// Номер действия
+        /// </summary>
+        [JsonProperty(PropertyName = "id_action")]
+        public int Id {
+            get
+            {
+                return id;
+            }
+            set
+            {
+                id = value;
+                OnPropertyChanged();
+            }
+        }
         [JsonProperty(PropertyName = "thumb_finger")]       // Большой палец
         public int ThumbFinger { get; set; }
         [JsonProperty(PropertyName = "pointer_finger")]     // Указательный палец
@@ -203,11 +225,11 @@ namespace HandControl.Model
 
         public ActionModel() { }
 
-        public static ActionModel GetDefault(string numNameAction)
+        public static ActionModel GetDefault(int idAction)
         {
             ActionModel result = new ActionModel()
             {
-                NameAction = numNameAction,
+                Id = idAction,
                 ThumbFinger = 0,
                 PointerFinger = 0,
                 MiddleFinger = 0,
@@ -224,9 +246,43 @@ namespace HandControl.Model
         {
             return this.MemberwiseClone();
         }
+
+        public static int GetNewId(List<ActionModel> listActions)
+        {
+            int newId = 0;
+            int maxId = 0;
+
+            for (int i = 0; i < listActions.Count; i++)
+            {
+                if (listActions[i].Id > maxId)
+                    maxId = listActions[i].Id;
+            }
+
+            for (int i = 1; i < maxId; i++)
+            {
+                bool state_search = false;
+                for (int j = 0; j < listActions.Count; j++)
+                {
+                    if (listActions[j].Id == i)
+                    {
+                        state_search = true;
+                        break;
+                    }
+                }
+
+                if (state_search == false)
+                {
+                    newId = i;
+                    return newId;
+                }
+
+            }
+
+            return maxId + 1;
+        }
     }
 
-    public class InfoCommandModel : ICloneable
+    public class InfoCommandModel : ICloneable, INotifyPropertyChanged
     {
         [JsonProperty(PropertyName = "iterable_actions")]
         public bool IterableActions { get; set; }
@@ -240,6 +296,8 @@ namespace HandControl.Model
         public string Date { get; set; }
 
         public InfoCommandModel() { }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public static InfoCommandModel GetDefault()
         {

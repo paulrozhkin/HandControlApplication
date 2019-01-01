@@ -15,14 +15,10 @@ namespace HandControl.ViewModel
 {
     class MainWindowViewModel : INotifyPropertyChanged
     {
+        #region Variables
         CommandModel selectedCommand = null;
 
         public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
 
         ObservableCollection<CommandModel> commands;
         public ObservableCollection<CommandModel> Commands {
@@ -76,7 +72,7 @@ namespace HandControl.ViewModel
             }
         }
 
-        Model.ActionModel selectedAction;
+        ActionModel selectedAction;
         public ActionModel SelectedAction
         {
             get
@@ -111,6 +107,7 @@ namespace HandControl.ViewModel
                 OnPropertyChanged();
             }
         }
+        #endregion
 
         #region Commands
         public ICommand SaveActionsCommand
@@ -118,51 +115,30 @@ namespace HandControl.ViewModel
             get { return new RelayCommand((object obj) => this.SaveActions()); }
         }
 
-        private void SaveActions()
-        {
-            SelectedCommand.DataAction = SelectedListCommandActions;
-            SelectedCommand.InfoCommand.Date = DateTime.Now.ToString("yyMMddHHmmss");
-            CommandModel.SaveCommand(SelectedCommand);
-            OnPropertyChanged();
-        }
+        
 
         public ICommand AddActionCommand
         {
             get { return new RelayCommand((object obj) => this.AddAction()); }
         }
 
-        private void AddAction()
+       
+        public ICommand DeleteCommandCommand
         {
-            string newName = "Действие " + (SelectedListCommandActions.Count + 1);
-            ActionModel newAction = Model.ActionModel.GetDefault(newName);
-            SelectedListCommandActions.Add(newAction);
+            get { return new RelayCommand((object obj) => this.DeleteCommand(obj)); }
         }
 
-        public ICommand DeleteItemCommand
+        
+
+        public ICommand DeleteActionCommand
         {
-            get { return new RelayCommand((object obj) => this.DeleteItem(obj)); }
+            get { return new RelayCommand((object obj) => this.DeleteACtion(obj)); }
         }
 
-        private void DeleteItem(object obj)
-        {
-            if (obj == null)
-                return;
-
-            string deletNameAction = obj as string;
-
-            foreach(ActionModel actionModel in SelectedListCommandActions)
-            {
-                if (actionModel.NameAction == deletNameAction)
-                {
-                    SelectedListCommandActions.Remove(actionModel);
-                    break;
-                }
-            }
-
-            OnPropertyChanged();
-        }
+        
         #endregion
 
+        #region Constructor
         public MainWindowViewModel()
         {
             Commands = CommandModel.GetCommands();
@@ -176,6 +152,70 @@ namespace HandControl.ViewModel
             // CommunicationManager.ExecuteTheCommand(commands[0]);
             // CommunicationManager.ExecuteTheRaw(15000);
         }
+        #endregion
 
+        #region Methods
+        private void DeleteACtion(object obj)
+                {
+                    if (obj == null)
+                        return;
+
+                    int deletNameAction = (int)obj;
+            
+
+                    foreach(ActionModel actionModel in SelectedListCommandActions)
+                    {
+                        if (actionModel.Id == Convert.ToInt32(deletNameAction))
+                        {
+                            for (int i = actionModel.Id; i < SelectedListCommandActions.Count; i++)
+                            {
+                                SelectedListCommandActions[i].Id = SelectedListCommandActions[i].Id - 1;
+                            }
+                            SelectedListCommandActions.Remove(actionModel);
+                            break;
+                        }
+                    }
+
+                    OnPropertyChanged();
+                }
+
+        private void SaveActions()
+        {
+            SelectedCommand.DataAction = SelectedListCommandActions;
+            SelectedCommand.InfoCommand.Date = DateTime.Now.ToString("yyMMddHHmmss");
+            CommandModel.SaveCommand(SelectedCommand);
+            OnPropertyChanged();
+        }
+
+        private void AddAction()
+        {
+            ActionModel newAction = ActionModel.GetDefault(ActionModel.GetNewId(SelectedListCommandActions.ToList<ActionModel>()));
+            SelectedListCommandActions.Add(newAction);
+        }
+
+        private void DeleteCommand(object obj)
+        {
+            if (obj == null)
+                return;
+
+            string deletNameCommand = obj as string;
+
+            foreach (CommandModel command in Commands)
+            {
+                if (command.Name == deletNameCommand)
+                {
+                    Commands.Remove(command);
+                    break;
+                }
+            }
+
+            OnPropertyChanged();
+        }
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        #endregion
     }
 }
