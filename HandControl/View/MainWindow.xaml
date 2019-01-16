@@ -13,7 +13,8 @@
     <!---->
     <Window.Resources>
         <converters:IdToNameActionConverter x:Key="idToNameActionConverter"/>
-        <Style TargetType="{x:Type ListBoxItem}">
+        
+        <Style x:Key="StyleListBox" TargetType="{x:Type ListBoxItem}">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ListBoxItem}">
@@ -343,6 +344,7 @@
                     x:Name="ListBoxActions"
                     BorderBrush="Transparent"
                     ScrollViewer.VerticalScrollBarVisibility="Visible"
+                    ItemContainerStyle="{StaticResource StyleListBox}"
                     >
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -513,13 +515,41 @@
 
             </ItemsControl>
         </Grid>
-
+        
+        
         <ListBox    Grid.Column="0" 
                     Background="Transparent"
                     BorderThickness="0"
+                    ItemContainerStyle="{StaticResource StyleListBox}"
                     ItemsSource="{Binding Commands}" 
                     ScrollViewer.VerticalScrollBarVisibility="Visible"
                     SelectedItem="{Binding SelectedCommand}">
+
+            <ListBox.Template>
+                <ControlTemplate>
+                    <ScrollViewer>
+                    <DockPanel LastChildFill="True">
+                        
+                        <Grid DockPanel.Dock="Top" Height="60">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Label Grid.Row="0" HorizontalContentAlignment="Center" FontSize="14" Foreground="White">Поиск комманды</Label>
+                            <Button
+                                Grid.Row="1"
+                                Style="{StaticResource StylePushButton}"
+                                Foreground="White"
+                                FontSize="14"
+                                Command="{Binding AddCommandCommand}">
+                                Добавить комманду
+                            </Button>
+                        </Grid>
+                        <ItemsPresenter></ItemsPresenter>
+                    </DockPanel></ScrollViewer>
+                </ControlTemplate>
+            </ListBox.Template>
+
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Height="40" Orientation="Horizontal">
@@ -558,31 +588,12 @@
                                         CommandParameter="{Binding Name}">
                             <Image Source="/img/Actions/Editor/icon_close.png"/>
                         </Button>
-
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
+            
         </ListBox>
-
-        <!--
-            <ScrollViewer 
-                VerticalScrollBarVisibility="Visible"
-                Grid.Column="0"
-                
-                Style="{StaticResource ScrollStyle}">
-                <ItemsControl ItemsSource="{Binding Commands}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <Button Background="Transparent">
-                                <StackPanel Orientation="Vertical">
-                                    <Button Content="{Binding Name}"/>
-                                </StackPanel>
-                            </Button>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </ScrollViewer>-->
-
+        
     </Grid>
 
     </Grid>

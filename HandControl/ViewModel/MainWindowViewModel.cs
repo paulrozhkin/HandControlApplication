@@ -135,7 +135,10 @@ namespace HandControl.ViewModel
             get { return new RelayCommand((object obj) => this.DeleteACtion(obj)); }
         }
 
-        
+        public ICommand AddCommandCommand
+        {
+            get { return new RelayCommand((object obj) => this.AddCommand(obj)); }
+        }
         #endregion
 
         #region Constructor
@@ -155,6 +158,16 @@ namespace HandControl.ViewModel
         #endregion
 
         #region Methods
+        private void AddCommand(object obj)
+        {
+            CommandModel newCommand = new CommandModel
+            {
+                Name = "Новая комманда"
+            };
+            Commands.Add(newCommand);
+            OnPropertyChanged();
+        }
+
         private void DeleteACtion(object obj)
                 {
                     if (obj == null)
