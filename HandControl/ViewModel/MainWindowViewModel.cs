@@ -66,6 +66,12 @@ namespace HandControl.ViewModel
                 selectedCommand = value;
                 if (selectedCommand != null)
                 {
+                    if (selectedCommand.DataAction == null)
+                        selectedCommand.DataAction = new ObservableCollection<ActionModel>();
+
+                    if (selectedCommand.InfoCommand == null)
+                        selectedCommand.InfoCommand = InfoCommandModel.GetDefault();
+
                     SelectedListCommandActions = selectedCommand.DataAction;
                 }
                 OnPropertyChanged();
@@ -148,8 +154,9 @@ namespace HandControl.ViewModel
             if (Commands.Count() != 0)
                 SelectedCommand = Commands[0];
 
+            // CommunicationManager.ActionListRequestCommand();
             // CommunicationManager.SaveCommandsToVoice(Commands);
-            // CommunicationManager.SaveCommands(commands);
+            CommunicationManager.SaveCommands(commands);
             // CommunicationManager.ExecuteTheCommand("Сжать");
             // CommunicationManager.ExecuteTheCommand("ModeVoice");
             // CommunicationManager.ExecuteTheCommand(commands[0]);

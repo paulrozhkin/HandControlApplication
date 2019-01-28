@@ -29,11 +29,13 @@ namespace HandControl.Model
             {
                 string lastName = name;
                 name = value;
-                if (InfoCommand != null && DataAction != null)
-                {
-                    FileIOManager.DeleteFolder(PathManager.GetCommandFolderPath(lastName)); // Сначала удаляем прдыдущую папку с командой
-                    SaveCommand(this);
-                }
+ 
+                    if (InfoCommand != null && DataAction != null)
+                    {
+                        FileIOManager.DeleteFolder(PathManager.GetCommandFolderPath(lastName)); // Сначала удаляем прдыдущую папку с командой
+                        SaveCommand(this);
+                    }
+                
                 OnPropertyChanged();
             }
         }
@@ -146,6 +148,10 @@ namespace HandControl.Model
                 return byteArray;
             }
             private set { }
+        }
+
+        public CommandModel()
+        {
         }
 
         public static ObservableCollection<CommandModel> GetCommands()

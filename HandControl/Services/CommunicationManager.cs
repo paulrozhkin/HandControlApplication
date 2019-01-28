@@ -21,6 +21,8 @@ namespace HandControl.Services
         private static readonly byte CommandExecByMotion = 0x17;        // Выполнить комманду по полученным данным
         private static readonly byte CommandExexRaw = 0x18;     // Установить на все двигатели данное значение
         private static readonly byte CommandSaveToVoice = 0x19; // Сохранить комманду в устройство распознования речи
+        private static readonly byte CommandActionListRequest = 0x20; // Запросить список команд устройства(имя команды)
+        private static readonly byte CommandActionListAnswer = 0x21; // Ответ на запрос списка команд устройства(список имен команд устройства)
 
         // Режимы работы протеза
         public static readonly byte ModeMIO = 0;
@@ -63,6 +65,17 @@ namespace HandControl.Services
             {
                 dataField.AddRange(command.BinaryDate.ToList<byte>());
             }
+            byte[] package = CreatePackage(addressHand, dataField);
+            device.SendToDevice(package);
+        }
+
+        public static void ActionListRequestCommand()
+        {
+            List<byte> dataField = new List<byte>
+                {
+                    CommandActionListRequest
+                };
+
             byte[] package = CreatePackage(addressHand, dataField);
             device.SendToDevice(package);
         }
