@@ -16,6 +16,7 @@ namespace HandControl.Services
     public class CommunicationManager: INotifyPropertyChanged
     {
         #region Variables
+        public bool Test { get; set; } = true;
         public IIODevice СonnectedDevices { get; set; }
         private static CommunicationManager instance;
         private static readonly object syncRoot = new object();

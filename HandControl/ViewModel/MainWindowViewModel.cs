@@ -18,8 +18,8 @@ namespace HandControl.ViewModel
         #region Variables
         public event PropertyChangedEventHandler PropertyChanged;
 
-        CommandModel selectedCommand = null;
-        CommunicationManager Communication { get; set; }
+        private CommandModel selectedCommand = null;
+        public CommunicationManager Communication { get; set; }
 
         /// <summary>
         /// Список комманд
@@ -55,43 +55,22 @@ namespace HandControl.ViewModel
             }
             set
             {
-                selectedCommand = value;
-                if (selectedCommand != null)
-                {
-                    if (selectedCommand.DataAction == null)
-                        selectedCommand.DataAction = new ObservableCollection<ActionModel>();
-
-                    if (selectedCommand.InfoCommand == null)
-                        selectedCommand.InfoCommand = InfoCommandModel.GetDefault();
-
-                    SelectedListCommandActions = selectedCommand.DataAction;
-                }
-            }
-        }
-
-        ActionModel selectedAction;
-        public ActionModel SelectedAction
-        {
-            get
-            {
-                return selectedAction;
-            }
-            set
-            {
                 if (value != null)
                 {
-                    selectedAction = (ActionModel)value;
-                    ActionVisible = Visibility.Visible;
+                    selectedCommand = value.Clone() as CommandModel;
+                    SelectedListCommandActions = selectedCommand.DataAction;
                 }
                 else
                 {
-                    ActionVisible = Visibility.Hidden;
+                    SelectedListCommandActions = null;
+                    selectedCommand = null;
                 }
             }
         }
 
-        public Visibility ActionVisible
-        { get; set; }
+        public ActionModel SelectedAction { get; set; }
+
+        public Visibility ActionVisible { get; set; } = Visibility.Collapsed;
         #endregion
 
         #region Commands
@@ -124,6 +103,16 @@ namespace HandControl.ViewModel
         {
             get { return new RelayCommand((object obj) => this.HandHandler(obj)); }
         }
+
+        public ICommand InfinityCheckCommand
+        {
+            get { return new RelayCommand((object obj) => this.InfinityCheck(obj)); }
+        }
+
+        public ICommand CloseChangeCommand
+        {
+            get { return new RelayCommand((object obj) => this.CloseChange(obj)); }
+        }
         #endregion
 
         #region Constructor
@@ -151,6 +140,8 @@ namespace HandControl.ViewModel
             {
                 Name = "Новая комманда"
             };
+            newCommand.InfoCommand = InfoCommandModel.GetDefault();
+            newCommand.DataAction = new ObservableCollection<ActionModel>();
             Commands.Add(newCommand);
         }
 
@@ -200,6 +191,7 @@ namespace HandControl.ViewModel
             {
                 if (command.Name == deletNameCommand)
                 {
+                    CommandModel.DeleteCommand(command);
                     Commands.Remove(command);
                     break;
                 }
@@ -209,6 +201,17 @@ namespace HandControl.ViewModel
         private void HandHandler(object obj)
         {
             throw new NotImplementedException();
+        }
+
+        private void InfinityCheck(object obj)
+        {
+            SelectedCommand.InfoCommand.IterableActions = !SelectedCommand.InfoCommand.IterableActions;
+        }
+
+        private void CloseChange(object obj)
+        {
+            SelectedCommand = null;
+            SelectedAction = null;
         }
         #endregion
     }

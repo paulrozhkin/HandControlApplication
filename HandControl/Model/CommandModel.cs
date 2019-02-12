@@ -30,11 +30,11 @@ namespace HandControl.Model
                 string lastName = name;
                 name = value;
  
-                    if (InfoCommand != null && DataAction != null)
-                    {
-                        FileIOManager.DeleteFolder(PathManager.GetCommandFolderPath(lastName)); // Сначала удаляем прдыдущую папку с командой
-                        SaveCommand(this);
-                    }
+                    //if (InfoCommand != null && DataAction != null)
+                    //{
+                    //    FileIOManager.DeleteFolder(PathManager.GetCommandFolderPath(lastName)); // Сначала удаляем прдыдущую папку с командой
+                    //    SaveCommand(this);
+                    //}
             }
         }
         /// <summary>
@@ -164,13 +164,28 @@ namespace HandControl.Model
             JsonSerDer.SaveObject(command, PathManager.GetCommandPath(command.Name));
         }
 
+        public static void DeleteCommand(CommandModel command)
+        {
+            FileIOManager.DeleteFolder(PathManager.GetCommandFolderPath(command.Name)); // Сначала удаляем прдыдущую папку с командой
+        }
+
         public object Clone()
         {
+            var newDataAction = new ObservableCollection<ActionModel>();
+
+            if (DataAction != null)
+            {
+                foreach (var action in this.DataAction)
+                {
+                    newDataAction.Add((ActionModel)action.Clone());
+                }
+            }
+
             return new CommandModel()
             {
-                Name = this.Name,
-                InfoCommand = (InfoCommandModel)this.InfoCommand.Clone()
-                // dataAction = (List<Action>)this.dataAction.Clone()
+                Name = (string)this.Name.Clone(),
+                InfoCommand = (InfoCommandModel)this.InfoCommand.Clone(),
+                DataAction = newDataAction
             };
         }
     }
@@ -292,14 +307,33 @@ namespace HandControl.Model
 
     public class InfoCommandModel : ICloneable, INotifyPropertyChanged
     {
+        /// <summary>
+        /// Бесконечность действий
+        /// </summary>
         [JsonProperty(PropertyName = "iterable_actions")]
         public bool IterableActions { get; set; }
+
+        /// <summary>
+        /// Команда комбинированного управления
+        /// </summary>
         [JsonProperty(PropertyName = "combined")]
         public bool CombinedCommand { get; set; }
+
+        /// <summary>
+        /// Количество повторений действий
+        /// </summary>
         [JsonProperty(PropertyName = "num_act_rep")]
         public int NumActRep { get; set; }
+
+        /// <summary>
+        /// Количество действий в команде
+        /// </summary>
         [JsonProperty(PropertyName = "count_command")]
         public int CountCommand { get; set; }
+
+        /// <summary>
+        /// Время последнего изменения/создания команды
+        /// </summary>
         [JsonProperty(PropertyName = "date")]
         public string Date { get; set; }
 

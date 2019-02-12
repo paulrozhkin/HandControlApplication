@@ -5,14 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HandControl"
         mc:Ignorable="d"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:converters="clr-namespace:HandControl.Services"
         Title="MainWindow" WindowStyle="SingleBorderWindow" Icon="/img/logo.ico"
         Height="768" Width="1024"
+        MaxHeight="768" MaxWidth="1024"
         >
 
     <Window.Resources>
         <converters:IdToNameActionConverter x:Key="idToNameActionConverter"/>
-        
+
         <Style x:Key="StyleListBox" TargetType="{x:Type ListBoxItem}">
             <Setter Property="Template">
                 <Setter.Value>
@@ -58,7 +60,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        
+
         <Style x:Key="StylePushButton" TargetType="{x:Type Button}">
 
             <Style.Triggers>
@@ -70,11 +72,11 @@
                     </Setter>
                 </Trigger>
             </Style.Triggers>
-            
+
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="BorderBrush" Value="{x:Null}"/>
             <Setter Property="RenderTransformOrigin" Value="0.5, 0.5"/>
-            
+
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
@@ -86,7 +88,7 @@
             </Setter>
             <Setter Property="Background" Value="Transparent"/>
         </Style>
-        
+
         <Style TargetType="{x:Type Thumb}">
             <Setter Property="Template">
                 <Setter.Value>
@@ -235,12 +237,12 @@
             <Image Width="40">
                 <Image.Style>
                     <Style TargetType="Image">
-                        <Setter Property="Source" Value="/img/Header/icon_usb.png"/>
+                        <Setter Property="Source" Value="/img/Header/usb_turn_off.png"/>
                         <Style.Triggers>
                             <DataTrigger
-                                Binding="{Binding Communication.СonnectedDevices.StateDeviceHand}"
+                                Binding="{Binding Path=Communication.СonnectedDevices.StateDeviceHand}"
                                 Value="True">
-                                <Setter Property="Source" Value="/img/Header/menu.png"/>
+                                <Setter Property="Source" Value="/img/Header/usb_turn_on.png"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -257,15 +259,83 @@
             <Image Source="/img/Header/rec2.png" Width="40"/>
         </Button>
 
+
+        <Grid Grid.Row="1" Visibility="Visible">
+
+            <Grid.Style>
+                <Style TargetType="Grid">
+                    <Setter Property="Visibility" Value="Visible"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Path=SelectedCommand}" Value="{x:Null}">
+                            <Setter Property="Visibility" Value="Collapsed"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+
+            <TextBlock Foreground="White"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Right"
+                       Margin="0 0 420 0"
+                       FontSize="16"
+                       FontFamily="{StaticResource SFUIDisplayThin}"
+                       Text="Бесконечное повторение действий"/>
+
+
+            <Button HorizontalAlignment="Right"
+                    Margin="0 0 360 0"
+                    Command="{Binding InfinityCheckCommand}"
+                    Style="{StaticResource StylePushButton}"
+                    >
+                <materialDesign:PackIcon Kind="Infinity" Height="40" Width="45">
+                    <materialDesign:PackIcon.Style>
+                        <Style TargetType="materialDesign:PackIcon">
+                            <Setter Property="Foreground" Value="Black"/>
+                            <Style.Triggers>
+                                <DataTrigger
+                                    Binding="{Binding Path=SelectedCommand.InfoCommand.IterableActions}"
+                                    Value="True">
+                                    <Setter Property="Foreground" Value="Yellow"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </materialDesign:PackIcon.Style>
+                </materialDesign:PackIcon >
+            </Button>
+
+
+            <TextBlock Foreground="White"
+                       VerticalAlignment="Center"
+                       HorizontalAlignment="Right"
+                       Margin="0 0 80 0"
+                       FontSize="16"
+                       FontFamily="{StaticResource SFUIDisplayThin}"
+                       Text="Количество повторений действий"/>
+
+            <TextBox Width="60"
+                     Height="25"
+                     VerticalAlignment="Center"
+                     HorizontalAlignment="Right"
+                     Margin="0 0 10 0"
+                     BorderBrush="Yellow"
+                     BorderThickness="2"
+                     Foreground="White"
+                     FontSize="14"
+                     Padding="10 0 0 0"
+                     MaxLength="4"
+                     FontFamily="{StaticResource SFUIDisplayThin}"
+                     Text="{Binding SelectedCommand.InfoCommand.NumActRep}"
+                     Background="Transparent"/>
+        </Grid>
+
+        <!--Основной контент-->
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="230"/>
-                <ColumnDefinition>
-
-                </ColumnDefinition>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <Grid Grid.Column="1" >
+            <Grid Grid.Column="1">
 
                 <Grid.Background>
                     <ImageBrush ImageSource="/img/fon1.jpg" />
@@ -278,7 +348,7 @@
                 </Grid.ColumnDefinitions>
 
 
-                <Grid Grid.Column="2">
+                <Grid Grid.Column="2" Visibility="Visible">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="35"/>
                         <RowDefinition Height="10"/>
@@ -287,6 +357,17 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
+                    <Grid.Style>
+                        <Style TargetType="Grid">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=SelectedCommand}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Grid.Style>
+                    
                     <Grid Grid.Row="0" Margin="0 10 0 0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
@@ -317,6 +398,7 @@
                         </Button>
 
                         <Button Grid.Column="4"
+                                Command="{Binding CloseChangeCommand}"
                                 Style="{StaticResource StylePushButton}"
                                 Height="22">
                             <Image Source="/img/Actions/Editor/icon_close.png"/>
@@ -324,7 +406,7 @@
                     </Grid>
 
                     <Border Grid.Row="2" BorderBrush="{x:Null}" Background="#262b36" Margin="0,0.333,15,0" Height="630" Grid.RowSpan="3" VerticalAlignment="Top">
-                        <TextBlock
+                        <TextBox
                             HorizontalAlignment="Center"
                             Foreground="Yellow"
                             Background="Transparent"
@@ -335,7 +417,7 @@
                             FontSize="16"
                             Margin="0 10 0 0"
                             >
-                        </TextBlock>
+                        </TextBox>
                     </Border>
 
                     <Button
@@ -403,20 +485,40 @@
                 </Grid>
 
                 <ItemsControl
+                    Visibility="Visible"
                     Grid.Column="1"      
-                    Background="White"
                     HorizontalAlignment="Left"                   
                     Width="180"                 
                     VerticalAlignment="Top"                   
                     Margin="0 120 0 0"                    
                     BorderBrush="Yellow"                   
-                    BorderThickness="2"                   
-                    Visibility="{Binding ActionVisible, Mode=TwoWay}"
+                    BorderThickness="2"  
+                    Foreground="#c2c2c2"
                     >
+
+                    <ItemsControl.Style>
+                        <Style TargetType="ItemsControl">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Path=SelectedAction}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ItemsControl.Style>
+                    
+                    <ItemsControl.Background>
+                        <SolidColorBrush Color="#262b36" Opacity="0.6" />
+                    </ItemsControl.Background>
+
                     <ItemsControl
-                        Height="50">
+                        Height="65">
                         <TextBlock Text="Большой палец"
                                    Margin="5"
+                                   FontWeight="Bold"
+                                   FontSize="14"
+                                   Foreground="#c2c2c2"
+                                   FontFamily="{StaticResource SFUIDisplayMedium}"
                                    HorizontalAlignment="Center">
 
                         </TextBlock>
@@ -424,18 +526,43 @@
                             Background="Transparent"
                             BorderBrush="Transparent"
                             HorizontalAlignment="Center"
-                            Margin="0 0 0 0"
-                            Width="50"
+                            Margin="0 -15 0 0"
+                            Width="60"
+                            FontSize="24"
+                            MaxLength="3"
                             TextAlignment="Center"
                             Text="{Binding SelectedAction.ThumbFinger}"
                             >
                         </TextBox>
+
+                        <TextBlock
+                            Text="0 - мин"
+                            Width="40"
+                            Height="15"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Left"
+                            Margin="9 -5 0 0">
+                        </TextBlock>
+
+                        <TextBlock
+                            Text="макс - 180"
+                            Width="60"
+                            Height="15"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Right"
+                            Margin="0 -15 5 0">
+                        </TextBlock>
+
+                        <Rectangle VerticalAlignment="Bottom" RadiusX="75" RadiusY="25" Height="1" Fill="White"/>
                     </ItemsControl>
 
                     <ItemsControl
-                        Height="50">
+                        Height="65">
                         <TextBlock Text="Указательный палец"
                                    Margin="5"
+                                   FontWeight="Bold"
+                                   FontSize="14"
+                                   FontFamily="{StaticResource SFUIDisplayMedium}"
                                    HorizontalAlignment="Center">
 
                         </TextBlock>
@@ -443,18 +570,43 @@
                             Background="Transparent"
                             BorderBrush="Transparent"
                             HorizontalAlignment="Center"
-                            Margin="0 0 0 0"
-                            Width="50"
+                            Margin="0 -15 0 0"
+                            Width="60"
+                            FontSize="24"
+                            MaxLength="3"
                             TextAlignment="Center"
                             Text="{Binding SelectedAction.PointerFinger}"
                             >
                         </TextBox>
+
+                        <TextBlock
+                            Text="0 - мин"
+                            Width="40"
+                            Height="15"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Left"
+                            Margin="9 -5 0 0">
+                        </TextBlock>
+
+                        <TextBlock
+                            Text="макс - 180"
+                            Width="60"
+                            Height="15"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Right"
+                            Margin="0 -15 5 0">
+                        </TextBlock>
+
+                        <Rectangle VerticalAlignment="Bottom" RadiusX="75" RadiusY="25" Height="1" Fill="White"/>
                     </ItemsControl>
 
                     <ItemsControl
-                        Height="50">
+                        Height="65">
                         <TextBlock Text="Средний палец"
                                    Margin="5"
+                                   FontWeight="Bold"
+                                   FontSize="14"
+                                   FontFamily="{StaticResource SFUIDisplayMedium}"
                                    HorizontalAlignment="Center">
 
                         </TextBlock>
@@ -462,18 +614,43 @@
                             Background="Transparent"
                             BorderBrush="Transparent"
                             HorizontalAlignment="Center"
-                            Margin="0 0 0 0"
-                            Width="50"
+                            Margin="0 -15 0 0"
+                            Width="60"
+                            FontSize="24"
+                            MaxLength="3"
                             TextAlignment="Center"
                             Text="{Binding SelectedAction.MiddleFinger}"
                             >
                         </TextBox>
+
+                        <TextBlock
+                            Text="0 - мин"
+                            Width="40"
+                            Height="15"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Left"
+                            Margin="9 -5 0 0">
+                        </TextBlock>
+
+                        <TextBlock
+                            Text="макс - 180"
+                            Width="60"
+                            Height="15"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Right"
+                            Margin="0 -15 5 0">
+                        </TextBlock>
+
+                        <Rectangle VerticalAlignment="Bottom" RadiusX="75" RadiusY="25" Height="1" Fill="White"/>
                     </ItemsControl>
 
                     <ItemsControl
-                        Height="50">
+                        Height="65">
                         <TextBlock Text="Безымянный палец"
                                    Margin="5"
+                                   FontWeight="Bold"
+                                   FontSize="14"
+                                   FontFamily="{StaticResource SFUIDisplayMedium}"
                                    HorizontalAlignment="Center">
 
                         </TextBlock>
@@ -481,18 +658,43 @@
                             Background="Transparent"
                             BorderBrush="Transparent"
                             HorizontalAlignment="Center"
-                            Margin="0 0 0 0"
-                            Width="50"
+                            Margin="0 -15 0 0"
+                            Width="60"
+                            FontSize="24"
+                            MaxLength="3"
                             TextAlignment="Center"
                             Text="{Binding SelectedAction.RingFinder}"
                             >
                         </TextBox>
+
+                        <TextBlock
+                            Text="0 - мин"
+                            Width="40"
+                            Height="15"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Left"
+                            Margin="9 -5 0 0">
+                        </TextBlock>
+
+                        <TextBlock
+                            Text="макс - 180"
+                            Width="60"
+                            Height="15"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Right"
+                            Margin="0 -15 5 0">
+                        </TextBlock>
+
+                        <Rectangle VerticalAlignment="Bottom" RadiusX="75" RadiusY="25" Height="1" Fill="White"/>
                     </ItemsControl>
 
                     <ItemsControl
-                        Height="50">
+                        Height="65">
                         <TextBlock Text="Мезинец"
                                    Margin="5"
+                                   FontWeight="Bold"
+                                   FontSize="14"
+                                   FontFamily="{StaticResource SFUIDisplayMedium}"
                                    HorizontalAlignment="Center">
 
                         </TextBlock>
@@ -500,18 +702,43 @@
                             Background="Transparent"
                             BorderBrush="Transparent"
                             HorizontalAlignment="Center"
-                            Margin="0 0 0 0"
-                            Width="50"
+                            Margin="0 -15 0 0"
+                            Width="60"
+                            FontSize="24"
+                            MaxLength="3"
                             TextAlignment="Center"
                             Text="{Binding SelectedAction.LittleFinger}"
                             >
                         </TextBox>
+
+                        <TextBlock
+                            Text="0 - мин"
+                            Width="40"
+                            Height="15"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Left"
+                            Margin="9 -5 0 0">
+                        </TextBlock>
+
+                        <TextBlock
+                            Text="макс - 180"
+                            Width="60"
+                            Height="15"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Right"
+                            Margin="0 -15 5 0">
+                        </TextBlock>
+
+                        <Rectangle VerticalAlignment="Bottom" RadiusX="75" RadiusY="25" Height="1" Fill="White"/>
                     </ItemsControl>
 
                     <ItemsControl
-                        Height="50">
+                        Height="65">
                         <TextBlock Text="Задержка"
                                    Margin="5"
+                                   FontWeight="Bold"
+                                   FontSize="14"
+                                   FontFamily="{StaticResource SFUIDisplayMedium}"
                                    HorizontalAlignment="Center">
 
                         </TextBlock>
@@ -519,18 +746,29 @@
                             Background="Transparent"
                             BorderBrush="Transparent"
                             HorizontalAlignment="Center"
-                            Margin="0 0 0 0"
-                            Width="50"
+                            Margin="0 -15 0 0"
+                            Width="60"
+                            FontSize="24"
+                            MaxLength="5"
                             TextAlignment="Center"
                             Text="{Binding SelectedAction.DelAction}"
                             >
                         </TextBox>
+
+                        <TextBlock
+                            Text="в секундах"
+                            Width="60"
+                            Height="15"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Center"
+                            Margin="0 -5 5 0">
+                        </TextBlock>
                     </ItemsControl>
 
                 </ItemsControl>
             </Grid>
-        
-        
+
+
             <ListBox    Grid.Column="0" 
                         Background="Transparent"
                         BorderThickness="0"
@@ -543,7 +781,7 @@
                     <ControlTemplate>
                         <ScrollViewer>
                             <DockPanel LastChildFill="True">
-                        
+
                                 <Grid DockPanel.Dock="Top" Height="60">
                                     <Grid.RowDefinitions>
                                         <RowDefinition/>
@@ -560,55 +798,55 @@
                                     </Button>
                                 </Grid>
                                 <ItemsPresenter></ItemsPresenter>
-                                </DockPanel></ScrollViewer>
-                            </ControlTemplate>
-                        </ListBox.Template>
+                            </DockPanel>
+                        </ScrollViewer>
+                    </ControlTemplate>
+                </ListBox.Template>
 
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Height="40" Orientation="Horizontal">
-                                    <TextBox 
-                                        Width="140"
-                                        VerticalAlignment="Center"
-                                        Margin="0 8 0 0" 
-                                        FontSize="16"
-                                        BorderBrush="{x:Null}"
-                                        Background="Transparent"
-                                        Text="{Binding Name, UpdateSourceTrigger=LostFocus}">
-                                        <TextBox.Style>
-                                            <Style>
-                                                <Setter Property="TextBox.Foreground" Value="White"/>
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={
-                                                                 RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem }}}"
-                                                                 Value="True">
-                                                        <Setter Property="TextBox.Foreground" Value="Black"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </TextBox.Style>
-                                    </TextBox>
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Height="40" Orientation="Horizontal">
+                            <TextBlock 
+                                Width="140"
+                                VerticalAlignment="Center"
+                                Margin="0 8 0 0" 
+                                FontSize="16"
+                                Background="Transparent"
+                                Text="{Binding Name, UpdateSourceTrigger=LostFocus}">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Foreground" Value="White"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={
+                                                         RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem }}}"
+                                                         Value="True">
+                                                <Setter Property="Foreground" Value="Black"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
 
-                                    <Button
-                                        Margin="30 5 0 0"        
-                                        DockPanel.Dock="Right"
-                                        Height="15"
-                                        Width="15"
-                                        VerticalAlignment="Top"
-                                        Style="{StaticResource StylePushButton}"
-                                        HorizontalAlignment="Right"    
-                                        Command="{Binding Path=DataContext.DeleteCommandCommand,
-                                        RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
-                                        CommandParameter="{Binding Name}">
-                                        <Image Source="/img/Actions/Editor/icon_close.png"/>
-                                    </Button>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-            
-                    </ListBox>
-        
-                </Grid>
+                            <Button
+                                Margin="30 5 0 0"        
+                                DockPanel.Dock="Right"
+                                Height="15"
+                                Width="15"
+                                VerticalAlignment="Top"
+                                Style="{StaticResource StylePushButton}"
+                                HorizontalAlignment="Right"    
+                                Command="{Binding Path=DataContext.DeleteCommandCommand,
+                                RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
+                                CommandParameter="{Binding Name}">
+                                <Image Source="/img/Actions/Editor/icon_close.png"/>
+                            </Button>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
 
-            </Grid>
-        </Window>
+            </ListBox>
+
+        </Grid>
+
+    </Grid>
+</Window>

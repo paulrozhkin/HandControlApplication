@@ -5,10 +5,10 @@ using System.IO.Ports;
 
 namespace HandControl.Services
 {
-    class IODeviceCom: IIODevice
+    public class IODeviceCom: IIODevice
     {
         #region Variables
-        public bool StateDeviceHand { get; private set; }
+        public bool StateDeviceHand { get; private set; } = true;
         public bool StateDeviceVoice { get; private set; }
 
         private SerialPort serialPortHand = new SerialPort();
@@ -20,8 +20,7 @@ namespace HandControl.Services
 
         public IODeviceCom()
         {
-            StateDeviceHand = true;
-            // SerialSetup();
+            SerialSetup();
         }
 
 
