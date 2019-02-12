@@ -10,7 +10,6 @@
         Height="768" Width="1024"
         >
 
-    <!---->
     <Window.Resources>
         <converters:IdToNameActionConverter x:Key="idToNameActionConverter"/>
         
@@ -25,8 +24,8 @@
                                 Padding="{TemplateBinding Padding}"
                                 SnapsToDevicePixels="true">
                             <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
-                                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsSelected" Value="true">
@@ -35,9 +34,9 @@
                             <MultiTrigger>
                                 <MultiTrigger.Conditions>
                                     <Condition Property="Selector.IsSelectionActive"
-                                                Value="False" />
+                                               Value="False" />
                                     <Condition Property="IsSelected"
-                                                Value="True" />
+                                               Value="True" />
                                 </MultiTrigger.Conditions>
                                 <Setter Property="Background"
                                         TargetName="Bd"
@@ -46,9 +45,9 @@
                             <MultiTrigger>
                                 <MultiTrigger.Conditions>
                                     <Condition Property="Selector.IsSelectionActive"
-                                                Value="True" />
+                                               Value="True" />
                                     <Condition Property="IsSelected"
-                                                Value="True" />
+                                               Value="True" />
                                 </MultiTrigger.Conditions>
                                 <Setter Property="Background"
                                         TargetName="Bd"
@@ -86,7 +85,7 @@
                 </Setter.Value>
             </Setter>
             <Setter Property="Background" Value="Transparent"/>
-         </Style>
+        </Style>
         
         <Style TargetType="{x:Type Thumb}">
             <Setter Property="Template">
@@ -187,10 +186,10 @@
                                 <ScrollContentPresenter />
                             </Border>
                             <ScrollBar x:Name="PART_VerticalScrollBar" Grid.Column="1" Grid.Row="0"
-                             Value="{TemplateBinding VerticalOffset}"
-                             Maximum="{TemplateBinding ScrollableHeight}"
-                             ViewportSize="{TemplateBinding ViewportHeight}"
-                             Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" Width="Auto" RenderTransformOrigin="0.5,0.5" Margin="0,0,-5,0">
+                                       Value="{TemplateBinding VerticalOffset}"
+                                       Maximum="{TemplateBinding ScrollableHeight}"
+                                       ViewportSize="{TemplateBinding ViewportHeight}"
+                                       Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" Width="Auto" RenderTransformOrigin="0.5,0.5" Margin="0,0,-5,0">
                                 <ScrollBar.RenderTransform>
                                     <TransformGroup>
                                         <ScaleTransform/>
@@ -215,386 +214,401 @@
         </Grid.RowDefinitions>
 
         <!--Background="#182339"-->
-    <Rectangle Grid.Row="0" Fill="Black" />
-    <Rectangle Grid.Row="1" Fill="#182339" />
+        <Rectangle Grid.Row="0" Fill="Black" />
+        <Rectangle Grid.Row="1" Fill="#182339" />
 
 
-    <Button Grid.Row="1"
+        <Button Grid.Row="1"
                 HorizontalAlignment="Left"
                 Margin="10 0 0 0"
                 Style="{StaticResource StylePushButton}"
                 >
-        <Image Source="/img/Header/menu.png" Width="48" Height="28"/>
-    </Button>
+            <Image Source="/img/Header/menu.png" Width="48" Height="28"/>
+        </Button>
 
-    <Button Grid.Row="1"
+        <Button Grid.Row="1"
                 HorizontalAlignment="Left"
                 Margin="80 0 0 0"
+                Command="{Binding HandCommand}"
                 Style="{StaticResource StylePushButton}"
                 >
-        <Image Source="/img/Header/icon_usb.png" Width="40"/>
-    </Button>
+            <Image Width="40">
+                <Image.Style>
+                    <Style TargetType="Image">
+                        <Setter Property="Source" Value="/img/Header/icon_usb.png"/>
+                        <Style.Triggers>
+                            <DataTrigger
+                                Binding="{Binding Communication.СonnectedDevices.StateDeviceHand}"
+                                Value="True">
+                                <Setter Property="Source" Value="/img/Header/menu.png"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
+        </Button>
 
-    <Button Grid.Row="1"
+        <Button Grid.Row="1"
+                Visibility="Collapsed"
                 HorizontalAlignment="Left"
                 Margin="140 0 0 0"
                 Style="{StaticResource StylePushButton}"
                 >
-        <Image Source="/img/Header/rec2.png" Width="40"/>
-    </Button>
+            <Image Source="/img/Header/rec2.png" Width="40"/>
+        </Button>
 
-    <Grid Grid.Row="2">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="230"/>
-            <ColumnDefinition>
-
-            </ColumnDefinition>
-        </Grid.ColumnDefinitions>
-
-        <Grid Grid.Column="1" >
-
-            <Grid.Background>
-                <ImageBrush ImageSource="/img/fon1.jpg" />
-            </Grid.Background>
-
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="180"/>
+                <ColumnDefinition Width="230"/>
+                <ColumnDefinition>
+
+                </ColumnDefinition>
             </Grid.ColumnDefinitions>
 
+            <Grid Grid.Column="1" >
 
-            <Grid Grid.Column="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="35"/>
-                    <RowDefinition Height="10"/>
-                    <RowDefinition Height="40"/>
-                    <RowDefinition Height="30"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
+                <Grid.Background>
+                    <ImageBrush ImageSource="/img/fon1.jpg" />
+                </Grid.Background>
 
-                <Grid Grid.Row="0" Margin="0 10 0 0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="18"/>
-                    </Grid.ColumnDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="180"/>
+                </Grid.ColumnDefinitions>
 
-                    <Button Grid.Column="1"
-                            Style="{StaticResource StylePushButton}"
-                            Command="{Binding SaveActionsCommand}"
-                            Height="22">
-                        <Image Source="/img/Actions/Editor/icon_save.png"/>
-                    </Button>
 
-                    <Button Grid.Column="2"
-                            Style="{StaticResource StylePushButton}"
-                            Height="22">
-                        <Image Source="/img/Actions/Editor/icon_back.png"/>
-                    </Button>
+                <Grid Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition Height="10"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
 
-                    <Button Grid.Column="3"
-                            Style="{StaticResource StylePushButton}"
-                            Height="22">
-                        <Image Source="/img/Actions/Editor/icon_front.png"/>
-                    </Button>
+                    <Grid Grid.Row="0" Margin="0 10 0 0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="18"/>
+                        </Grid.ColumnDefinitions>
 
-                    <Button Grid.Column="4"
-                            Style="{StaticResource StylePushButton}"
-                            Height="22">
-                        <Image Source="/img/Actions/Editor/icon_close.png"/>
-                    </Button>
-                </Grid>
-
-                <Border Grid.Row="2" BorderBrush="{x:Null}" Background="#262b36" Margin="0,0.333,15,0" Height="630" Grid.RowSpan="3" VerticalAlignment="Top">
-                    <TextBlock
-                        HorizontalAlignment="Center"
-                        Foreground="Yellow"
-                        Background="Transparent"
-                        VerticalAlignment="Top"
-                        Text="{Binding SelectedCommand.Name}"
-                        TextWrapping="Wrap"
-                        TextAlignment="Center"
-                        FontSize="16"
-                        Margin="0 10 0 0"
-                    >
-                    </TextBlock>
-                </Border>
-
-                <Button
-                    Style="{StaticResource StylePushButton}"
-                    Foreground="White"
-                    Grid.Row="3"
-                    Margin="0 0 15 0"
-                    FontSize="14"
-                    Command="{Binding AddActionCommand}"
-                    >
-                    Добавить действие
-                </Button>
-
-                <ListBox
-                    Background="#262b36"
-                    Grid.Row="4"
-                    ItemsSource="{Binding SelectedListCommandActions}" 
-                    SelectedItem="{Binding SelectedAction}"
-                    BorderThickness="0"
-                    x:Name="ListBoxActions"
-                    BorderBrush="Transparent"
-                    ScrollViewer.VerticalScrollBarVisibility="Visible"
-                    ItemContainerStyle="{StaticResource StyleListBox}"
-                    >
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock 
-                                    DockPanel.Dock="Left"
-                                    Margin="3" 
-                                    Width="130"
-                                    Background="Transparent"
-                                    FontSize="14"
-                                    Text="{Binding Id, Converter={StaticResource idToNameActionConverter}, Mode=TwoWay}">
-                                    <TextBlock.Style>
-                                        <Style>
-                                            <Setter Property="TextBlock.Foreground" Value="White"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={
-                                                    RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem }}}"
-                                                        Value="True">
-                                                    <Setter Property="TextBlock.Foreground" Value="Black"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
-
-                                <Button
-                                    DockPanel.Dock="Right"
-                                    Height="15"
-                                    Width="15"
-                                    VerticalAlignment="Top"
-                                    Style="{StaticResource StylePushButton}"
-                                    HorizontalAlignment="Right"    
-                                    Command="{Binding Path=DataContext.DeleteActionCommand,
-                                            RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
-                                        CommandParameter="{Binding Id, Mode=TwoWay}">
-                                    <Image Source="/img/Actions/Editor/icon_close.png"/>
-                                </Button>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </Grid>
-
-            <ItemsControl
-                Grid.Column="1"      
-                Background="White"
-                HorizontalAlignment="Left"                   
-                Width="180"                 
-                VerticalAlignment="Top"                   
-                Margin="0 120 0 0"                    
-                BorderBrush="Yellow"                   
-                BorderThickness="2"                   
-                Visibility="{Binding ActionVisible, Mode=TwoWay}"
-                >
-                <ItemsControl
-                    Height="50">
-                    <TextBlock Text="Большой палец"
-                               Margin="5"
-                               HorizontalAlignment="Center">
-
-                    </TextBlock>
-                    <TextBox
-                        Background="Transparent"
-                        BorderBrush="Transparent"
-                        HorizontalAlignment="Center"
-                        Margin="0 0 0 0"
-                        Width="50"
-                        TextAlignment="Center"
-                        Text="{Binding SelectedAction.ThumbFinger}"
-                        >
-                    </TextBox>
-                </ItemsControl>
-
-                <ItemsControl
-                    Height="50">
-                    <TextBlock Text="Указательный палец"
-                               Margin="5"
-                               HorizontalAlignment="Center">
-
-                    </TextBlock>
-                    <TextBox
-                        Background="Transparent"
-                        BorderBrush="Transparent"
-                        HorizontalAlignment="Center"
-                        Margin="0 0 0 0"
-                        Width="50"
-                        TextAlignment="Center"
-                        Text="{Binding SelectedAction.PointerFinger}"
-                        >
-                    </TextBox>
-                </ItemsControl>
-
-                <ItemsControl
-                    Height="50">
-                    <TextBlock Text="Средний палец"
-                               Margin="5"
-                               HorizontalAlignment="Center">
-
-                    </TextBlock>
-                    <TextBox
-                        Background="Transparent"
-                        BorderBrush="Transparent"
-                        HorizontalAlignment="Center"
-                        Margin="0 0 0 0"
-                        Width="50"
-                        TextAlignment="Center"
-                        Text="{Binding SelectedAction.MiddleFinger}"
-                        >
-                    </TextBox>
-                </ItemsControl>
-
-                <ItemsControl
-                    Height="50">
-                    <TextBlock Text="Безымянный палец"
-                               Margin="5"
-                               HorizontalAlignment="Center">
-
-                    </TextBlock>
-                    <TextBox
-                        Background="Transparent"
-                        BorderBrush="Transparent"
-                        HorizontalAlignment="Center"
-                        Margin="0 0 0 0"
-                        Width="50"
-                        TextAlignment="Center"
-                        Text="{Binding SelectedAction.RingFinder}"
-                        >
-                    </TextBox>
-                </ItemsControl>
-
-                <ItemsControl
-                    Height="50">
-                    <TextBlock Text="Мезинец"
-                               Margin="5"
-                               HorizontalAlignment="Center">
-
-                    </TextBlock>
-                    <TextBox
-                        Background="Transparent"
-                        BorderBrush="Transparent"
-                        HorizontalAlignment="Center"
-                        Margin="0 0 0 0"
-                        Width="50"
-                        TextAlignment="Center"
-                        Text="{Binding SelectedAction.LittleFinger}"
-                        >
-                    </TextBox>
-                </ItemsControl>
-
-                <ItemsControl
-                    Height="50">
-                    <TextBlock Text="Задержка"
-                               Margin="5"
-                               HorizontalAlignment="Center">
-
-                    </TextBlock>
-                    <TextBox
-                        Background="Transparent"
-                        BorderBrush="Transparent"
-                        HorizontalAlignment="Center"
-                        Margin="0 0 0 0"
-                        Width="50"
-                        TextAlignment="Center"
-                        Text="{Binding SelectedAction.DelAction}"
-                        >
-                    </TextBox>
-                </ItemsControl>
-
-            </ItemsControl>
-        </Grid>
-        
-        
-        <ListBox    Grid.Column="0" 
-                    Background="Transparent"
-                    BorderThickness="0"
-                    ItemContainerStyle="{StaticResource StyleListBox}"
-                    ItemsSource="{Binding Commands}" 
-                    ScrollViewer.VerticalScrollBarVisibility="Visible"
-                    SelectedItem="{Binding SelectedCommand}">
-
-            <ListBox.Template>
-                <ControlTemplate>
-                    <ScrollViewer>
-                    <DockPanel LastChildFill="True">
-                        
-                        <Grid DockPanel.Dock="Top" Height="60">
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <Label Grid.Row="0" HorizontalContentAlignment="Center" FontSize="14" Foreground="White">Поиск комманды</Label>
-                            <Button
-                                Grid.Row="1"
+                        <Button Grid.Column="1"
                                 Style="{StaticResource StylePushButton}"
-                                Foreground="White"
-                                FontSize="14"
-                                Command="{Binding AddCommandCommand}">
-                                Добавить комманду
-                            </Button>
-                        </Grid>
-                        <ItemsPresenter></ItemsPresenter>
-                    </DockPanel></ScrollViewer>
-                </ControlTemplate>
-            </ListBox.Template>
+                                Command="{Binding SaveActionsCommand}"
+                                Height="22">
+                            <Image Source="/img/Actions/Editor/icon_save.png"/>
+                        </Button>
 
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Height="40" Orientation="Horizontal">
-                        <TextBox 
-                            Width="140"
-                                VerticalAlignment="Center"
-                                Margin="0 8 0 0" 
-                                FontSize="16"
-                                BorderBrush="{x:Null}"
-                                Background="Transparent"
-                                Text="{Binding Name, UpdateSourceTrigger=LostFocus}">
-                            <TextBox.Style>
-                                <Style>
-                                    <Setter Property="TextBox.Foreground" Value="White"/>
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={
-                                                    RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem }}}"
-                                                        Value="True">
-                                            <Setter Property="TextBox.Foreground" Value="Black"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </TextBox.Style>
-                        </TextBox>
+                        <Button Grid.Column="2"
+                                Style="{StaticResource StylePushButton}"
+                                Height="22">
+                            <Image Source="/img/Actions/Editor/icon_back.png"/>
+                        </Button>
 
-                        <Button
-                            Margin="30 5 0 0"        
-                            DockPanel.Dock="Right"
-                                    Height="15"
-                                    Width="15"
-                                    VerticalAlignment="Top"
-                                    Style="{StaticResource StylePushButton}"
-                                    HorizontalAlignment="Right"    
-                                    Command="{Binding Path=DataContext.DeleteCommandCommand,
-                                            RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
-                                        CommandParameter="{Binding Name}">
+                        <Button Grid.Column="3"
+                                Style="{StaticResource StylePushButton}"
+                                Height="22">
+                            <Image Source="/img/Actions/Editor/icon_front.png"/>
+                        </Button>
+
+                        <Button Grid.Column="4"
+                                Style="{StaticResource StylePushButton}"
+                                Height="22">
                             <Image Source="/img/Actions/Editor/icon_close.png"/>
                         </Button>
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-            
-        </ListBox>
-        
-    </Grid>
+                    </Grid>
 
-    </Grid>
-</Window>
+                    <Border Grid.Row="2" BorderBrush="{x:Null}" Background="#262b36" Margin="0,0.333,15,0" Height="630" Grid.RowSpan="3" VerticalAlignment="Top">
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            Foreground="Yellow"
+                            Background="Transparent"
+                            VerticalAlignment="Top"
+                            Text="{Binding SelectedCommand.Name}"
+                            TextWrapping="Wrap"
+                            TextAlignment="Center"
+                            FontSize="16"
+                            Margin="0 10 0 0"
+                            >
+                        </TextBlock>
+                    </Border>
+
+                    <Button
+                        Style="{StaticResource StylePushButton}"
+                        Foreground="White"
+                        Grid.Row="3"
+                        Margin="0 0 15 0"
+                        FontSize="14"
+                        Command="{Binding AddActionCommand}"
+                        >
+                        Добавить действие
+                    </Button>
+
+                    <ListBox
+                        Background="#262b36"
+                        Grid.Row="4"
+                        ItemsSource="{Binding SelectedListCommandActions}" 
+                        SelectedItem="{Binding SelectedAction}"
+                        BorderThickness="0"
+                        x:Name="ListBoxActions"
+                        BorderBrush="Transparent"
+                        ScrollViewer.VerticalScrollBarVisibility="Visible"
+                        ItemContainerStyle="{StaticResource StyleListBox}"
+                        >
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock 
+                                        DockPanel.Dock="Left"
+                                        Margin="3" 
+                                        Width="130"
+                                        Background="Transparent"
+                                        FontSize="14"
+                                        Text="{Binding Id, Converter={StaticResource idToNameActionConverter}, Mode=TwoWay}">
+                                        <TextBlock.Style>
+                                            <Style>
+                                                <Setter Property="TextBlock.Foreground" Value="White"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={
+                                                                 RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem }}}"
+                                                                 Value="True">
+                                                        <Setter Property="TextBlock.Foreground" Value="Black"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+
+                                    <Button
+                                        DockPanel.Dock="Right"
+                                        Height="15"
+                                        Width="15"
+                                        VerticalAlignment="Top"
+                                        Style="{StaticResource StylePushButton}"
+                                        HorizontalAlignment="Right"    
+                                        Command="{Binding Path=DataContext.DeleteActionCommand,
+                                        RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
+                                        CommandParameter="{Binding Id, Mode=TwoWay}">
+                                        <Image Source="/img/Actions/Editor/icon_close.png"/>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+
+                <ItemsControl
+                    Grid.Column="1"      
+                    Background="White"
+                    HorizontalAlignment="Left"                   
+                    Width="180"                 
+                    VerticalAlignment="Top"                   
+                    Margin="0 120 0 0"                    
+                    BorderBrush="Yellow"                   
+                    BorderThickness="2"                   
+                    Visibility="{Binding ActionVisible, Mode=TwoWay}"
+                    >
+                    <ItemsControl
+                        Height="50">
+                        <TextBlock Text="Большой палец"
+                                   Margin="5"
+                                   HorizontalAlignment="Center">
+
+                        </TextBlock>
+                        <TextBox
+                            Background="Transparent"
+                            BorderBrush="Transparent"
+                            HorizontalAlignment="Center"
+                            Margin="0 0 0 0"
+                            Width="50"
+                            TextAlignment="Center"
+                            Text="{Binding SelectedAction.ThumbFinger}"
+                            >
+                        </TextBox>
+                    </ItemsControl>
+
+                    <ItemsControl
+                        Height="50">
+                        <TextBlock Text="Указательный палец"
+                                   Margin="5"
+                                   HorizontalAlignment="Center">
+
+                        </TextBlock>
+                        <TextBox
+                            Background="Transparent"
+                            BorderBrush="Transparent"
+                            HorizontalAlignment="Center"
+                            Margin="0 0 0 0"
+                            Width="50"
+                            TextAlignment="Center"
+                            Text="{Binding SelectedAction.PointerFinger}"
+                            >
+                        </TextBox>
+                    </ItemsControl>
+
+                    <ItemsControl
+                        Height="50">
+                        <TextBlock Text="Средний палец"
+                                   Margin="5"
+                                   HorizontalAlignment="Center">
+
+                        </TextBlock>
+                        <TextBox
+                            Background="Transparent"
+                            BorderBrush="Transparent"
+                            HorizontalAlignment="Center"
+                            Margin="0 0 0 0"
+                            Width="50"
+                            TextAlignment="Center"
+                            Text="{Binding SelectedAction.MiddleFinger}"
+                            >
+                        </TextBox>
+                    </ItemsControl>
+
+                    <ItemsControl
+                        Height="50">
+                        <TextBlock Text="Безымянный палец"
+                                   Margin="5"
+                                   HorizontalAlignment="Center">
+
+                        </TextBlock>
+                        <TextBox
+                            Background="Transparent"
+                            BorderBrush="Transparent"
+                            HorizontalAlignment="Center"
+                            Margin="0 0 0 0"
+                            Width="50"
+                            TextAlignment="Center"
+                            Text="{Binding SelectedAction.RingFinder}"
+                            >
+                        </TextBox>
+                    </ItemsControl>
+
+                    <ItemsControl
+                        Height="50">
+                        <TextBlock Text="Мезинец"
+                                   Margin="5"
+                                   HorizontalAlignment="Center">
+
+                        </TextBlock>
+                        <TextBox
+                            Background="Transparent"
+                            BorderBrush="Transparent"
+                            HorizontalAlignment="Center"
+                            Margin="0 0 0 0"
+                            Width="50"
+                            TextAlignment="Center"
+                            Text="{Binding SelectedAction.LittleFinger}"
+                            >
+                        </TextBox>
+                    </ItemsControl>
+
+                    <ItemsControl
+                        Height="50">
+                        <TextBlock Text="Задержка"
+                                   Margin="5"
+                                   HorizontalAlignment="Center">
+
+                        </TextBlock>
+                        <TextBox
+                            Background="Transparent"
+                            BorderBrush="Transparent"
+                            HorizontalAlignment="Center"
+                            Margin="0 0 0 0"
+                            Width="50"
+                            TextAlignment="Center"
+                            Text="{Binding SelectedAction.DelAction}"
+                            >
+                        </TextBox>
+                    </ItemsControl>
+
+                </ItemsControl>
+            </Grid>
+        
+        
+            <ListBox    Grid.Column="0" 
+                        Background="Transparent"
+                        BorderThickness="0"
+                        ItemContainerStyle="{StaticResource StyleListBox}"
+                        ItemsSource="{Binding Commands}" 
+                        ScrollViewer.VerticalScrollBarVisibility="Visible"
+                        SelectedItem="{Binding SelectedCommand}">
+
+                <ListBox.Template>
+                    <ControlTemplate>
+                        <ScrollViewer>
+                            <DockPanel LastChildFill="True">
+                        
+                                <Grid DockPanel.Dock="Top" Height="60">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Label Grid.Row="0" HorizontalContentAlignment="Center" FontSize="14" Foreground="White">Поиск комманды</Label>
+                                    <Button
+                                        Grid.Row="1"
+                                        Style="{StaticResource StylePushButton}"
+                                        Foreground="White"
+                                        FontSize="14"
+                                        Command="{Binding AddCommandCommand}">
+                                        Добавить комманду
+                                    </Button>
+                                </Grid>
+                                <ItemsPresenter></ItemsPresenter>
+                                </DockPanel></ScrollViewer>
+                            </ControlTemplate>
+                        </ListBox.Template>
+
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Height="40" Orientation="Horizontal">
+                                    <TextBox 
+                                        Width="140"
+                                        VerticalAlignment="Center"
+                                        Margin="0 8 0 0" 
+                                        FontSize="16"
+                                        BorderBrush="{x:Null}"
+                                        Background="Transparent"
+                                        Text="{Binding Name, UpdateSourceTrigger=LostFocus}">
+                                        <TextBox.Style>
+                                            <Style>
+                                                <Setter Property="TextBox.Foreground" Value="White"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={
+                                                                 RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem }}}"
+                                                                 Value="True">
+                                                        <Setter Property="TextBox.Foreground" Value="Black"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBox.Style>
+                                    </TextBox>
+
+                                    <Button
+                                        Margin="30 5 0 0"        
+                                        DockPanel.Dock="Right"
+                                        Height="15"
+                                        Width="15"
+                                        VerticalAlignment="Top"
+                                        Style="{StaticResource StylePushButton}"
+                                        HorizontalAlignment="Right"    
+                                        Command="{Binding Path=DataContext.DeleteCommandCommand,
+                                        RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
+                                        CommandParameter="{Binding Name}">
+                                        <Image Source="/img/Actions/Editor/icon_close.png"/>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+            
+                    </ListBox>
+        
+                </Grid>
+
+            </Grid>
+        </Window>

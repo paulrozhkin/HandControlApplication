@@ -8,7 +8,7 @@ using System.Windows.Data;
 
 namespace HandControl.Services
 {
-    class IdToNameActionConverter : IValueConverter
+    public class IdToNameActionConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

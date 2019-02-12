@@ -16,22 +16,15 @@ namespace HandControl.ViewModel
     class MainWindowViewModel : INotifyPropertyChanged
     {
         #region Variables
-        CommandModel selectedCommand = null;
-
         public event PropertyChangedEventHandler PropertyChanged;
 
-        ObservableCollection<CommandModel> commands;
-        public ObservableCollection<CommandModel> Commands {
-            get
-            {
-                return commands;
-            }
-            set
-            {
-                commands = value;
-                OnPropertyChanged();
-            }
-        }
+        CommandModel selectedCommand = null;
+        CommunicationManager Communication { get; set; }
+
+        /// <summary>
+        /// Список комманд
+        /// </summary>
+        public ObservableCollection<CommandModel> Commands { get; set; }
 
         ObservableCollection<ActionModel> commandActions = new ObservableCollection<ActionModel>();
         public ObservableCollection<ActionModel> SelectedListCommandActions
@@ -51,7 +44,6 @@ namespace HandControl.ViewModel
                     }
                 }
                 SelectedAction = null;
-                OnPropertyChanged();
             }
         }
 
@@ -74,7 +66,6 @@ namespace HandControl.ViewModel
 
                     SelectedListCommandActions = selectedCommand.DataAction;
                 }
-                OnPropertyChanged();
             }
         }
 
@@ -96,23 +87,11 @@ namespace HandControl.ViewModel
                 {
                     ActionVisible = Visibility.Hidden;
                 }
-                OnPropertyChanged();
             }
         }
 
-        private Visibility actionVisible;
         public Visibility ActionVisible
-        {
-            get
-            {
-                return actionVisible;
-            }
-            set
-            {
-                actionVisible = value;
-                OnPropertyChanged();
-            }
-        }
+        { get; set; }
         #endregion
 
         #region Commands
@@ -121,20 +100,15 @@ namespace HandControl.ViewModel
             get { return new RelayCommand((object obj) => this.SaveActions()); }
         }
 
-        
-
         public ICommand AddActionCommand
         {
             get { return new RelayCommand((object obj) => this.AddAction()); }
         }
 
-       
         public ICommand DeleteCommandCommand
         {
             get { return new RelayCommand((object obj) => this.DeleteCommand(obj)); }
         }
-
-        
 
         public ICommand DeleteActionCommand
         {
@@ -145,6 +119,11 @@ namespace HandControl.ViewModel
         {
             get { return new RelayCommand((object obj) => this.AddCommand(obj)); }
         }
+
+        public ICommand HandCommand
+        {
+            get { return new RelayCommand((object obj) => this.HandHandler(obj)); }
+        }
         #endregion
 
         #region Constructor
@@ -154,9 +133,10 @@ namespace HandControl.ViewModel
             if (Commands.Count() != 0)
                 SelectedCommand = Commands[0];
 
+            Communication = CommunicationManager.GetInstance();
             // CommunicationManager.ActionListRequestCommand();
             // CommunicationManager.SaveCommandsToVoice(Commands);
-            CommunicationManager.SaveCommands(commands);
+            // CommunicationManager.SaveCommands(commands);
             // CommunicationManager.ExecuteTheCommand("Сжать");
             // CommunicationManager.ExecuteTheCommand("ModeVoice");
             // CommunicationManager.ExecuteTheCommand(commands[0]);
@@ -172,7 +152,6 @@ namespace HandControl.ViewModel
                 Name = "Новая комманда"
             };
             Commands.Add(newCommand);
-            OnPropertyChanged();
         }
 
         private void DeleteACtion(object obj)
@@ -195,8 +174,6 @@ namespace HandControl.ViewModel
                             break;
                         }
                     }
-
-                    OnPropertyChanged();
                 }
 
         private void SaveActions()
@@ -204,7 +181,6 @@ namespace HandControl.ViewModel
             SelectedCommand.DataAction = SelectedListCommandActions;
             SelectedCommand.InfoCommand.Date = DateTime.Now.ToString("yyMMddHHmmss");
             CommandModel.SaveCommand(SelectedCommand);
-            OnPropertyChanged();
         }
 
         private void AddAction()
@@ -228,13 +204,11 @@ namespace HandControl.ViewModel
                     break;
                 }
             }
-
-            OnPropertyChanged();
         }
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        private void HandHandler(object obj)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            throw new NotImplementedException();
         }
         #endregion
     }

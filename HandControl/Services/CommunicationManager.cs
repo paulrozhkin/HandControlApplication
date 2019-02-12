@@ -6,23 +6,28 @@ using System.Threading.Tasks;
 using HandControl.Services;
 using HandControl.Model;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 
 namespace HandControl.Services
 {
-    public static class CommunicationManager
+    /// <summary>
+    /// Синглетный класс для , получаемых из файловой системы.
+    /// </summary>
+    public class CommunicationManager: INotifyPropertyChanged
     {
         #region Variables
-        private static readonly IIODevice device = new IODeviceCom();
+        public IIODevice СonnectedDevices { get; set; }
+        private static CommunicationManager instance;
+        private static readonly object syncRoot = new object();
 
         // Возможные комманды
-
         private static readonly byte CommandSave = 0x15;        // Сохранить комманды
-        private static readonly byte CommandExecByName = 0x16;   // Выполнить записанную комануду
+        private static readonly byte CommandExecByName = 0x16;   // Выполнить записанную команду
         private static readonly byte CommandExecByMotion = 0x17;        // Выполнить комманду по полученным данным
         private static readonly byte CommandExexRaw = 0x18;     // Установить на все двигатели данное значение
         private static readonly byte CommandSaveToVoice = 0x19; // Сохранить комманду в устройство распознования речи
         private static readonly byte CommandActionListRequest = 0x20; // Запросить список команд устройства(имя команды)
-        private static readonly byte CommandActionListAnswer = 0x21; // Ответ на запрос списка команд устройства(список имен команд устройства)
+        // private static readonly byte CommandActionListAnswer = 0x21; // Ответ на запрос списка команд устройства(список имен команд устройства)
 
         // Режимы работы протеза
         public static readonly byte ModeMIO = 0;
@@ -48,6 +53,31 @@ namespace HandControl.Services
             Convert.ToByte('R'), Convert.ToByte('{'), Convert.ToByte('D'), Convert.ToByte('9'),
             Convert.ToByte('8'), Convert.ToByte('V'), Convert.ToByte('8'), Convert.ToByte('9')
         };
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        #endregion
+
+        #region Constuctors
+        public CommunicationManager()
+        {
+            СonnectedDevices = new IODeviceCom();
+        }
+
+        #endregion
+
+        #region SingeltonMethods
+        public static CommunicationManager GetInstance()
+        {
+            if (instance == null)
+            {
+                lock (syncRoot)
+                {
+                    if (instance == null)
+                        instance = new CommunicationManager();
+                }
+            }
+            return instance;
+        }
         #endregion
 
         #region Methods
@@ -55,7 +85,7 @@ namespace HandControl.Services
         /// Создание и отправка пакета команды сохранения на устройство руки.
         /// </summary>
         /// <param name="commandsList"></param>
-        public static void SaveCommands(ObservableCollection<CommandModel> commandsList)
+        public void SaveCommands(ObservableCollection<CommandModel> commandsList)
         {
             List<byte> dataField = new List<byte>
                 {
@@ -66,10 +96,10 @@ namespace HandControl.Services
                 dataField.AddRange(command.BinaryDate.ToList<byte>());
             }
             byte[] package = CreatePackage(addressHand, dataField);
-            device.SendToDevice(package);
+            СonnectedDevices.SendToDevice(package);
         }
 
-        public static void ActionListRequestCommand()
+        public void ActionListRequestCommand()
         {
             List<byte> dataField = new List<byte>
                 {
@@ -77,10 +107,10 @@ namespace HandControl.Services
                 };
 
             byte[] package = CreatePackage(addressHand, dataField);
-            device.SendToDevice(package);
+            СonnectedDevices.SendToDevice(package);
         }
 
-        public static void SaveCommandsToVoice(ObservableCollection<CommandModel> commandsList)
+        public void SaveCommandsToVoice(ObservableCollection<CommandModel> commandsList)
         {
             List<byte> dataField = new List<byte>
                 {
@@ -92,10 +122,10 @@ namespace HandControl.Services
                 dataField.AddRange(command.BinaryInfo.ToList<byte>());
             }
             byte[] package = CreatePackage(addressVoice, dataField);
-            device.SendToDevice(package);
+            СonnectedDevices.SendToDevice(package);
         }
 
-        public static void ExecuteTheRaw(UInt32 newValueServo)
+        public void ExecuteTheRaw(UInt32 newValueServo)
         {
             List<byte> dataField = new List<byte>
                 {
@@ -104,19 +134,19 @@ namespace HandControl.Services
             List<byte> valueByte = BitConverter.GetBytes(newValueServo).ToList<byte>();
             dataField.AddRange(valueByte);
             byte[] package = CreatePackage(addressHand, dataField);
-            device.SendToDevice(package);
+            СonnectedDevices.SendToDevice(package);
         }
 
 
-        public static void ExecuteTheCommand(CommandModel command)
+        public void ExecuteTheCommand(CommandModel command)
         {
             List<byte> dataField = new List<byte> { CommandExecByMotion };
             dataField.AddRange(command.BinaryDate.ToList<byte>());
             byte[] package = CreatePackage(addressHand, dataField);
-            device.SendToDevice(package);
+            СonnectedDevices.SendToDevice(package);
         }
 
-        public static void ExecuteTheCommand(string nameCommand)
+        public void ExecuteTheCommand(string nameCommand)
         {
             List<byte> dataField = new List<byte> { CommandExecByName };
 
@@ -138,7 +168,7 @@ namespace HandControl.Services
             dataField.AddRange(Name);
 
             byte[] package = CreatePackage(addressHand, dataField);
-            device.SendToDevice(package);
+            СonnectedDevices.SendToDevice(package);
         }
 
         /// <summary>

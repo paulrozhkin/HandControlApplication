@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO.Ports;
 
 namespace HandControl.Services
@@ -13,11 +14,14 @@ namespace HandControl.Services
         private SerialPort serialPortHand = new SerialPort();
         private SerialPort serialPortVoice = new SerialPort();
         private PortInfo infoCom;
+
+        public event PropertyChangedEventHandler PropertyChanged;
         #endregion
 
         public IODeviceCom()
         {
-            SerialSetup();
+            StateDeviceHand = true;
+            // SerialSetup();
         }
 
 

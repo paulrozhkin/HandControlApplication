@@ -35,8 +35,6 @@ namespace HandControl.Model
                         FileIOManager.DeleteFolder(PathManager.GetCommandFolderPath(lastName)); // Сначала удаляем прдыдущую папку с командой
                         SaveCommand(this);
                     }
-                
-                OnPropertyChanged();
             }
         }
         /// <summary>
@@ -50,13 +48,6 @@ namespace HandControl.Model
         /// </summary>
         [JsonProperty(PropertyName = "data_actions")]
         public ObservableCollection<ActionModel> DataAction { get; set; }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
 
         /// <summary>
         /// Возвращает имя команды и дату ее изменения в бинарном виде
@@ -150,9 +141,7 @@ namespace HandControl.Model
             private set { }
         }
 
-        public CommandModel()
-        {
-        }
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public static ObservableCollection<CommandModel> GetCommands()
         {
@@ -188,48 +177,61 @@ namespace HandControl.Model
 
     public class ActionModel : ICloneable, INotifyPropertyChanged
     {
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        private int id;
         /// <summary>
         /// Номер действия
         /// </summary>
         [JsonProperty(PropertyName = "id_action")]
-        public int Id {
-            get
-            {
-                return id;
-            }
-            set
-            {
-                id = value;
-                OnPropertyChanged();
-            }
-        }
-        [JsonProperty(PropertyName = "thumb_finger")]       // Большой палец
+        public int Id { get; set; }
+
+        /// <summary>
+        /// Большой палец
+        /// </summary>
+        [JsonProperty(PropertyName = "thumb_finger")]
         public int ThumbFinger { get; set; }
-        [JsonProperty(PropertyName = "pointer_finger")]     // Указательный палец
+
+        /// <summary>
+        /// Указательный палец
+        /// </summary>
+        [JsonProperty(PropertyName = "pointer_finger")]
         public int PointerFinger { get; set; }
-        [JsonProperty(PropertyName = "middle_finger")]      // Средний палец
+
+        /// <summary>
+        /// Средний палец
+        /// </summary>
+        [JsonProperty(PropertyName = "middle_finger")]
         public int MiddleFinger { get; set; }
-        [JsonProperty(PropertyName = "ring_finder")]        // Безымянный палец
+
+        /// <summary>
+        /// Безымянный палец
+        /// </summary>
+        [JsonProperty(PropertyName = "ring_finder")]     
         public int RingFinder { get; set; }
-        [JsonProperty(PropertyName = "little_finger")]      // Мезинец
+
+        /// <summary>
+        /// Мезинец
+        /// </summary>
+        [JsonProperty(PropertyName = "little_finger")]
         public int LittleFinger { get; set; }
-        [JsonProperty(PropertyName = "del_action")]         // Задержка между действиями
+
+        /// <summary>
+        /// Задержка между действиями
+        /// </summary>
+        [JsonProperty(PropertyName = "del_action")]
         public int DelAction { get; set; }
-        [JsonProperty(PropertyName = "state_pos_brush")]    // Положение кисти
+
+        /// <summary>
+        /// Положение кисти
+        /// </summary>
+        [JsonProperty(PropertyName = "state_pos_brush")]
         public int StatePosBrush { get; set; }
-        [JsonProperty(PropertyName = "state_pos_thumb")]    // Положение большого пальца
+
+        /// <summary>
+        /// Положение большого пальца
+        /// </summary>
+        [JsonProperty(PropertyName = "state_pos_thumb")]
         public int StatePosThumb { get; set; }
 
-        public ActionModel() { }
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public static ActionModel GetDefault(int idAction)
         {
@@ -300,8 +302,6 @@ namespace HandControl.Model
         public int CountCommand { get; set; }
         [JsonProperty(PropertyName = "date")]
         public string Date { get; set; }
-
-        public InfoCommandModel() { }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

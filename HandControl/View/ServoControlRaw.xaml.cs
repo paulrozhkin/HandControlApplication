@@ -21,9 +21,12 @@ namespace HandControl.View
     /// </summary>
     public partial class ServoControlRaw : Window
     {
+        public CommunicationManager Communication { get; set; }
+
         public ServoControlRaw()
         {
             InitializeComponent();
+            Communication = CommunicationManager.GetInstance();
         }
 
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
@@ -61,8 +64,9 @@ namespace HandControl.View
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             uint value = Convert.ToUInt32(Tim4Ch1Slider.Value);
-            CommunicationManager.ExecuteTheRaw(value);
-            
+            Communication.ExecuteTheRaw(value);
+            // CommunicationManager.ExecuteTheRaw(value);
+
         }
     }
 }
