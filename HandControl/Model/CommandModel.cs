@@ -13,8 +13,13 @@ namespace HandControl.Model
 {
     public class CommandModel : ICloneable, INotifyPropertyChanged
     {
-        string name = "";
 
+        /// <summary>
+        /// ID команды, уникально
+        /// </summary>
+        public int ID { get; set; }
+
+        string name = "";
         /// <summary>
         /// Имя команды
         /// </summary>
@@ -161,12 +166,12 @@ namespace HandControl.Model
 
         public static void SaveCommand(CommandModel command)
         {
-            JsonSerDer.SaveObject(command, PathManager.GetCommandPath(command.Name));
+            JsonSerDer.SaveObject(command, PathManager.GetCommandPath(command.ID.ToString()));
         }
 
         public static void DeleteCommand(CommandModel command)
         {
-            FileIOManager.DeleteFolder(PathManager.GetCommandFolderPath(command.Name)); // Сначала удаляем прдыдущую папку с командой
+            FileIOManager.DeleteFolder(PathManager.GetCommandFolderPath(command.ID.ToString())); // Сначала удаляем прдыдущую папку с командой
         }
 
         public object Clone()
@@ -183,6 +188,7 @@ namespace HandControl.Model
 
             return new CommandModel()
             {
+                ID = this.ID,
                 Name = (string)this.Name.Clone(),
                 InfoCommand = (InfoCommandModel)this.InfoCommand.Clone(),
                 DataAction = newDataAction

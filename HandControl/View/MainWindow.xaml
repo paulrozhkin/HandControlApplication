@@ -234,7 +234,7 @@
                 Command="{Binding HandCommand}"
                 Style="{StaticResource StylePushButton}"
                 >
-            <Image Width="40">
+            <Image Width="55">
                 <Image.Style>
                     <Style TargetType="Image">
                         <Setter Property="Source" Value="/img/Header/usb_turn_off.png"/>
@@ -260,7 +260,7 @@
         </Button>
 
 
-        <Grid Grid.Row="1" Visibility="Visible">
+        <Grid Grid.Row="1">
 
             <Grid.Style>
                 <Style TargetType="Grid">
@@ -348,12 +348,12 @@
                 </Grid.ColumnDefinitions>
 
 
-                <Grid Grid.Column="2" Visibility="Visible">
+                <Grid Grid.Column="2">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="35"/>
                         <RowDefinition Height="10"/>
+                        <RowDefinition Height="50"/>
                         <RowDefinition Height="40"/>
-                        <RowDefinition Height="30"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
@@ -406,6 +406,12 @@
                     </Grid>
 
                     <Border Grid.Row="2" BorderBrush="{x:Null}" Background="#262b36" Margin="0,0.333,15,0" Height="630" Grid.RowSpan="3" VerticalAlignment="Top">
+                        
+                    </Border>
+
+                    <Grid Grid.Row="2">
+                        <materialDesign:PackIcon Kind="Edit" Foreground="White" Width="20" Height="20" VerticalAlignment="Center" Margin="8 0 0 0"/>
+                        
                         <TextBox
                             HorizontalAlignment="Center"
                             Foreground="Yellow"
@@ -416,21 +422,38 @@
                             TextAlignment="Center"
                             FontSize="16"
                             Margin="0 10 0 0"
+                            materialDesign:HintAssist.Hint="  Новое название"
+                            materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                            BorderThickness="0"
+                            Width="140"
+                            MaxLength="12"
                             >
                         </TextBox>
-                    </Border>
 
-                    <Button
-                        Style="{StaticResource StylePushButton}"
-                        Foreground="White"
-                        Grid.Row="3"
-                        Margin="0 0 15 0"
-                        FontSize="14"
-                        Command="{Binding AddActionCommand}"
-                        >
-                        Добавить действие
-                    </Button>
+                        <Rectangle VerticalAlignment="Bottom" RadiusX="75" RadiusY="25" Height="1" Fill="White" Margin="0 0 15 0"/>
+                    </Grid>
+                    
 
+                    <Grid Grid.Row="3">
+                        <Button
+                            Style="{StaticResource StylePushButton}"
+                            Foreground="White"
+                            Margin="0 0 15 0"
+                            FontSize="14"
+                            Command="{Binding AddActionCommand}"
+                            >
+                            <Grid>
+                                <materialDesign:PackIcon Kind="CirclesAdd" Foreground="White" VerticalAlignment="Center" Margin="0 2 0 0"/>
+
+                                <TextBlock Margin="20 0 0 0">
+                                           Добавить действие
+                                </TextBlock>
+                            </Grid>
+                        </Button>
+
+                        <Rectangle VerticalAlignment="Bottom" RadiusX="75" RadiusY="25" Height="1" Fill="White" Margin="0 0 15 0"/>
+                    </Grid>
+                    
                     <ListBox
                         Background="#262b36"
                         Grid.Row="4"
@@ -444,22 +467,24 @@
                         >
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
+                                <Grid Height="45" Width="155" Margin="0 0 0 0">
                                     <TextBlock 
-                                        DockPanel.Dock="Left"
                                         Margin="3" 
                                         Width="130"
                                         Background="Transparent"
-                                        FontSize="14"
+                                        FontFamily="{StaticResource SFUIDisplayMedium}"
+                                        VerticalAlignment="Center"
                                         Text="{Binding Id, Converter={StaticResource idToNameActionConverter}, Mode=TwoWay}">
                                         <TextBlock.Style>
-                                            <Style>
+                                            <Style TargetType="TextBlock">
                                                 <Setter Property="TextBlock.Foreground" Value="White"/>
+                                                <Setter Property="FontSize" Value="14"/>
                                                 <Style.Triggers>
                                                     <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={
                                                                  RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem }}}"
                                                                  Value="True">
                                                         <Setter Property="TextBlock.Foreground" Value="Black"/>
+                                                        <Setter Property="FontSize" Value="16"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
                                             </Style>
@@ -467,7 +492,7 @@
                                     </TextBlock>
 
                                     <Button
-                                        DockPanel.Dock="Right"
+                                        Margin="0 4 5 0"
                                         Height="15"
                                         Width="15"
                                         VerticalAlignment="Top"
@@ -476,16 +501,43 @@
                                         Command="{Binding Path=DataContext.DeleteActionCommand,
                                         RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
                                         CommandParameter="{Binding Id, Mode=TwoWay}">
-                                        <Image Source="/img/Actions/Editor/icon_close.png"/>
+                                        <materialDesign:PackIcon Kind="WindowClose" Height="17" Width="17">
+                                            <materialDesign:PackIcon.Style>
+                                                <Style TargetType="materialDesign:PackIcon">
+                                                    <Setter Property="Foreground" Value="White"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={
+                                                                     RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem }}}"
+                                                                     Value="True">
+                                                            <Setter Property="Foreground" Value="Black"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </materialDesign:PackIcon.Style>
+                                        </materialDesign:PackIcon>
                                     </Button>
-                                </StackPanel>
+
+                                    <Rectangle VerticalAlignment="Bottom" RadiusX="75" RadiusY="25" Height="1" Fill="White">
+                                        <Rectangle.Style>
+                                            <Style TargetType="Rectangle">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={
+                                                                 RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem }}}"
+                                                                 Value="True">
+                                                        <Setter Property="Visibility" Value="Hidden"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Rectangle.Style>
+                                    </Rectangle>
+                                </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
                 </Grid>
 
                 <ItemsControl
-                    Visibility="Visible"
                     Grid.Column="1"      
                     HorizontalAlignment="Left"                   
                     Width="180"                 
@@ -775,27 +827,75 @@
                         ItemContainerStyle="{StaticResource StyleListBox}"
                         ItemsSource="{Binding Commands}" 
                         ScrollViewer.VerticalScrollBarVisibility="Visible"
-                        SelectedItem="{Binding SelectedCommand}">
+                        SelectedItem="{Binding SelectedCommand, Mode=TwoWay}">
 
                 <ListBox.Template>
                     <ControlTemplate>
                         <ScrollViewer>
                             <DockPanel LastChildFill="True">
 
-                                <Grid DockPanel.Dock="Top" Height="60">
+                                <Grid DockPanel.Dock="Top">
                                     <Grid.RowDefinitions>
                                         <RowDefinition/>
                                         <RowDefinition/>
                                     </Grid.RowDefinitions>
-                                    <Label Grid.Row="0" HorizontalContentAlignment="Center" FontSize="14" Foreground="White">Поиск комманды</Label>
-                                    <Button
-                                        Grid.Row="1"
-                                        Style="{StaticResource StylePushButton}"
-                                        Foreground="White"
-                                        FontSize="14"
-                                        Command="{Binding AddCommandCommand}">
-                                        Добавить комманду
-                                    </Button>
+                                    
+
+
+                                    <Grid Grid.Row="0"
+                                          Height="40"
+                                          Margin="0 0 0 0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition
+                                                Width="Auto" />
+                                            <ColumnDefinition
+                                                Width="*" />
+                                            <ColumnDefinition
+                                                Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        
+                                        <Button
+                                            Style="{DynamicResource MaterialDesignToolButton}">
+                                            <materialDesign:PackIcon
+                                                Kind="Magnify"
+                                                Opacity=".56" 
+                                                Margin="10 0 0 0"
+                                                Foreground="White"/>
+                                        </Button>
+                                        
+                                        <TextBox
+                                            Grid.Column="1"
+                                            materialDesign:HintAssist.Hint="Поиск комманды"
+                                            materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                                            BorderThickness="0"
+                                            FontSize="18"
+                                            VerticalAlignment="Center" 
+                                            Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                                            Foreground="White"/>
+
+                                        <Rectangle VerticalAlignment="Bottom" RadiusX="75" RadiusY="25" Height="1" Fill="White" Grid.ColumnSpan="3" Margin="0 0 0 0"/>
+                                    </Grid>
+
+                                    <Grid Height="40" Grid.Row="1">
+                                        <Button
+                                            Style="{StaticResource StylePushButton}"
+                                            Foreground="White"
+                                            Margin="0 0 0 0"
+                                            FontSize="18"
+                                            Command="{Binding AddCommandCommand}"
+                                            >
+                                            <Grid>
+                                                <materialDesign:PackIcon Kind="CirclesAdd" Foreground="White" VerticalAlignment="Center" Margin="0 2 0 0"/>
+
+                                                <TextBlock Margin="20 0 0 0">
+                                                           Добавить комманду
+                                                </TextBlock>
+                                            </Grid>
+                                        </Button>
+
+                                        <Rectangle VerticalAlignment="Bottom" RadiusX="75" RadiusY="25" Height="1" Fill="White" Margin="0 0 0 0"/>
+                                    </Grid>
+
                                 </Grid>
                                 <ItemsPresenter></ItemsPresenter>
                             </DockPanel>
@@ -805,22 +905,23 @@
 
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Height="40" Orientation="Horizontal">
+                        <Grid Height="40" Width="210">
                             <TextBlock 
                                 Width="140"
                                 VerticalAlignment="Center"
-                                Margin="0 8 0 0" 
-                                FontSize="16"
+                                Margin="0 8 40 0" 
                                 Background="Transparent"
                                 Text="{Binding Name, UpdateSourceTrigger=LostFocus}">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="Foreground" Value="White"/>
+                                        <Setter Property="FontSize" Value="18"/>
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={
                                                          RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem }}}"
                                                          Value="True">
                                                 <Setter Property="Foreground" Value="Black"/>
+                                                <Setter Property="FontSize" Value="20"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
@@ -828,19 +929,47 @@
                             </TextBlock>
 
                             <Button
-                                Margin="30 5 0 0"        
+                                Margin="0 5 15 0"        
                                 DockPanel.Dock="Right"
-                                Height="15"
-                                Width="15"
+                                Height="17"
+                                Width="17"
                                 VerticalAlignment="Top"
                                 Style="{StaticResource StylePushButton}"
                                 HorizontalAlignment="Right"    
                                 Command="{Binding Path=DataContext.DeleteCommandCommand,
                                 RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
-                                CommandParameter="{Binding Name}">
-                                <Image Source="/img/Actions/Editor/icon_close.png"/>
+                                CommandParameter="{Binding ID}">
+                                <materialDesign:PackIcon Kind="WindowClose" Height="17" Width="17">
+                                    <materialDesign:PackIcon.Style>
+                                        <Style TargetType="materialDesign:PackIcon">
+                                            <Setter Property="Foreground" Value="White"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={
+                                                             RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem }}}"
+                                                             Value="True">
+                                                    <Setter Property="Foreground" Value="Black"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </materialDesign:PackIcon.Style>
+                                </materialDesign:PackIcon>
                             </Button>
-                        </StackPanel>
+
+                            <Rectangle VerticalAlignment="Bottom" RadiusX="75" RadiusY="25" Height="1" Fill="White">
+                                <Rectangle.Style>
+                                    <Style TargetType="Rectangle">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={
+                                                         RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem }}}"
+                                                         Value="True">
+                                                <Setter Property="Visibility" Value="Hidden"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Rectangle.Style>
+                            </Rectangle>
+                        </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
 

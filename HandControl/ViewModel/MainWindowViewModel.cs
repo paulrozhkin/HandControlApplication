@@ -119,9 +119,6 @@ namespace HandControl.ViewModel
         public MainWindowViewModel()
         {
             Commands = CommandModel.GetCommands();
-            if (Commands.Count() != 0)
-                SelectedCommand = Commands[0];
-
             Communication = CommunicationManager.GetInstance();
             // CommunicationManager.ActionListRequestCommand();
             // CommunicationManager.SaveCommandsToVoice(Commands);
@@ -138,6 +135,7 @@ namespace HandControl.ViewModel
         {
             CommandModel newCommand = new CommandModel
             {
+                ID = GetNewID(),
                 Name = "Новая комманда"
             };
             newCommand.InfoCommand = InfoCommandModel.GetDefault();
@@ -172,6 +170,24 @@ namespace HandControl.ViewModel
             SelectedCommand.DataAction = SelectedListCommandActions;
             SelectedCommand.InfoCommand.Date = DateTime.Now.ToString("yyMMddHHmmss");
             CommandModel.SaveCommand(SelectedCommand);
+
+            bool StateFountCommand = false;
+            for (int i = 0; i < Commands.Count; i++)
+            {
+                if(Commands[i].ID == SelectedCommand.ID)
+                {
+                    Commands[i] = SelectedCommand.Clone() as CommandModel;
+                    StateFountCommand = true;
+                    break;
+                    // SelectedCommand = Commands[i];
+                }
+            }
+
+            if(StateFountCommand is false)
+            {
+                Commands.Add(SelectedCommand.Clone() as CommandModel);
+            }
+
         }
 
         private void AddAction()
@@ -185,11 +201,11 @@ namespace HandControl.ViewModel
             if (obj == null)
                 return;
 
-            string deletNameCommand = obj as string;
+            int deleteID = (int)obj;
 
             foreach (CommandModel command in Commands)
             {
-                if (command.Name == deletNameCommand)
+                if (command.ID == deleteID)
                 {
                     CommandModel.DeleteCommand(command);
                     Commands.Remove(command);
@@ -212,6 +228,17 @@ namespace HandControl.ViewModel
         {
             SelectedCommand = null;
             SelectedAction = null;
+        }
+
+        private int GetNewID()
+        {
+            int newID = 1;
+            foreach (CommandModel acc in Commands)
+            {
+                if (acc.ID >= newID)
+                    newID = acc.ID + 1;
+            }
+            return newID;
         }
         #endregion
     }

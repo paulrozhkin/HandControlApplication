@@ -124,6 +124,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Resource Include="img\Actions\icon_add.png" />
     <Content Include="Resources\Fonts\SF-UI-Display-Thin.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
