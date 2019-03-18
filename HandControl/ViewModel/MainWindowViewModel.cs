@@ -13,11 +13,9 @@ using HandControl.Services;
 
 namespace HandControl.ViewModel
 {
-    class MainWindowViewModel : INotifyPropertyChanged
+    class MainWindowViewModel : ViewModelBase
     {
         #region Variables
-        public event PropertyChangedEventHandler PropertyChanged;
-
         private CommandModel selectedCommand = null;
         public CommunicationManager Communication { get; set; }
 
@@ -144,26 +142,26 @@ namespace HandControl.ViewModel
         }
 
         private void DeleteACtion(object obj)
+        {
+            if (obj == null)
+                return;
+
+            int deletNameAction = (int)obj;
+
+
+            foreach (ActionModel actionModel in SelectedListCommandActions)
+            {
+                if (actionModel.Id == Convert.ToInt32(deletNameAction))
                 {
-                    if (obj == null)
-                        return;
-
-                    int deletNameAction = (int)obj;
-            
-
-                    foreach(ActionModel actionModel in SelectedListCommandActions)
+                    for (int i = actionModel.Id; i < SelectedListCommandActions.Count; i++)
                     {
-                        if (actionModel.Id == Convert.ToInt32(deletNameAction))
-                        {
-                            for (int i = actionModel.Id; i < SelectedListCommandActions.Count; i++)
-                            {
-                                SelectedListCommandActions[i].Id = SelectedListCommandActions[i].Id - 1;
-                            }
-                            SelectedListCommandActions.Remove(actionModel);
-                            break;
-                        }
+                        SelectedListCommandActions[i].Id = SelectedListCommandActions[i].Id - 1;
                     }
+                    SelectedListCommandActions.Remove(actionModel);
+                    break;
                 }
+            }
+        }
 
         private void SaveActions()
         {
@@ -174,7 +172,7 @@ namespace HandControl.ViewModel
             bool StateFountCommand = false;
             for (int i = 0; i < Commands.Count; i++)
             {
-                if(Commands[i].ID == SelectedCommand.ID)
+                if (Commands[i].ID == SelectedCommand.ID)
                 {
                     Commands[i] = SelectedCommand.Clone() as CommandModel;
                     StateFountCommand = true;
@@ -183,7 +181,7 @@ namespace HandControl.ViewModel
                 }
             }
 
-            if(StateFountCommand is false)
+            if (StateFountCommand is false)
             {
                 Commands.Add(SelectedCommand.Clone() as CommandModel);
             }
