@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-
-namespace HandControl.Services
+﻿namespace HandControl.Services
 {
+    using System;
+    using System.Windows.Input;
+
     class RelayCommand : ICommand
     {
         private readonly Action<object> _execute;

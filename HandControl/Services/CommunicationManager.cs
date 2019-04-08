@@ -11,7 +11,7 @@ using System.ComponentModel;
 namespace HandControl.Services
 {
     /// <summary>
-    /// Синглетный класс для , получаемых из файловой системы.
+    /// Синглтон класс для взаимодействия с протезом руки.
     /// </summary>
     public class CommunicationManager: INotifyPropertyChanged
     {

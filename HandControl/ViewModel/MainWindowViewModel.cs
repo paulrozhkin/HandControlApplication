@@ -24,8 +24,8 @@ namespace HandControl.ViewModel
         /// </summary>
         public ObservableCollection<CommandModel> Commands { get; set; }
 
-        ObservableCollection<ActionModel> commandActions = new ObservableCollection<ActionModel>();
-        public ObservableCollection<ActionModel> SelectedListCommandActions
+        ObservableCollection<CommandModel.ActionModel> commandActions = new ObservableCollection<CommandModel.ActionModel>();
+        public ObservableCollection<CommandModel.ActionModel> SelectedListCommandActions
         {
             get
             {
@@ -33,12 +33,12 @@ namespace HandControl.ViewModel
             }
             set
             {
-                commandActions = new ObservableCollection<ActionModel>();
+                commandActions = new ObservableCollection<CommandModel.ActionModel>();
                 if (value != null)
                 {
-                    foreach (ActionModel action in value)
+                    foreach (CommandModel.ActionModel action in value)
                     {
-                        commandActions.Add((ActionModel)action.Clone());
+                        commandActions.Add((CommandModel.ActionModel)action.Clone());
                     }
                 }
                 SelectedAction = null;
@@ -66,7 +66,7 @@ namespace HandControl.ViewModel
             }
         }
 
-        public ActionModel SelectedAction { get; set; }
+        public CommandModel.ActionModel SelectedAction { get; set; }
 
         public Visibility ActionVisible { get; set; } = Visibility.Collapsed;
         #endregion
@@ -136,8 +136,8 @@ namespace HandControl.ViewModel
                 ID = GetNewID(),
                 Name = "Новая комманда"
             };
-            newCommand.InfoCommand = InfoCommandModel.GetDefault();
-            newCommand.DataAction = new ObservableCollection<ActionModel>();
+            newCommand.InfoCommand = CommandModel.InfoCommandModel.GetDefault();
+            newCommand.DataAction = new ObservableCollection<CommandModel.ActionModel>();
             Commands.Add(newCommand);
         }
 
@@ -149,7 +149,7 @@ namespace HandControl.ViewModel
             int deletNameAction = (int)obj;
 
 
-            foreach (ActionModel actionModel in SelectedListCommandActions)
+            foreach (CommandModel.ActionModel actionModel in SelectedListCommandActions)
             {
                 if (actionModel.Id == Convert.ToInt32(deletNameAction))
                 {
@@ -190,7 +190,7 @@ namespace HandControl.ViewModel
 
         private void AddAction()
         {
-            ActionModel newAction = ActionModel.GetDefault(ActionModel.GetNewId(SelectedListCommandActions.ToList<ActionModel>()));
+            CommandModel.ActionModel newAction = CommandModel.ActionModel.GetDefault(CommandModel.ActionModel.GetNewId(SelectedListCommandActions.ToList<CommandModel.ActionModel>()));
             SelectedListCommandActions.Add(newAction);
         }
 

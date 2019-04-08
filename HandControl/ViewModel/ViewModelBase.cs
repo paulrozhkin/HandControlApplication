@@ -1,20 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿// --------------------------------------------------------------------------------------
+// <copyright file = "ViewModelBase.cs" company = "Студенческий проект HandControl‎"> 
+//      Copyright © 2019 HandControl. All rights reserved.
+// </copyright> 
+// -------------------------------------------------------------------------------------
 namespace HandControl.ViewModel
 {
+    using System.ComponentModel;
+
     /// <summary>
-    /// Базовый клас модели представления окон программы.
-    /// Все ViewModel классы (за исключением диалогов) должны насследоваться от этого класса.
+    /// ViewModelBase - базовая имплементация ViewModel.
+    /// Все ViewModels должны насследоваться от этого класса.
+    /// \brief Класс для работы с данными системы.
+    /// \version 1.0
+    /// \date Март 2019 года
+    /// \authors Paul Rozhkin(blackiiifox@gmail.com)
     /// </summary>
-    class ViewModelBase : INotifyPropertyChanged
+    public abstract class ViewModelBase : INotifyPropertyChanged
     {
         /// <summary>
-        /// Реализация интерфейса INotifyPropertyChanged
+        /// Имплементация интерфейса INotifyPropertyChanged.
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
     }
