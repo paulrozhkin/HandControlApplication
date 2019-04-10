@@ -1,18 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
-using HandControl.Model;
-using HandControl.Services;
-
+﻿// --------------------------------------------------------------------------------------
+// <copyright file = "MainWindowViewModel.cs" company = "Студенческий проект HandControl‎"> 
+//      Copyright © 2019 HandControl. All rights reserved.
+// </copyright> 
+// -------------------------------------------------------------------------------------
 namespace HandControl.ViewModel
 {
+    using System;
+    using System.Collections.ObjectModel;
+    using System.Linq;
+    using System.Windows;
+    using System.Windows.Input;
+    using HandControl.Model;
+    using HandControl.Services;
+
     class MainWindowViewModel : ViewModelBase
     {
         #region Variables

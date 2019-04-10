@@ -1,19 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HandControl.Services;
-using HandControl.Model;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-
+﻿// --------------------------------------------------------------------------------------
+// <copyright file = "CommunicationManager.cs" company = "Студенческий проект HandControl‎"> 
+//      Copyright © 2019 HandControl. All rights reserved.
+// </copyright> 
+// -------------------------------------------------------------------------------------
 namespace HandControl.Services
 {
+    using System;
+    using System.ComponentModel;
+    using System.Collections.ObjectModel;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using HandControl.Model;
+
     /// <summary>
     /// Синглтон класс для взаимодействия с протезом руки.
     /// </summary>
-    public class CommunicationManager: INotifyPropertyChanged
+    public class CommunicationManager : INotifyPropertyChanged
     {
         #region Variables
         public bool Test { get; set; } = true;
@@ -175,9 +178,9 @@ namespace HandControl.Services
         /// <summary>
         /// Создание байтового пакета отправляемого на устройство.
         /// </summary>
-        /// <param name="distAddress"></param>
-        /// <param name="dataField"></param>
-        /// <returns></returns>
+        /// <param name="distAddress">Адрес устройства назначения.</param>
+        /// <param name="dataField">Передаваемые данные.</param>
+        /// <returns>Сформированный байтовый пакет.</returns>
         private static byte[] CreatePackage(byte distAddress, List<byte> dataField)
         {
             // Стартовая константа
