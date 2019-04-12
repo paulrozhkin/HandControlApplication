@@ -214,7 +214,7 @@ namespace HandControl.ViewModel
 
         private void HandHandler(object obj)
         {
-            throw new NotImplementedException();
+            Communication.SaveCommands(Commands);
         }
 
         private void InfinityCheck(object obj)

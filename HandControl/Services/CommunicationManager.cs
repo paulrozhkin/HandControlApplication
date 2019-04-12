@@ -6,153 +6,224 @@
 namespace HandControl.Services
 {
     using System;
-    using System.ComponentModel;
-    using System.Collections.ObjectModel;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
     using System.Linq;
     using System.Text;
     using HandControl.Model;
 
     /// <summary>
-    /// Синглтон класс для взаимодействия с протезом руки.
+    /// Класс, предоставляющий API для управления устройствами системы.
+    /// Является имплементацией паттерна Singleton.
+    /// \version 1.0
+    /// \date Январь 2019 года
+    /// \authors Paul Rozhkin(blackiiifox@gmail.com)
     /// </summary>
     public class CommunicationManager : INotifyPropertyChanged
     {
-        #region Variables
-        public bool Test { get; set; } = true;
-        public IIODevice СonnectedDevices { get; set; }
+        #region Fields
+        /// <summary>
+        /// Текущая версия протокола.
+        /// </summary>
+        private const string VersionProtocol = "01";
+
+        /// <summary>
+        /// Стартовое поле в формате протокола передачи.
+        /// </summary>
+        private const string StartFiled = "1N7ROINm";
+
+        /// <summary>
+        /// Стоповое поле в формате протокола передачи.
+        /// </summary>
+        private const string StopFiled = "R{D98V89";
+
+        /// <summary>
+        /// Обеспечивает потокобезопасное извлечение instance.  
+        /// </summary>
+        private static readonly object SyncRoot = new object();
+
+        /// <summary>
+        /// Хранит одиночный экземпляр класса <see cref="CommunicationManager"/>.
+        /// </summary>
         private static CommunicationManager instance;
-        private static readonly object syncRoot = new object();
-
-        // Возможные комманды
-        private static readonly byte CommandSave = 0x15;        // Сохранить комманды
-        private static readonly byte CommandExecByName = 0x16;   // Выполнить записанную команду
-        private static readonly byte CommandExecByMotion = 0x17;        // Выполнить комманду по полученным данным
-        private static readonly byte CommandExexRaw = 0x18;     // Установить на все двигатели данное значение
-        private static readonly byte CommandSaveToVoice = 0x19; // Сохранить комманду в устройство распознования речи
-        private static readonly byte CommandActionListRequest = 0x20; // Запросить список команд устройства(имя команды)
-        // private static readonly byte CommandActionListAnswer = 0x21; // Ответ на запрос списка команд устройства(список имен команд устройства)
-
-        // Режимы работы протеза
-        public static readonly byte ModeMIO = 0;
-        public static readonly byte ModeVoice = 1;
-        public static readonly byte ModeMixed = 2;
-
-        // Адреса устройств протокольного уровня
-        public static readonly byte addressPC = 0x00;
-        public static readonly byte addressHand = 0x01;
-        public static readonly byte addressVoice = 0x02;
-
-        private static readonly List<byte> versionProtocol = new List<byte>
-        {
-            Convert.ToByte('0'), Convert.ToByte('1')
-        };
-
-        private static readonly List<byte> startFiled = new List<byte> {
-            Convert.ToByte('1'), Convert.ToByte('N'), Convert.ToByte('7'), Convert.ToByte('R'),
-            Convert.ToByte('O'), Convert.ToByte('I'), Convert.ToByte('N'), Convert.ToByte('m')
-        };
-
-        private static readonly List<byte> endFiled = new List<byte> {
-            Convert.ToByte('R'), Convert.ToByte('{'), Convert.ToByte('D'), Convert.ToByte('9'),
-            Convert.ToByte('8'), Convert.ToByte('V'), Convert.ToByte('8'), Convert.ToByte('9')
-        };
-
-        public event PropertyChangedEventHandler PropertyChanged;
         #endregion
 
         #region Constuctors
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CommunicationManager" /> class.
+        /// </summary>
         public CommunicationManager()
         {
-            СonnectedDevices = new IODeviceCom();
+            this.СonnectedDevices = new IODeviceCom();
         }
-
         #endregion
 
-        #region SingeltonMethods
-        public static CommunicationManager GetInstance()
+        #region Events
+        /// <summary>
+        /// Имплементация интерфейса INotifyPropertyChanged.
+        /// </summary>
+        public event PropertyChangedEventHandler PropertyChanged;
+        #endregion
+
+        #region Enums
+        /// <summary>
+        /// Определяет режимы управления протеза.
+        /// </summary>
+        public enum OperationModeType
         {
-            if (instance == null)
-            {
-                lock (syncRoot)
-                {
-                    if (instance == null)
-                        instance = new CommunicationManager();
-                }
-            }
-            return instance;
+            /// <summary>
+            /// Миоэлектрический режим работы. В этом режиме прямое управление отключен.
+            /// Моторно-двигательные функции протеза реализуются за счет считывание биопотенциалов с мышц.
+            /// </summary>
+            [Description("Миоэлектрический режим работы")] MyoelectricMode,
+
+            /// <summary>
+            /// Режим прямого управления. В этом режиме миоэлектрическое управление отключено.
+            /// Моторно-двигательные функции протеза реализуются за счет внешних устройств, подключаемых к протезу,
+            /// в частности мобильный телефон.
+            /// </summary>
+            [Description("Режим прямого управления")] DirectMode,
+
+            /// <summary>
+            /// Комбинированный режим управления. В этом режиме используются и миоэлектрическое управление и прямое управление.
+            /// </summary>
+            [Description("Комбинированный режим управления")] DirectModeCombinedMode
         }
+
+        /// <summary>
+        /// Определяет команды, реализуемые протезом.
+        /// </summary>
+        private enum CommandType
+        {
+            /// <summary>
+            /// Команда сохранения одной или нескольких команд протеза.
+            /// </summary>
+            [Description("Сохранить комманду")] Save = 0x15,
+
+            /// <summary>
+            /// Команда выполнения команды протезом по имени.
+            /// </summary>
+            [Description("Выполнить команду по имени")] ExecByName = 0x16,
+
+            /// <summary>
+            /// Команда выполнения протезом руки переданной команды.
+            /// </summary>
+            [Description("Выполнить переданную команду")] ExecByMotion = 0x17,
+
+            /// <summary>
+            /// Команда установки переданных положений пальцев на протез.
+            /// </summary>
+            [Description("Установить на все двигатели переданное значение")] ExexRaw = 0x18,
+        }
+
+        /// <summary>
+        /// Определяет устройства системы.
+        /// </summary>
+        private enum DeviceType
+        {
+            /// <summary>
+            /// Персональный комьютер.
+            /// </summary>
+            [Description("Персональный комьютер")] PC = 0x00,
+
+            /// <summary>
+            /// Устройство протеза.
+            /// </summary>
+            [Description("Протез")] Prosthesis = 0x01,
+
+            /// <summary>
+            /// Внешнее устройство управления.
+            /// </summary>
+            [Description("Внешнее устройство управления")] Сontrol = 0x02,
+        }
+        #endregion
+
+        #region Properties
+        /// <summary>
+        /// Gets or sets экземпляр, выполняющий соедниение с устройством протеза.
+        /// </summary>
+        private IIODevice СonnectedDevices { get; set; }
         #endregion
 
         #region Methods
         /// <summary>
-        /// Создание и отправка пакета команды сохранения на устройство руки.
+        /// Получить единичный экземпляр класса <see cref="CommunicationManager"/>.
         /// </summary>
-        /// <param name="commandsList"></param>
+        /// <returns>Единичный экземпляр класса <see cref="CommunicationManager"/>.</returns>
+        public static CommunicationManager GetInstance()
+        {
+            if (instance == null)
+            {
+                lock (SyncRoot)
+                {
+                    if (instance == null)
+                    {
+                        instance = new CommunicationManager();
+                    }
+                }
+            }
+
+            return instance;
+        }
+
+        /// <summary>
+        /// Создание и отправка пакета команд на устройство протеза для
+        /// сохранения их на устройстве и будующего применения.
+        /// </summary>
+        /// <param name="commandsList">Коллекция передаваемых команд.</param>
         public void SaveCommands(ObservableCollection<CommandModel> commandsList)
         {
             List<byte> dataField = new List<byte>
                 {
-                    CommandSave
+                    (byte)CommandType.Save
                 };
+
             foreach (CommandModel command in commandsList)
             {
                 dataField.AddRange(command.BinaryDate.ToList<byte>());
             }
-            byte[] package = CreatePackage(addressHand, dataField);
-            СonnectedDevices.SendToDevice(package);
+
+            byte[] package = CreatePackage((byte)DeviceType.Prosthesis, dataField);
+
+            this.СonnectedDevices.SendToDevice(package);
         }
 
-        public void ActionListRequestCommand()
+        /// <summary>
+        /// Создание и отправка пакета на устройство протеза для установки требуемого положения на все сервоприводы.
+        /// </summary>
+        /// <param name="newValueServo">Устанавливаемое положение</param>
+        public void ExecuteTheRaw(uint newValueServo)
         {
             List<byte> dataField = new List<byte>
                 {
-                    CommandActionListRequest
-                };
-
-            byte[] package = CreatePackage(addressHand, dataField);
-            СonnectedDevices.SendToDevice(package);
-        }
-
-        public void SaveCommandsToVoice(ObservableCollection<CommandModel> commandsList)
-        {
-            List<byte> dataField = new List<byte>
-                {
-                    CommandSaveToVoice
-                };
-
-            foreach (CommandModel command in commandsList)
-            {
-                dataField.AddRange(command.BinaryInfo.ToList<byte>());
-            }
-            byte[] package = CreatePackage(addressVoice, dataField);
-            СonnectedDevices.SendToDevice(package);
-        }
-
-        public void ExecuteTheRaw(UInt32 newValueServo)
-        {
-            List<byte> dataField = new List<byte>
-                {
-                    CommandExexRaw
+                    (byte)CommandType.ExexRaw
                 };
             List<byte> valueByte = BitConverter.GetBytes(newValueServo).ToList<byte>();
             dataField.AddRange(valueByte);
-            byte[] package = CreatePackage(addressHand, dataField);
-            СonnectedDevices.SendToDevice(package);
+            byte[] package = CreatePackage((byte)DeviceType.Prosthesis, dataField);
+            this.СonnectedDevices.SendToDevice(package);
         }
 
-
+        /// <summary>
+        /// Создание и отправка пакета на устройство протеза для исполнения переданной команды.
+        /// </summary>
+        /// <param name="command">Исполняемая команда.</param>
         public void ExecuteTheCommand(CommandModel command)
         {
-            List<byte> dataField = new List<byte> { CommandExecByMotion };
+            List<byte> dataField = new List<byte> { (byte)CommandType.ExecByMotion };
             dataField.AddRange(command.BinaryDate.ToList<byte>());
-            byte[] package = CreatePackage(addressHand, dataField);
-            СonnectedDevices.SendToDevice(package);
+            byte[] package = CreatePackage((byte)DeviceType.Prosthesis, dataField);
+            this.СonnectedDevices.SendToDevice(package);
         }
 
+        /// <summary>
+        /// Создание и отправка пакета на устройство протеза для исполнения заложенной команды по имени.
+        /// </summary>
+        /// <param name="nameCommand">Имя заложенной команды.</param>
         public void ExecuteTheCommand(string nameCommand)
         {
-            List<byte> dataField = new List<byte> { CommandExecByName };
+            List<byte> dataField = new List<byte> { (byte)CommandType.ExecByName };
 
             byte[] byteName = Encoding.UTF8.GetBytes(nameCommand);
 
@@ -162,17 +233,17 @@ namespace HandControl.Services
                 byteName[19] = Convert.ToByte('\0');
             }
 
-            List<byte> Name = byteName.ToList<byte>();
+            List<byte> name = byteName.ToList<byte>();
 
             for (int i = byteName.Count(); i < 20; i++)
             {
-                Name.Add(Convert.ToByte('\0'));
+                name.Add(Convert.ToByte('\0'));
             }
 
-            dataField.AddRange(Name);
+            dataField.AddRange(name);
 
-            byte[] package = CreatePackage(addressHand, dataField);
-            СonnectedDevices.SendToDevice(package);
+            byte[] package = CreatePackage((byte)DeviceType.Prosthesis, dataField);
+            this.СonnectedDevices.SendToDevice(package);
         }
 
         /// <summary>
@@ -185,14 +256,15 @@ namespace HandControl.Services
         {
             // Стартовая константа
             List<byte> package = new List<byte>();
-            package.AddRange(startFiled);
+            package.AddRange(Encoding.ASCII.GetBytes(StartFiled));
 
             // Заполнения поля информации пакета
             List<byte> infoField = new List<byte>();
-            infoField.AddRange(versionProtocol);
-            infoField.Add(addressPC);
+            infoField.AddRange(Encoding.ASCII.GetBytes(VersionProtocol));
+            infoField.Add((byte)DeviceType.Prosthesis);
             infoField.Add(distAddress);
             uint countField = Convert.ToUInt32(dataField.Count());
+
             // Заполнение поля размера информационного пакета
             byte[] countFieldByte = new byte[4];
             countFieldByte[3] = Convert.ToByte(countField & 0x000000FF);
@@ -209,42 +281,58 @@ namespace HandControl.Services
 
             // Добавление в конечный пакет основного контейнера, crc кода и стоповой последовательности
             package.AddRange(mainField);
-            package.AddRange(endFiled);
+            package.AddRange(Encoding.ASCII.GetBytes(StopFiled));
 
             return package.ToArray<byte>();
         }
         #endregion
-    }
 
-    static class CRC8
-    {
-        static readonly byte[] CRC8_TABLE = new byte[]{
-        0, 94, 188, 226, 97, 63, 221, 131, 194, 156, 126, 32, 163, 253, 31, 65,
-        157, 195, 33, 127, 252, 162, 64, 30, 95, 1, 227, 189, 62, 96, 130, 220,
-        35, 125, 159, 193, 66, 28, 254, 160, 225, 191, 93, 3, 128, 222, 60, 98,
-        190, 224, 2, 92, 223, 129, 99, 61, 124, 34, 192, 158, 29, 67, 161, 255,
-        70, 24, 250, 164, 39, 121, 155, 197, 132, 218, 56, 102, 229, 187, 89, 7,
-        219, 133, 103, 57, 186, 228, 6, 88, 25, 71, 165, 251, 120, 38, 196, 154,
-        101, 59, 217, 135, 4, 90, 184, 230, 167, 249, 27, 69, 198, 152, 122, 36,
-        248, 166, 68, 26, 153, 199, 37, 123, 58, 100, 134, 216, 91, 5, 231, 185,
-        140, 210, 48, 110, 237, 179, 81, 15, 78, 16, 242, 172, 47, 113, 147, 205,
-        17, 79, 173, 243, 112, 46, 204, 146, 211, 141, 111, 49, 178, 236, 14, 80,
-        175, 241, 19, 77, 206, 144, 114, 44, 109, 51, 209, 143, 12, 82, 176, 238,
-        50, 108, 142, 208, 83, 13, 239, 177, 240, 174, 76, 18, 145, 207, 45, 115,
-        202, 148, 118, 40, 171, 245, 23, 73, 8, 86, 180, 234, 105, 55, 213, 139,
-        87, 9, 235, 181, 54, 104, 138, 212, 149, 203, 41, 119, 244, 170, 72, 22,
-        233, 183, 85, 11, 136, 214, 52, 106, 43, 117, 151, 201, 74, 20, 246, 168,
-        116, 42, 200, 150, 21, 75, 169, 247, 182, 232, 10, 84, 215, 137, 107, 53
-        };
-
-        public static byte Calculate(byte[] data, byte init = 0)
+        #region Classes
+        /// <summary>
+        /// Класс для расчета циклического избыточного кода для байт (CRC8).
+        /// \authors Paul Rozhkin(blackiiifox@gmail.com)
+        /// </summary>
+        private static class CRC8
         {
-            byte result = init;
-            for (var i = 0; i < data.Length; i++)
+            /// <summary>
+            /// Таблица CRC8.
+            /// </summary>
+            private static readonly byte[] TableCRC8 = new byte[]
             {
-                result = CRC8_TABLE[result ^ data[i]];
+                0, 94, 188, 226, 97, 63, 221, 131, 194, 156, 126, 32, 163, 253, 31, 65,
+                157, 195, 33, 127, 252, 162, 64, 30, 95, 1, 227, 189, 62, 96, 130, 220,
+                35, 125, 159, 193, 66, 28, 254, 160, 225, 191, 93, 3, 128, 222, 60, 98,
+                190, 224, 2, 92, 223, 129, 99, 61, 124, 34, 192, 158, 29, 67, 161, 255,
+                70, 24, 250, 164, 39, 121, 155, 197, 132, 218, 56, 102, 229, 187, 89, 7,
+                219, 133, 103, 57, 186, 228, 6, 88, 25, 71, 165, 251, 120, 38, 196, 154,
+                101, 59, 217, 135, 4, 90, 184, 230, 167, 249, 27, 69, 198, 152, 122, 36,
+                248, 166, 68, 26, 153, 199, 37, 123, 58, 100, 134, 216, 91, 5, 231, 185,
+                140, 210, 48, 110, 237, 179, 81, 15, 78, 16, 242, 172, 47, 113, 147, 205,
+                17, 79, 173, 243, 112, 46, 204, 146, 211, 141, 111, 49, 178, 236, 14, 80,
+                175, 241, 19, 77, 206, 144, 114, 44, 109, 51, 209, 143, 12, 82, 176, 238,
+                50, 108, 142, 208, 83, 13, 239, 177, 240, 174, 76, 18, 145, 207, 45, 115,
+                202, 148, 118, 40, 171, 245, 23, 73, 8, 86, 180, 234, 105, 55, 213, 139,
+                87, 9, 235, 181, 54, 104, 138, 212, 149, 203, 41, 119, 244, 170, 72, 22,
+                233, 183, 85, 11, 136, 214, 52, 106, 43, 117, 151, 201, 74, 20, 246, 168,
+                116, 42, 200, 150, 21, 75, 169, 247, 182, 232, 10, 84, 215, 137, 107, 53
+            };
+
+            /// <summary>
+            /// Расчет CRC8.
+            /// </summary>
+            /// <param name="data">Байтовые данные.</param>
+            /// <returns>CRC8 код.</returns>
+            public static byte Calculate(byte[] data)
+            {
+                byte result = 0;
+                for (var i = 0; i < data.Length; i++)
+                {
+                    result = TableCRC8[result ^ data[i]];
+                }
+
+                return result;
             }
-            return result;
         }
+        #endregion
     }
 }

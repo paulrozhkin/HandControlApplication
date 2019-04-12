@@ -28,11 +28,6 @@ namespace HandControl.Services
         private readonly SerialPort serialPortHand = new SerialPort();
 
         /// <summary>
-        /// Ресурс COM порта для устройства голосового управления.
-        /// </summary>
-        private readonly SerialPort serialPortVoice = new SerialPort();
-
-        /// <summary>
         /// Информация о конфигурации COM портов.
         /// </summary>
         private PortInfo infoCom;
@@ -62,11 +57,6 @@ namespace HandControl.Services
         /// Gets a value indicating whether состояние подключения протеза руки.
         /// </summary>
         public bool StateDeviceHand { get; private set; } = true;
-
-        /// <summary>
-        /// Gets a value indicating whether состояние подключения устройства голосового управления.
-        /// </summary>
-        public bool StateDeviceVoice { get; private set; }
         #endregion
 
         #region Methods
@@ -79,22 +69,10 @@ namespace HandControl.Services
         {
             bool stateTx = false;
 
-            if (dataTx[11] == CommunicationManager.addressHand)
+            if (this.StateDeviceHand == true)
             {
-                if (this.StateDeviceHand == true)
-                {
-                    this.serialPortHand.Write(dataTx, 0, dataTx.Length);
-                    stateTx = true;
-                }
-            }
-
-            if (dataTx[11] == CommunicationManager.addressVoice)
-            {
-                if (this.StateDeviceVoice == true)
-                {
-                    this.serialPortVoice.Write(dataTx, 0, dataTx.Length);
-                    stateTx = true;
-                }
+                this.serialPortHand.Write(dataTx, 0, dataTx.Length);
+                stateTx = true;
             }
 
             return stateTx;
@@ -126,11 +104,6 @@ namespace HandControl.Services
             {
                 this.serialPortHand.Close();
             }
-
-            if (this.serialPortVoice.IsOpen)
-            {
-                this.serialPortVoice.Close();
-            }
         }
 
         /// <summary>
@@ -140,7 +113,6 @@ namespace HandControl.Services
         private void SerialSetup()
         {
             bool stateConnectHand = false;
-            bool stateConnectVoice = false;
 
             List<string> comPorts = new List<string>(SerialPort.GetPortNames());
             this.infoCom = PortInfo.InfoLoad();
@@ -155,7 +127,7 @@ namespace HandControl.Services
                     this.serialPortHand.DataBits = 8;
                     this.serialPortHand.Handshake = Handshake.None;
                     this.serialPortHand.RtsEnable = true;
-                    
+
                     try
                     {
                         this.serialPortHand.Open();
@@ -163,37 +135,13 @@ namespace HandControl.Services
                         this.serialPortHand.DataReceived += new SerialDataReceivedEventHandler(this.DataReceivedHandHandler);
                         stateConnectHand = true;
                     }
-                    catch 
+                    catch
                     {
                         stateConnectHand = false;
                     }
                 }
-
-                if (realnamePort == this.infoCom.NamePortVoice)
-                {
-                    this.serialPortVoice.PortName = this.infoCom.NamePortVoice;
-                    this.serialPortVoice.BaudRate = this.infoCom.BaudRateVoice;
-                    this.serialPortVoice.Parity = Parity.None;
-                    this.serialPortVoice.StopBits = StopBits.One;
-                    this.serialPortVoice.DataBits = 8;
-                    this.serialPortVoice.Handshake = Handshake.None;
-                    this.serialPortVoice.RtsEnable = true;
-
-                    try
-                    {
-                        this.serialPortVoice.Open();
-                        this.serialPortVoice.DiscardInBuffer();
-                        this.serialPortVoice.DataReceived += new SerialDataReceivedEventHandler(this.DataReceivedVoiceHandler);
-                        stateConnectVoice = true;
-                    }
-                    catch
-                    {
-                        stateConnectVoice = false;
-                    }
-                }
             }
 
-            this.StateDeviceVoice = stateConnectVoice;
             this.StateDeviceHand = stateConnectHand;
         }
 
@@ -241,20 +189,6 @@ namespace HandControl.Services
             /// </summary>
             [JsonProperty(PropertyName = "BaudRateHand")]
             public int BaudRateHand { get; set; }
-
-            /// <summary>
-            /// Gets or sets имя COM порта, 
-            /// к которому подключено устройство голосового управления.
-            /// </summary>
-            [JsonProperty(PropertyName = "PortVoice")]
-            public string NamePortVoice { get; set; }
-
-            /// <summary>
-            /// Gets or sets скорость передачи в бодах по COM порту,
-            /// к которому подключено устройство голосового управления.
-            /// </summary>
-            [JsonProperty(PropertyName = "BaudRateVoice")]
-            public int BaudRateVoice { get; set; }
             #endregion
 
             #region Methods
@@ -267,9 +201,7 @@ namespace HandControl.Services
                 PortInfo newInfo = new PortInfo
                 {
                     BaudRateHand = 115200,
-                    NamePortHand = "None",
-                    BaudRateVoice = 115200,
-                    NamePortVoice = "None"
+                    NamePortHand = "None"
                 };
                 return newInfo;
             }

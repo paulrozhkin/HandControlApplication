@@ -110,7 +110,6 @@
       <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
     </Compile>
     <Compile Include="Services\JsonSerDer.cs" />
-    <Compile Include="Services\LoaderModel.cs" />
     <Compile Include="Services\PathManager.cs" />
     <Compile Include="Services\RelayCommand.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
