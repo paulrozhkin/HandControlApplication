@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------
-// <copyright file = "IdToNameActionConverter.cs" company = "Студенческий проект HandControl‎"> 
+// <copyright file = "IdToNameMotionConverter.cs" company = "Студенческий проект HandControl‎"> 
 //      Copyright © 2019 HandControl. All rights reserved.
 // </copyright> 
 // -------------------------------------------------------------------------------------
@@ -15,7 +15,7 @@ namespace HandControl.Services
     /// \date Январь 2019 года
     /// \authors Paul Rozhkin(blackiiifox@gmail.com)
     /// </summary>
-    public class IdToNameActionConverter : IValueConverter
+    public class IdToNameMotionConverter : IValueConverter
     {
         /// <summary>
         /// Конвертиация id в строковое представление путем добавления слова Действие в начало строки.

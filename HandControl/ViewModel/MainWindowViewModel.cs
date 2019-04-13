@@ -16,36 +16,36 @@ namespace HandControl.ViewModel
     class MainWindowViewModel : ViewModelBase
     {
         #region Variables
-        private CommandModel selectedCommand = null;
+        private GestureModel selectedCommand = null;
         public CommunicationManager Communication { get; set; }
 
         /// <summary>
         /// Список комманд
         /// </summary>
-        public ObservableCollection<CommandModel> Commands { get; set; }
+        public ObservableCollection<GestureModel> Commands { get; set; }
 
-        ObservableCollection<CommandModel.ActionModel> commandActions = new ObservableCollection<CommandModel.ActionModel>();
-        public ObservableCollection<CommandModel.ActionModel> SelectedListCommandActions
+        ObservableCollection<GestureModel.MotionModel> commandMotions = new ObservableCollection<GestureModel.MotionModel>();
+        public ObservableCollection<GestureModel.MotionModel> SelectedListCommandMotions
         {
             get
             {
-                return commandActions;
+                return commandMotions;
             }
             set
             {
-                commandActions = new ObservableCollection<CommandModel.ActionModel>();
+                commandMotions = new ObservableCollection<GestureModel.MotionModel>();
                 if (value != null)
                 {
-                    foreach (CommandModel.ActionModel action in value)
+                    foreach (GestureModel.MotionModel action in value)
                     {
-                        commandActions.Add((CommandModel.ActionModel)action.Clone());
+                        commandMotions.Add((GestureModel.MotionModel)action.Clone());
                     }
                 }
-                SelectedAction = null;
+                SelectedMotion = null;
             }
         }
 
-        public CommandModel SelectedCommand
+        public GestureModel SelectedCommand
         {
             get
             {
@@ -55,31 +55,31 @@ namespace HandControl.ViewModel
             {
                 if (value != null)
                 {
-                    selectedCommand = value.Clone() as CommandModel;
-                    SelectedListCommandActions = selectedCommand.DataAction;
+                    selectedCommand = value.Clone() as GestureModel;
+                    SelectedListCommandMotions = selectedCommand.ListMotions;
                 }
                 else
                 {
-                    SelectedListCommandActions = null;
+                    SelectedListCommandMotions = null;
                     selectedCommand = null;
                 }
             }
         }
 
-        public CommandModel.ActionModel SelectedAction { get; set; }
+        public GestureModel.MotionModel SelectedMotion { get; set; }
 
-        public Visibility ActionVisible { get; set; } = Visibility.Collapsed;
+        public Visibility MotionVisible { get; set; } = Visibility.Collapsed;
         #endregion
 
         #region Commands
-        public ICommand SaveActionsCommand
+        public ICommand SaveMotionsCommand
         {
-            get { return new RelayCommand((object obj) => this.SaveActions()); }
+            get { return new RelayCommand((object obj) => this.SaveMotions()); }
         }
 
-        public ICommand AddActionCommand
+        public ICommand AddMotionCommand
         {
-            get { return new RelayCommand((object obj) => this.AddAction()); }
+            get { return new RelayCommand((object obj) => this.AddMotion()); }
         }
 
         public ICommand DeleteCommandCommand
@@ -87,7 +87,7 @@ namespace HandControl.ViewModel
             get { return new RelayCommand((object obj) => this.DeleteCommand(obj)); }
         }
 
-        public ICommand DeleteActionCommand
+        public ICommand DeleteMotionCommand
         {
             get { return new RelayCommand((object obj) => this.DeleteACtion(obj)); }
         }
@@ -116,9 +116,11 @@ namespace HandControl.ViewModel
         #region Constructor
         public MainWindowViewModel()
         {
-            Commands = CommandModel.GetCommands();
-            Communication = CommunicationManager.GetInstance();
-            // CommunicationManager.ActionListRequestCommand();
+            // Commands = GestureModel.GetCommands();
+            // Communication = CommunicationManager.GetInstance();
+
+
+            // CommunicationManager.MotionListRequestCommand();
             // CommunicationManager.SaveCommandsToVoice(Commands);
             // CommunicationManager.SaveCommands(commands);
             // CommunicationManager.ExecuteTheCommand("Сжать");
@@ -131,13 +133,7 @@ namespace HandControl.ViewModel
         #region Methods
         private void AddCommand(object obj)
         {
-            CommandModel newCommand = new CommandModel
-            {
-                ID = GetNewID(),
-                Name = "Новая комманда"
-            };
-            newCommand.InfoCommand = CommandModel.InfoCommandModel.GetDefault();
-            newCommand.DataAction = new ObservableCollection<CommandModel.ActionModel>();
+            GestureModel newCommand = GestureModel.GetDefault("Новая комманда");
             Commands.Add(newCommand);
         }
 
@@ -146,35 +142,35 @@ namespace HandControl.ViewModel
             if (obj == null)
                 return;
 
-            int deletNameAction = (int)obj;
+            int deletNameMotion = (int)obj;
 
 
-            foreach (CommandModel.ActionModel actionModel in SelectedListCommandActions)
+            foreach (GestureModel.MotionModel actionModel in SelectedListCommandMotions)
             {
-                if (actionModel.Id == Convert.ToInt32(deletNameAction))
+                if (actionModel.Id == Convert.ToInt32(deletNameMotion))
                 {
-                    for (int i = actionModel.Id; i < SelectedListCommandActions.Count; i++)
+                    for (int i = actionModel.Id; i < SelectedListCommandMotions.Count; i++)
                     {
-                        SelectedListCommandActions[i].Id = SelectedListCommandActions[i].Id - 1;
+                        SelectedListCommandMotions[i].Id = SelectedListCommandMotions[i].Id - 1;
                     }
-                    SelectedListCommandActions.Remove(actionModel);
+                    SelectedListCommandMotions.Remove(actionModel);
                     break;
                 }
             }
         }
 
-        private void SaveActions()
+        private void SaveMotions()
         {
-            SelectedCommand.DataAction = SelectedListCommandActions;
-            SelectedCommand.InfoCommand.Date = DateTime.Now.ToString("yyMMddHHmmss");
-            CommandModel.SaveCommand(SelectedCommand);
+            SelectedCommand.ListMotions = SelectedListCommandMotions;
+            SelectedCommand.InfoGesture.Date = DateTime.Now.ToString("yyMMddHHmmss");
+            GestureModel.Save(SelectedCommand);
 
             bool StateFountCommand = false;
             for (int i = 0; i < Commands.Count; i++)
             {
-                if (Commands[i].ID == SelectedCommand.ID)
+                if (Commands[i].Name == SelectedCommand.Name)
                 {
-                    Commands[i] = SelectedCommand.Clone() as CommandModel;
+                    Commands[i] = SelectedCommand.Clone() as GestureModel;
                     StateFountCommand = true;
                     break;
                     // SelectedCommand = Commands[i];
@@ -183,15 +179,15 @@ namespace HandControl.ViewModel
 
             if (StateFountCommand is false)
             {
-                Commands.Add(SelectedCommand.Clone() as CommandModel);
+                Commands.Add(SelectedCommand.Clone() as GestureModel);
             }
 
         }
 
-        private void AddAction()
+        private void AddMotion()
         {
-            CommandModel.ActionModel newAction = CommandModel.ActionModel.GetDefault(CommandModel.ActionModel.GetNewId(SelectedListCommandActions.ToList<CommandModel.ActionModel>()));
-            SelectedListCommandActions.Add(newAction);
+            GestureModel.MotionModel newMotion = GestureModel.MotionModel.GetDefault(GestureModel.MotionModel.GetNewId(SelectedListCommandMotions.ToList<GestureModel.MotionModel>()));
+            SelectedListCommandMotions.Add(newMotion);
         }
 
         private void DeleteCommand(object obj)
@@ -199,13 +195,13 @@ namespace HandControl.ViewModel
             if (obj == null)
                 return;
 
-            int deleteID = (int)obj;
+            string deleteID = (string)obj;
 
-            foreach (CommandModel command in Commands)
+            foreach (GestureModel command in Commands)
             {
-                if (command.ID == deleteID)
+                if (command.Name == deleteID)
                 {
-                    CommandModel.DeleteCommand(command);
+                    GestureModel.Delete(command);
                     Commands.Remove(command);
                     break;
                 }
@@ -219,24 +215,13 @@ namespace HandControl.ViewModel
 
         private void InfinityCheck(object obj)
         {
-            SelectedCommand.InfoCommand.IterableActions = !SelectedCommand.InfoCommand.IterableActions;
+            SelectedCommand.InfoGesture.IterableMotions = !SelectedCommand.InfoGesture.IterableMotions;
         }
 
         private void CloseChange(object obj)
         {
             SelectedCommand = null;
-            SelectedAction = null;
-        }
-
-        private int GetNewID()
-        {
-            int newID = 1;
-            foreach (CommandModel acc in Commands)
-            {
-                if (acc.ID >= newID)
-                    newID = acc.ID + 1;
-            }
-            return newID;
+            SelectedMotion = null;
         }
         #endregion
     }

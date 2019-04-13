@@ -99,7 +99,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Model\CommandModel.cs" />
+    <Compile Include="Model\GestureModel.cs" />
     <Compile Include="Services\CommunicationManager.cs" />
     <Compile Include="Services\Converters\IdToNameActionConverter.cs" />
     <Compile Include="Services\FileIOManager.cs" />

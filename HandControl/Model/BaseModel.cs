@@ -5,6 +5,7 @@
 // -------------------------------------------------------------------------------------
 namespace HandControl.Model
 {
+    using System;
     using System.ComponentModel;
 
     /// <summary>
@@ -16,6 +17,7 @@ namespace HandControl.Model
     /// \date Апрель 2019 года
     /// \authors Paul Rozhkin(blackiiifox@gmail.com)
     /// </summary>
+    [Serializable]
     public abstract class BaseModel : INotifyPropertyChanged
     {
         /// <summary>

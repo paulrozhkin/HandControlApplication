@@ -172,14 +172,14 @@ namespace HandControl.Services
         /// сохранения их на устройстве и будующего применения.
         /// </summary>
         /// <param name="commandsList">Коллекция передаваемых команд.</param>
-        public void SaveCommands(ObservableCollection<CommandModel> commandsList)
+        public void SaveCommands(ObservableCollection<GestureModel> commandsList)
         {
             List<byte> dataField = new List<byte>
                 {
                     (byte)CommandType.Save
                 };
 
-            foreach (CommandModel command in commandsList)
+            foreach (GestureModel command in commandsList)
             {
                 dataField.AddRange(command.BinaryDate.ToList<byte>());
             }
@@ -209,7 +209,7 @@ namespace HandControl.Services
         /// Создание и отправка пакета на устройство протеза для исполнения переданной команды.
         /// </summary>
         /// <param name="command">Исполняемая команда.</param>
-        public void ExecuteTheCommand(CommandModel command)
+        public void ExecuteTheCommand(GestureModel command)
         {
             List<byte> dataField = new List<byte> { (byte)CommandType.ExecByMotion };
             dataField.AddRange(command.BinaryDate.ToList<byte>());

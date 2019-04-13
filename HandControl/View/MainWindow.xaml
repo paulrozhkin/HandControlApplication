@@ -13,7 +13,7 @@
         >
 
     <Window.Resources>
-        <converters:IdToNameActionConverter x:Key="idToNameActionConverter"/>
+        <converters:IdToNameMotionConverter x:Key="idToNameMotionConverter"/>
 
         <Style x:Key="StyleListBox" TargetType="{x:Type ListBoxItem}">
             <Setter Property="Template">
@@ -293,7 +293,7 @@
                             <Setter Property="Foreground" Value="Black"/>
                             <Style.Triggers>
                                 <DataTrigger
-                                    Binding="{Binding Path=SelectedCommand.InfoCommand.IterableActions}"
+                                    Binding="{Binding Path=SelectedCommand.InfoCommand.IterableMotions}"
                                     Value="True">
                                     <Setter Property="Foreground" Value="Yellow"/>
                                 </DataTrigger>
@@ -380,28 +380,28 @@
 
                         <Button Grid.Column="1"
                                 Style="{StaticResource StylePushButton}"
-                                Command="{Binding SaveActionsCommand}"
+                                Command="{Binding SaveMotionsCommand}"
                                 Height="22">
-                            <Image Source="/img/Actions/Editor/icon_save.png"/>
+                            <Image Source="/img/Motions/Editor/icon_save.png"/>
                         </Button>
 
                         <Button Grid.Column="2"
                                 Style="{StaticResource StylePushButton}"
                                 Height="22">
-                            <Image Source="/img/Actions/Editor/icon_back.png"/>
+                            <Image Source="/img/Motions/Editor/icon_back.png"/>
                         </Button>
 
                         <Button Grid.Column="3"
                                 Style="{StaticResource StylePushButton}"
                                 Height="22">
-                            <Image Source="/img/Actions/Editor/icon_front.png"/>
+                            <Image Source="/img/Motions/Editor/icon_front.png"/>
                         </Button>
 
                         <Button Grid.Column="4"
                                 Command="{Binding CloseChangeCommand}"
                                 Style="{StaticResource StylePushButton}"
                                 Height="22">
-                            <Image Source="/img/Actions/Editor/icon_close.png"/>
+                            <Image Source="/img/Motions/Editor/icon_close.png"/>
                         </Button>
                     </Grid>
 
@@ -440,7 +440,7 @@
                             Foreground="White"
                             Margin="0 0 15 0"
                             FontSize="14"
-                            Command="{Binding AddActionCommand}"
+                            Command="{Binding AddMotionCommand}"
                             >
                             <Grid>
                                 <materialDesign:PackIcon Kind="CirclesAdd" Foreground="White" VerticalAlignment="Center" Margin="0 2 0 0"/>
@@ -457,10 +457,10 @@
                     <ListBox
                         Background="#262b36"
                         Grid.Row="4"
-                        ItemsSource="{Binding SelectedListCommandActions}" 
-                        SelectedItem="{Binding SelectedAction}"
+                        ItemsSource="{Binding SelectedListCommandMotions}" 
+                        SelectedItem="{Binding SelectedMotion}"
                         BorderThickness="0"
-                        x:Name="ListBoxActions"
+                        x:Name="ListBoxMotions"
                         BorderBrush="Transparent"
                         ScrollViewer.VerticalScrollBarVisibility="Visible"
                         ItemContainerStyle="{StaticResource StyleListBox}"
@@ -474,7 +474,7 @@
                                         Background="Transparent"
                                         FontFamily="{StaticResource SFUIDisplayMedium}"
                                         VerticalAlignment="Center"
-                                        Text="{Binding Id, Converter={StaticResource idToNameActionConverter}, Mode=TwoWay}">
+                                        Text="{Binding Id, Converter={StaticResource idToNameMotionConverter}, Mode=TwoWay}">
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
                                                 <Setter Property="TextBlock.Foreground" Value="White"/>
@@ -498,7 +498,7 @@
                                         VerticalAlignment="Top"
                                         Style="{StaticResource StylePushButton}"
                                         HorizontalAlignment="Right"    
-                                        Command="{Binding Path=DataContext.DeleteActionCommand,
+                                        Command="{Binding Path=DataContext.DeleteMotionCommand,
                                         RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
                                         CommandParameter="{Binding Id, Mode=TwoWay}">
                                         <materialDesign:PackIcon Kind="WindowClose" Height="17" Width="17">
@@ -552,7 +552,7 @@
                         <Style TargetType="ItemsControl">
                             <Setter Property="Visibility" Value="Visible"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Path=SelectedAction}" Value="{x:Null}">
+                                <DataTrigger Binding="{Binding Path=SelectedMotion}" Value="{x:Null}">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -583,7 +583,7 @@
                             FontSize="24"
                             MaxLength="3"
                             TextAlignment="Center"
-                            Text="{Binding SelectedAction.ThumbFinger}"
+                            Text="{Binding SelectedMotion.ThumbFinger}"
                             >
                         </TextBox>
 
@@ -627,7 +627,7 @@
                             FontSize="24"
                             MaxLength="3"
                             TextAlignment="Center"
-                            Text="{Binding SelectedAction.PointerFinger}"
+                            Text="{Binding SelectedMotion.PointerFinger}"
                             >
                         </TextBox>
 
@@ -671,7 +671,7 @@
                             FontSize="24"
                             MaxLength="3"
                             TextAlignment="Center"
-                            Text="{Binding SelectedAction.MiddleFinger}"
+                            Text="{Binding SelectedMotion.MiddleFinger}"
                             >
                         </TextBox>
 
@@ -715,7 +715,7 @@
                             FontSize="24"
                             MaxLength="3"
                             TextAlignment="Center"
-                            Text="{Binding SelectedAction.RingFinder}"
+                            Text="{Binding SelectedMotion.RingFinder}"
                             >
                         </TextBox>
 
@@ -759,7 +759,7 @@
                             FontSize="24"
                             MaxLength="3"
                             TextAlignment="Center"
-                            Text="{Binding SelectedAction.LittleFinger}"
+                            Text="{Binding SelectedMotion.LittleFinger}"
                             >
                         </TextBox>
 
@@ -803,7 +803,7 @@
                             FontSize="24"
                             MaxLength="5"
                             TextAlignment="Center"
-                            Text="{Binding SelectedAction.DelAction}"
+                            Text="{Binding SelectedMotion.DelMotion}"
                             >
                         </TextBox>
 
@@ -865,7 +865,7 @@
                                         
                                         <TextBox
                                             Grid.Column="1"
-                                            materialDesign:HintAssist.Hint="Поиск комманды"
+                                            materialDesign:HintAssist.Hint="Поиск жеста"
                                             materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
                                             BorderThickness="0"
                                             FontSize="18"
@@ -878,9 +878,10 @@
 
                                     <Grid Height="40" Grid.Row="1">
                                         <Button
+                                            HorizontalAlignment="Left"
                                             Style="{StaticResource StylePushButton}"
                                             Foreground="White"
-                                            Margin="0 0 0 0"
+                                            Margin="15 0 0 0"
                                             FontSize="18"
                                             Command="{Binding AddCommandCommand}"
                                             >
@@ -888,7 +889,7 @@
                                                 <materialDesign:PackIcon Kind="CirclesAdd" Foreground="White" VerticalAlignment="Center" Margin="0 2 0 0"/>
 
                                                 <TextBlock Margin="20 0 0 0">
-                                                           Добавить комманду
+                                                           Добавить жест
                                                 </TextBlock>
                                             </Grid>
                                         </Button>
