@@ -9,7 +9,6 @@
         xmlns:converters="clr-namespace:HandControl.Services"
         Title="HandControl" WindowStyle="SingleBorderWindow" Icon="/img/logo.ico"
         Height="768" Width="1024"
-        MaxHeight="768" MaxWidth="1024"
         >
 
     <Window.Resources>
@@ -266,7 +265,7 @@
                 <Style TargetType="Grid">
                     <Setter Property="Visibility" Value="Visible"/>
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding Path=SelectedCommand}" Value="{x:Null}">
+                        <DataTrigger Binding="{Binding Path=SelectedGesture}" Value="{x:Null}">
                             <Setter Property="Visibility" Value="Collapsed"/>
                         </DataTrigger>
                     </Style.Triggers>
@@ -293,7 +292,7 @@
                             <Setter Property="Foreground" Value="Black"/>
                             <Style.Triggers>
                                 <DataTrigger
-                                    Binding="{Binding Path=SelectedCommand.InfoCommand.IterableMotions}"
+                                    Binding="{Binding Path=SelectedGesture.InfoGesture.IterableGesture}"
                                     Value="True">
                                     <Setter Property="Foreground" Value="Yellow"/>
                                 </DataTrigger>
@@ -324,7 +323,7 @@
                      Padding="10 0 0 0"
                      MaxLength="4"
                      FontFamily="{StaticResource SFUIDisplayThin}"
-                     Text="{Binding SelectedCommand.InfoCommand.NumActRep}"
+                     Text="{Binding SelectedGesture.InfoGesture.GestureRepetitions}"
                      Background="Transparent"/>
         </Grid>
 
@@ -361,7 +360,7 @@
                         <Style TargetType="Grid">
                             <Setter Property="Visibility" Value="Visible"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Path=SelectedCommand}" Value="{x:Null}">
+                                <DataTrigger Binding="{Binding Path=SelectedGesture}" Value="{x:Null}">
                                     <Setter Property="Visibility" Value="Collapsed"/>
                                 </DataTrigger>
                             </Style.Triggers>
@@ -380,7 +379,7 @@
 
                         <Button Grid.Column="1"
                                 Style="{StaticResource StylePushButton}"
-                                Command="{Binding SaveMotionsCommand}"
+                                Command="{Binding SaveGestureCommand}"
                                 Height="22">
                             <Image Source="/img/Motions/Editor/icon_save.png"/>
                         </Button>
@@ -417,11 +416,11 @@
                             Foreground="Yellow"
                             Background="Transparent"
                             VerticalAlignment="Top"
-                            Text="{Binding SelectedCommand.Name}"
-                            TextWrapping="Wrap"
+                            Text="{Binding SelectedGesture.Name}"
+                            TextWrapping="NoWrap"
                             TextAlignment="Center"
                             FontSize="16"
-                            Margin="0 10 0 0"
+                            Margin="20 10 0 0"
                             materialDesign:HintAssist.Hint="  Новое название"
                             materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
                             BorderThickness="0"
@@ -827,7 +826,7 @@
                         ItemContainerStyle="{StaticResource StyleListBox}"
                         ItemsSource="{Binding Commands}" 
                         ScrollViewer.VerticalScrollBarVisibility="Visible"
-                        SelectedItem="{Binding SelectedCommand, Mode=TwoWay}">
+                        SelectedItem="{Binding SelectedGesture, Mode=TwoWay}">
 
                 <ListBox.Template>
                     <ControlTemplate>
@@ -916,13 +915,13 @@
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="Foreground" Value="White"/>
-                                        <Setter Property="FontSize" Value="18"/>
+                                        <Setter Property="FontSize" Value="16"/>
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={
                                                          RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem }}}"
                                                          Value="True">
                                                 <Setter Property="Foreground" Value="Black"/>
-                                                <Setter Property="FontSize" Value="20"/>
+                                                <Setter Property="FontSize" Value="18"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>

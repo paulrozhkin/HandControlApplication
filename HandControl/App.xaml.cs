@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-
+﻿// --------------------------------------------------------------------------------------
+// <copyright file = "App.xaml.cs" company = "Студенческий проект HandControl‎"> 
+//      Copyright © 2019 HandControl. All rights reserved.
+// </copyright> 
+// -------------------------------------------------------------------------------------
 namespace HandControl
 {
+    using System.Windows;
+
     /// <summary>
     /// Логика взаимодействия для App.xaml
     /// </summary>

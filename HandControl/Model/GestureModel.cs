@@ -39,14 +39,21 @@ namespace HandControl.Model
         {
             this.Name = nameGesture;
         }
+
+        /// <summary>
+        /// Prevents a default instance of the <see cref="GestureModel" /> class from being created.
+        /// </summary>
+        private GestureModel()
+        {
+        }
         #endregion
 
         #region Properties
         /// <summary>
-        /// Gets or sets идентификатор жеста, должен быть уникальным.
+        /// Gets or sets уникальный идентификатор жеста.
         /// </summary>
         [JsonProperty(PropertyName = "id_gesture")]
-        public int ID { get; set; }
+        public Guid ID { get; set; }
 
         /// <summary>
         /// Gets or sets имя жеста, должно быть уникальным.
@@ -182,7 +189,7 @@ namespace HandControl.Model
         /// <param name="command">Экземпляр сохраняемого жеста.</param>
         public static void Save(GestureModel command)
         {
-            JsonSerDer.SaveObject(command, PathManager.GetCommandPath(command.Name));
+            JsonSerDer.SaveObject(command, PathManager.GetCommandPath(command.ID.ToString()));
         }
 
         /// <summary>
@@ -191,7 +198,7 @@ namespace HandControl.Model
         /// <param name="command">Экземпляр удаляемого жеста.</param>
         public static void Delete(GestureModel command)
         {
-            FileIOManager.DeleteFolder(PathManager.GetCommandFolderPath(command.Name));
+            FileIOManager.DeleteFolder(PathManager.GetCommandFolderPath(command.ID.ToString()));
         }
 
         /// <summary>
@@ -212,6 +219,7 @@ namespace HandControl.Model
 
             return new GestureModel((string)this.Name.Clone())
             {
+                ID = this.ID,
                 InfoGesture = (InfoCommandModel)this.InfoGesture.Clone(),
                 ListMotions = newDataMotion
             };
@@ -421,7 +429,7 @@ namespace HandControl.Model
                     Date = string.Empty,
                     IterableGesture = false,
                     IsCombinedGesture = false,
-                    GestureRepetitions = 0,
+                    GestureRepetitions = 1,
                     NumberOfMotions = 0
                 };
                 return result;
