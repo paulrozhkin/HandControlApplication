@@ -210,12 +210,12 @@ namespace HandControl.ViewModel
 
         private void HandHandler(object obj)
         {
-            Communication.SaveCommands(Commands);
+            Communication.SaveGestures(Commands);
         }
 
         private void InfinityCheck(object obj)
         {
-            SelectedCommand.InfoGesture.IterableMotions = !SelectedCommand.InfoGesture.IterableMotions;
+            SelectedCommand.InfoGesture.IterableGesture = !SelectedCommand.InfoGesture.IterableGesture;
         }
 
         private void CloseChange(object obj)

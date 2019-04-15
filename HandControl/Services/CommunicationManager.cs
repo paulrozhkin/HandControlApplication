@@ -97,19 +97,19 @@ namespace HandControl.Services
         private enum CommandType
         {
             /// <summary>
-            /// Команда сохранения одной или нескольких команд протеза.
+            /// Команда сохранения одного или нескольких жестов протеза.
             /// </summary>
-            [Description("Сохранить комманду")] Save = 0x15,
+            [Description("Сохранить жест")] Save = 0x15,
 
             /// <summary>
-            /// Команда выполнения команды протезом по имени.
+            /// Команда выполнения жеста протезом по имени.
             /// </summary>
-            [Description("Выполнить команду по имени")] ExecByName = 0x16,
+            [Description("Выполнить жест по имени")] ExecByName = 0x16,
 
             /// <summary>
-            /// Команда выполнения протезом руки переданной команды.
+            /// Команда выполнения протезом руки переданного жеста.
             /// </summary>
-            [Description("Выполнить переданную команду")] ExecByMotion = 0x17,
+            [Description("Выполнить переданный жест")] ExecByMotion = 0x17,
 
             /// <summary>
             /// Команда установки переданных положений пальцев на протез.
@@ -168,18 +168,18 @@ namespace HandControl.Services
         }
 
         /// <summary>
-        /// Создание и отправка пакета команд на устройство протеза для
+        /// Создание и отправка пакета жестов на устройство протеза для
         /// сохранения их на устройстве и будующего применения.
         /// </summary>
-        /// <param name="commandsList">Коллекция передаваемых команд.</param>
-        public void SaveCommands(ObservableCollection<GestureModel> commandsList)
+        /// <param name="gestureList">Коллекция передаваемых жестов.</param>
+        public void SaveGestures(ObservableCollection<GestureModel> gestureList)
         {
             List<byte> dataField = new List<byte>
                 {
                     (byte)CommandType.Save
                 };
 
-            foreach (GestureModel command in commandsList)
+            foreach (GestureModel command in gestureList)
             {
                 dataField.AddRange(command.BinaryDate.ToList<byte>());
             }
@@ -206,26 +206,26 @@ namespace HandControl.Services
         }
 
         /// <summary>
-        /// Создание и отправка пакета на устройство протеза для исполнения переданной команды.
+        /// Создание и отправка пакета на устройство протеза для исполнения переданного жеста.
         /// </summary>
-        /// <param name="command">Исполняемая команда.</param>
-        public void ExecuteTheCommand(GestureModel command)
+        /// <param name="gesture">Исполняемый жест.</param>
+        public void ExecuteTheGesture(GestureModel gesture)
         {
             List<byte> dataField = new List<byte> { (byte)CommandType.ExecByMotion };
-            dataField.AddRange(command.BinaryDate.ToList<byte>());
+            dataField.AddRange(gesture.BinaryDate.ToList<byte>());
             byte[] package = CreatePackage((byte)DeviceType.Prosthesis, dataField);
             this.СonnectedDevices.SendToDevice(package);
         }
 
         /// <summary>
-        /// Создание и отправка пакета на устройство протеза для исполнения заложенной команды по имени.
+        /// Создание и отправка пакета на устройство протеза для исполнения заложенного жеста по имени.
         /// </summary>
-        /// <param name="nameCommand">Имя заложенной команды.</param>
-        public void ExecuteTheCommand(string nameCommand)
+        /// <param name="nameGesture">Имя заложенного жеста.</param>
+        public void ExecuteTheGesture(string nameGesture)
         {
             List<byte> dataField = new List<byte> { (byte)CommandType.ExecByName };
 
-            byte[] byteName = Encoding.UTF8.GetBytes(nameCommand);
+            byte[] byteName = Encoding.UTF8.GetBytes(nameGesture);
 
             if (byteName.Length == 20)
             {

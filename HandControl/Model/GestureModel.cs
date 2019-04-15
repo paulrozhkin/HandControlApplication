@@ -13,10 +13,10 @@ namespace HandControl.Model
     using Newtonsoft.Json;
 
     /// <summary>
-    /// Класс содержащий целостную команду протеза.
+    /// Класс содержащий целостный жест (некоторое действие или движение протеза, имеющее определённое значение или смысл) протеза.
     /// Экземпляр данного класса содержит информацию о комманде и положения принимаемые протезом в разные единицы времени.
     /// Содержит методы для сохранения и загрузки данных.
-    /// \brief Класс содержащий целостную команду протеза.
+    /// \brief Класс содержащий целостный жест протеза.
     /// \version 1.1
     /// \date Март 2019 года
     /// \authors Paul Rozhkin(blackiiifox@gmail.com)
@@ -43,13 +43,13 @@ namespace HandControl.Model
 
         #region Properties
         /// <summary>
-        /// Gets or sets идентификатор команды, должен быть уникальным.
+        /// Gets or sets идентификатор жеста, должен быть уникальным.
         /// </summary>
         [JsonProperty(PropertyName = "id_gesture")]
         public int ID { get; set; }
 
         /// <summary>
-        /// Gets or sets имя команды, должно быть уникальным.
+        /// Gets or sets имя жеста, должно быть уникальным.
         /// </summary>
         [JsonProperty(PropertyName = "name_gesture")]
         public string Name
@@ -67,26 +67,26 @@ namespace HandControl.Model
         }
 
         /// <summary>
-        /// Gets or sets информацию о команде, такую как время, кол-во действий, кол-во повторений действия и итеративность действий.
+        /// Gets or sets информацию о жесте, такую как время создания/изменения жеста, кол-во действий, кол-во повторений действия и итеративность действий.
         /// </summary>
         [JsonProperty(PropertyName = "info_gesture")]
         public InfoCommandModel InfoGesture { get; set; }
 
         /// <summary>
-        /// Gets or sets список данных действий
+        /// Gets or sets список действий жеста.
         /// </summary>
         [JsonProperty(PropertyName = "list_motions")]
         public ObservableCollection<MotionModel> ListMotions { get; set; }
 
         /// <summary>
-        /// Gets полную информацию и данные команды в бинарном виде
+        /// Gets полную информацию и данные жеста в бинарном виде
         /// </summary>
         [JsonIgnore]
         public byte[] BinaryDate
         {
             get
             {
-                byte[] byteArray = new byte[20 + 12 + 4 + (this.InfoGesture.CountCommand * 8)];
+                byte[] byteArray = new byte[20 + 12 + 4 + (this.InfoGesture.NumberOfMotions * 8)];
 
                 byte[] byteName = Encoding.GetEncoding(1251).GetBytes(this.Name);
 
@@ -114,12 +114,12 @@ namespace HandControl.Model
                     byteArray[20 + i] = byteDate[i];
                 }
 
-                byteArray[32] = Convert.ToByte(this.InfoGesture.CombinedCommand);
-                byteArray[33] = Convert.ToByte(this.InfoGesture.IterableMotions);
-                byteArray[34] = Convert.ToByte(this.InfoGesture.NumActRep);
-                byteArray[35] = Convert.ToByte(this.InfoGesture.CountCommand);
+                byteArray[32] = Convert.ToByte(this.InfoGesture.IsCombinedGesture);
+                byteArray[33] = Convert.ToByte(this.InfoGesture.IterableGesture);
+                byteArray[34] = Convert.ToByte(this.InfoGesture.GestureRepetitions);
+                byteArray[35] = Convert.ToByte(this.InfoGesture.NumberOfMotions);
 
-                for (int i = 0; i < this.InfoGesture.CountCommand; i++)
+                for (int i = 0; i < this.InfoGesture.NumberOfMotions; i++)
                 {
                     int index = 36 + (i * 8);
                     byteArray[index] = Convert.ToByte(this.ListMotions[i].LittleFinger);
@@ -155,9 +155,9 @@ namespace HandControl.Model
         }
 
         /// <summary>
-        /// Извлечение списка команд системы.
+        /// Извлечение списка жестов системы.
         /// </summary>
-        /// <returns>Коллекция команд хранимых в системе.</returns>
+        /// <returns>Коллекция жестов хранимых в системе.</returns>
         public static ObservableCollection<GestureModel> GetCommands()
         {
             ObservableCollection<GestureModel> sessionLoaded = new ObservableCollection<GestureModel>();
@@ -177,18 +177,18 @@ namespace HandControl.Model
         }
 
         /// <summary>
-        /// Сохранение команды в файловую систему.
+        /// Сохранение жеста в файловую систему.
         /// </summary>
-        /// <param name="command">Экземпляр сохраняемой команды.</param>
+        /// <param name="command">Экземпляр сохраняемого жеста.</param>
         public static void Save(GestureModel command)
         {
             JsonSerDer.SaveObject(command, PathManager.GetCommandPath(command.Name));
         }
 
         /// <summary>
-        /// Удаление команды из файловой системы.
+        /// Удаление жеста из файловой системы.
         /// </summary>
-        /// <param name="command">Экземпляр удаляемой команды.</param>
+        /// <param name="command">Экземпляр удаляемого жеста.</param>
         public static void Delete(GestureModel command)
         {
             FileIOManager.DeleteFolder(PathManager.GetCommandFolderPath(command.Name));
@@ -314,13 +314,12 @@ namespace HandControl.Model
             }
 
             /// <summary>
-            /// Генерация нового Id единичного действия на основании коллекции имеющихся действий команды.
+            /// Генерация нового Id единичного действия на основании коллекции имеющихся действий жеста.
             /// </summary>
-            /// <param name="listMotions">Коллекция имеющихся действий команды.</param>
-            /// <returns>Коллекция действий команды.</returns>
+            /// <param name="listMotions">Коллекция имеющихся действий в жесте.</param>
+            /// <returns>Коллекция действий жеста.</returns>
             public static int GetNewId(List<MotionModel> listMotions)
             {
-                int newId = 0;
                 int maxId = 0;
 
                 for (int i = 0; i < listMotions.Count; i++)
@@ -345,7 +344,7 @@ namespace HandControl.Model
 
                     if (state_search == false)
                     {
-                        newId = i;
+                        int newId = i;
                         return newId;
                     }
                 }
@@ -365,7 +364,7 @@ namespace HandControl.Model
         }
 
         /// <summary>
-        /// Класс содержащий информацию о жесте.
+        /// Класс содержащий информацию о жесте <see cref="GestureModel"/>.
         /// </summary>
         public class InfoCommandModel : BaseModel, ICloneable
         {
@@ -380,31 +379,31 @@ namespace HandControl.Model
 
             #region Properties
             /// <summary>
-            /// Gets or sets a value indicating whether итерируемость действий команды.
+            /// Gets or sets a value indicating whether итерируемость жеста.
             /// </summary>
-            [JsonProperty(PropertyName = "iterable_actions")]
-            public bool IterableMotions { get; set; }
+            [JsonProperty(PropertyName = "iterable_gestures")]
+            public bool IterableGesture { get; set; }
 
             /// <summary>
-            /// Gets or sets a value indicating whether состояние доступности комбинированного управления для команды.
+            /// Gets or sets a value indicating whether состояние доступности комбинированного управления для жеста.
             /// </summary>
-            [JsonProperty(PropertyName = "combined")]
-            public bool CombinedCommand { get; set; }
+            [JsonProperty(PropertyName = "combined_gesture")]
+            public bool IsCombinedGesture { get; set; }
 
             /// <summary>
-            /// Gets or sets количество повторений действий команды.
+            /// Gets or sets количество повторений жеста.
             /// </summary>
             [JsonProperty(PropertyName = "num_act_rep")]
-            public int NumActRep { get; set; }
+            public int GestureRepetitions { get; set; }
 
             /// <summary>
-            /// Gets or sets количество действий в команде.
+            /// Gets or sets количество действий в жесте.
             /// </summary>
             [JsonProperty(PropertyName = "count_command")]
-            public int CountCommand { get; set; }
+            public int NumberOfMotions { get; set; }
 
             /// <summary>
-            /// Gets or sets время последнего изменения/создания команды.
+            /// Gets or sets время последнего изменения/создания жеста.
             /// </summary>
             [JsonProperty(PropertyName = "date")]
             public string Date { get; set; }
@@ -420,10 +419,10 @@ namespace HandControl.Model
                 InfoCommandModel result = new InfoCommandModel()
                 {
                     Date = string.Empty,
-                    IterableMotions = false,
-                    CombinedCommand = false,
-                    NumActRep = 0,
-                    CountCommand = 0
+                    IterableGesture = false,
+                    IsCombinedGesture = false,
+                    GestureRepetitions = 0,
+                    NumberOfMotions = 0
                 };
                 return result;
             }
