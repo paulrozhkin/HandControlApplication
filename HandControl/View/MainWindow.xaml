@@ -456,7 +456,7 @@
                     <ListBox
                         Background="#262b36"
                         Grid.Row="4"
-                        ItemsSource="{Binding SelectedListCommandMotions}" 
+                        ItemsSource="{Binding SelectedListGestureMotions}" 
                         SelectedItem="{Binding SelectedMotion}"
                         BorderThickness="0"
                         x:Name="ListBoxMotions"
@@ -697,6 +697,7 @@
 
                     <ItemsControl
                         Height="65">
+                        
                         <TextBlock Text="Безымянный палец"
                                    Margin="5"
                                    FontWeight="Bold"
@@ -705,6 +706,7 @@
                                    HorizontalAlignment="Center">
 
                         </TextBlock>
+                        
                         <TextBox
                             Background="Transparent"
                             BorderBrush="Transparent"
@@ -749,6 +751,7 @@
                                    HorizontalAlignment="Center">
 
                         </TextBlock>
+                        
                         <TextBox
                             Background="Transparent"
                             BorderBrush="Transparent"
@@ -793,6 +796,7 @@
                                    HorizontalAlignment="Center">
 
                         </TextBlock>
+                        
                         <TextBox
                             Background="Transparent"
                             BorderBrush="Transparent"
@@ -802,7 +806,7 @@
                             FontSize="24"
                             MaxLength="5"
                             TextAlignment="Center"
-                            Text="{Binding SelectedMotion.DelMotion}"
+                            Text="{Binding SelectedMotion.DelMotionSec}"
                             >
                         </TextBox>
 
@@ -824,7 +828,7 @@
                         Background="Transparent"
                         BorderThickness="0"
                         ItemContainerStyle="{StaticResource StyleListBox}"
-                        ItemsSource="{Binding Commands}" 
+                        ItemsSource="{Binding ListGesture}" 
                         ScrollViewer.VerticalScrollBarVisibility="Visible"
                         SelectedItem="{Binding SelectedGesture, Mode=TwoWay}">
 
@@ -882,7 +886,7 @@
                                             Foreground="White"
                                             Margin="15 0 0 0"
                                             FontSize="18"
-                                            Command="{Binding AddCommandCommand}"
+                                            Command="{Binding AddGestureCommand}"
                                             >
                                             <Grid>
                                                 <materialDesign:PackIcon Kind="CirclesAdd" Foreground="White" VerticalAlignment="Center" Margin="0 2 0 0"/>
@@ -936,7 +940,7 @@
                                 VerticalAlignment="Top"
                                 Style="{StaticResource StylePushButton}"
                                 HorizontalAlignment="Right"    
-                                Command="{Binding Path=DataContext.DeleteCommandCommand,
+                                Command="{Binding Path=DataContext.DeleteGestureCommand,
                                 RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}"
                                 CommandParameter="{Binding ID}">
                                 <materialDesign:PackIcon Kind="WindowClose" Height="17" Width="17">

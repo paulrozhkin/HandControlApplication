@@ -143,7 +143,7 @@ namespace HandControl.Services
         /// <summary>
         /// Gets or sets экземпляр, выполняющий соедниение с устройством протеза.
         /// </summary>
-        private IIODevice СonnectedDevices { get; set; }
+        public IIODevice СonnectedDevices { get; set; }
         #endregion
 
         #region Methods
@@ -225,7 +225,8 @@ namespace HandControl.Services
         {
             List<byte> dataField = new List<byte> { (byte)CommandType.ExecByName };
 
-            byte[] byteName = Encoding.UTF8.GetBytes(nameGesture);
+            // byte[] byteName = Encoding.UTF8.GetBytes(nameGesture);
+            byte[] byteName = Encoding.GetEncoding(1251).GetBytes(nameGesture);
 
             if (byteName.Length == 20)
             {

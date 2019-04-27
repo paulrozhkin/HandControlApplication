@@ -22,23 +22,23 @@ namespace HandControl.ViewModel
         /// <summary>
         /// Список комманд
         /// </summary>
-        public ObservableCollection<GestureModel> Commands { get; set; }
+        public ObservableCollection<GestureModel> ListGesture { get; set; }
 
-        ObservableCollection<GestureModel.MotionModel> commandMotions = new ObservableCollection<GestureModel.MotionModel>();
-        public ObservableCollection<GestureModel.MotionModel> SelectedListCommandMotions
+        ObservableCollection<GestureModel.MotionModel> ListMotions = new ObservableCollection<GestureModel.MotionModel>();
+        public ObservableCollection<GestureModel.MotionModel> SelectedListGestureMotions
         {
             get
             {
-                return commandMotions;
+                return ListMotions;
             }
             set
             {
-                commandMotions = new ObservableCollection<GestureModel.MotionModel>();
+                ListMotions = new ObservableCollection<GestureModel.MotionModel>();
                 if (value != null)
                 {
                     foreach (GestureModel.MotionModel action in value)
                     {
-                        commandMotions.Add((GestureModel.MotionModel)action.Clone());
+                        ListMotions.Add((GestureModel.MotionModel)action.Clone());
                     }
                 }
                 SelectedMotion = null;
@@ -56,11 +56,11 @@ namespace HandControl.ViewModel
                 if (value != null)
                 {
                     selectedGesture = value.Clone() as GestureModel;
-                    SelectedListCommandMotions = selectedGesture.ListMotions;
+                    SelectedListGestureMotions = selectedGesture.ListMotions;
                 }
                 else
                 {
-                    SelectedListCommandMotions = null;
+                    SelectedListGestureMotions = null;
                     selectedGesture = null;
                 }
             }
@@ -82,19 +82,19 @@ namespace HandControl.ViewModel
             get { return new RelayCommand((object obj) => this.AddMotion()); }
         }
 
-        public ICommand DeleteCommandCommand
+        public ICommand DeleteGestureCommand
         {
-            get { return new RelayCommand((object obj) => this.DeleteCommand(obj)); }
+            get { return new RelayCommand((object obj) => this.DeleteGesture(obj)); }
         }
 
         public ICommand DeleteMotionCommand
         {
-            get { return new RelayCommand((object obj) => this.DeleteACtion(obj)); }
+            get { return new RelayCommand((object obj) => this.DeleteMotion(obj)); }
         }
 
-        public ICommand AddCommandCommand
+        public ICommand AddGestureCommand
         {
-            get { return new RelayCommand((object obj) => this.AddCommand(obj)); }
+            get { return new RelayCommand((object obj) => this.AddGesture(obj)); }
         }
 
         public ICommand HandCommand
@@ -116,7 +116,7 @@ namespace HandControl.ViewModel
         #region Constructor
         public MainWindowViewModel()
         {
-            Commands = GestureModel.GetCommands();
+            ListGesture = GestureModel.GetGestures();
             Communication = CommunicationManager.GetInstance();
 
 
@@ -131,14 +131,14 @@ namespace HandControl.ViewModel
         #endregion
 
         #region Methods
-        private void AddCommand(object obj)
+        private void AddGesture(object obj)
         {
-            GestureModel newCommand = GestureModel.GetDefault("Новая комманда");
-            newCommand.ID = Guid.NewGuid();
-            Commands.Add(newCommand);
+            GestureModel newGesture = GestureModel.GetDefault("Новый жест");
+            newGesture.ID = Guid.NewGuid();
+            ListGesture.Add(newGesture);
         }
 
-        private void DeleteACtion(object obj)
+        private void DeleteMotion(object obj)
         {
             if (obj == null)
                 return;
@@ -146,15 +146,15 @@ namespace HandControl.ViewModel
             int deletNameMotion = (int)obj;
 
 
-            foreach (GestureModel.MotionModel actionModel in SelectedListCommandMotions)
+            foreach (GestureModel.MotionModel actionModel in SelectedListGestureMotions)
             {
                 if (actionModel.Id == Convert.ToInt32(deletNameMotion))
                 {
-                    for (int i = actionModel.Id; i < SelectedListCommandMotions.Count; i++)
+                    for (int i = actionModel.Id; i < SelectedListGestureMotions.Count; i++)
                     {
-                        SelectedListCommandMotions[i].Id = SelectedListCommandMotions[i].Id - 1;
+                        SelectedListGestureMotions[i].Id = SelectedListGestureMotions[i].Id - 1;
                     }
-                    SelectedListCommandMotions.Remove(actionModel);
+                    SelectedListGestureMotions.Remove(actionModel);
                     break;
                 }
             }
@@ -162,16 +162,17 @@ namespace HandControl.ViewModel
 
         private void SaveGesture()
         {
-            SelectedGesture.ListMotions = SelectedListCommandMotions;
+            SelectedGesture.ListMotions = SelectedListGestureMotions;
             SelectedGesture.InfoGesture.Date = DateTime.Now.ToString("yyMMddHHmmss");
+            SelectedGesture.InfoGesture.NumberOfMotions = SelectedListGestureMotions.Count();
             GestureModel.Save(SelectedGesture);
 
             bool StateFountGesture = false;
-            for (int i = 0; i < Commands.Count; i++)
+            for (int i = 0; i < ListGesture.Count; i++)
             {
-                if (Commands[i].ID == SelectedGesture.ID)
+                if (ListGesture[i].ID == SelectedGesture.ID)
                 {
-                    Commands[i] = SelectedGesture.Clone() as GestureModel;
+                    ListGesture[i] = SelectedGesture.Clone() as GestureModel;
                     StateFountGesture = true;
                     break;
                 }
@@ -179,30 +180,32 @@ namespace HandControl.ViewModel
 
             if (StateFountGesture is false)
             {
-                Commands.Add(SelectedGesture.Clone() as GestureModel);
+                ListGesture.Add(SelectedGesture.Clone() as GestureModel);
             }
 
         }
 
         private void AddMotion()
         {
-            GestureModel.MotionModel newMotion = GestureModel.MotionModel.GetDefault(GestureModel.MotionModel.GetNewId(SelectedListCommandMotions.ToList<GestureModel.MotionModel>()));
-            SelectedListCommandMotions.Add(newMotion);
+            GestureModel.MotionModel newMotion = GestureModel.MotionModel.GetDefault(GestureModel.MotionModel.GetNewId(SelectedListGestureMotions.ToList<GestureModel.MotionModel>()));
+            SelectedListGestureMotions.Add(newMotion);
         }
 
-        private void DeleteCommand(object obj)
+        private void DeleteGesture(object obj)
         {
             if (obj == null)
+            {
                 return;
+            }
 
             Guid deleteID = (Guid)obj;
 
-            foreach (GestureModel command in Commands)
+            foreach (GestureModel gesture in ListGesture)
             {
-                if (command.ID.Equals(deleteID))
+                if (gesture.ID.Equals(deleteID))
                 {
-                    GestureModel.Delete(command);
-                    Commands.Remove(command);
+                    GestureModel.Delete(gesture);
+                    ListGesture.Remove(gesture);
                     break;
                 }
             }
@@ -210,7 +213,8 @@ namespace HandControl.ViewModel
 
         private void HandHandler(object obj)
         {
-            Communication.SaveGestures(Commands);
+            Communication.SaveGestures(ListGesture);
+            // CommunicationManager.GetInstance().ExecuteTheGesture("Сжать");
         }
 
         private void InfinityCheck(object obj)

@@ -165,7 +165,7 @@ namespace HandControl.Model
         /// Извлечение списка жестов системы.
         /// </summary>
         /// <returns>Коллекция жестов хранимых в системе.</returns>
-        public static ObservableCollection<GestureModel> GetCommands()
+        public static ObservableCollection<GestureModel> GetGestures()
         {
             ObservableCollection<GestureModel> sessionLoaded = new ObservableCollection<GestureModel>();
             foreach (var item in PathManager.GetCommandsFilesPaths())
@@ -279,12 +279,6 @@ namespace HandControl.Model
             public int LittleFinger { get; set; }
 
             /// <summary>
-            /// Gets or sets задержку между действиями.
-            /// </summary>
-            [JsonProperty(PropertyName = "del_action")]
-            public int DelMotion { get; set; }
-
-            /// <summary>
             /// Gets or sets положение кисти в градусах.
             /// </summary>
             [JsonProperty(PropertyName = "state_pos_brush")]
@@ -295,6 +289,36 @@ namespace HandControl.Model
             /// </summary>
             [JsonProperty(PropertyName = "state_pos_thumb")]
             public int StatePosThumb { get; set; }
+
+            [JsonIgnore]
+            public double DelMotionSec
+            {
+                get
+                {
+                    return DelMotion / 10.0;
+                }
+
+                set
+                {
+                    if(value < 0)
+                    {
+                        value = 0;
+                    }
+
+                    if(value > 10)
+                    {
+                        value = 10;
+                    }
+
+                    DelMotion = (int)(value * 10);
+                }
+            }
+
+            /// <summary>
+            /// Gets or sets задержку между действиями в мили секундах.
+            /// </summary>
+            [JsonProperty(PropertyName = "del_action")]
+            public int DelMotion{ get; set; }
             #endregion
 
             #region Methods
@@ -316,7 +340,8 @@ namespace HandControl.Model
                     LittleFinger = 0,
                     DelMotion = 0,
                     StatePosBrush = 0,
-                    StatePosThumb = 0
+                    StatePosThumb = 0,
+                    DelMotionSec = 0
                 };
                 return result;
             }
