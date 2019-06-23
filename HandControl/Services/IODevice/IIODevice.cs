@@ -22,11 +22,23 @@ namespace HandControl.Services
         bool StateDeviceHand { get; }
 
         /// <summary>
+        /// Выполняет подключение к устройству.
+        /// </summary>
+        /// <returns></returns>
+        void ConnectDevice();
+
+        /// <summary>
+        /// Выполняет отключение от устройству.
+        /// </summary>
+        void DisconnectDevice();
+
+
+        /// <summary>
         /// Отправка данных на устройство.
         /// </summary>
         /// <param name="dataTx">Отправляемые данные в byte</param>
         /// <returns>Состояние отправки.</returns>
-        bool SendToDevice(byte[] dataTx);
+        void SendToDevice(byte[] dataTx);
 
         /// <summary>
         /// Прием данных с устройства.

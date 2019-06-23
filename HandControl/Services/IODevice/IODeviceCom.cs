@@ -54,9 +54,9 @@ namespace HandControl.Services
 
         #region Properties
         /// <summary>
-        /// Gets a value indicating whether состояние подключения протеза руки.
+        /// Gets a value indicating whether состояние подключения протеза руки по COM порту.
         /// </summary>
-        public bool StateDeviceHand { get; private set; } = true;
+        public bool StateDeviceHand { get; private set; }
         #endregion
 
         #region Methods
@@ -65,17 +65,16 @@ namespace HandControl.Services
         /// </summary>
         /// <param name="dataTx">Передаваемые данные.</param>
         /// <returns>Состояние отправки.</returns>
-        bool IIODevice.SendToDevice(byte[] dataTx)
+        void IIODevice.SendToDevice(byte[] dataTx)
         {
-            bool stateTx = false;
-
-            if (this.StateDeviceHand == true)
+            try
             {
                 this.serialPortHand.Write(dataTx, 0, dataTx.Length);
-                stateTx = true;
             }
-
-            return stateTx;
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         /// <summary>
@@ -96,7 +95,7 @@ namespace HandControl.Services
 
         /// <summary>
         /// Имплементация интерфейса IDisposable.
-        /// Выполняет закрытие соединений COM портов.
+        /// Выполняет закрытие соединения COM порта.
         /// </summary>
         public void Dispose()
         {
@@ -154,13 +153,14 @@ namespace HandControl.Services
         {
         }
 
-        /// <summary>
-        /// Обработчик принятие данных с устройства голосового управления.
-        /// </summary>
-        /// <param name="sender">Объект вызвавщий обработчик.</param>
-        /// <param name="e">Событие вызвавщее обработчик.</param>
-        private void DataReceivedVoiceHandler(object sender, SerialDataReceivedEventArgs e)
+        public void ConnectDevice()
         {
+            throw new NotImplementedException();
+        }
+
+        public void DisconnectDevice()
+        {
+            throw new NotImplementedException();
         }
         #endregion
 
