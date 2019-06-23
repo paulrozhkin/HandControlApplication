@@ -20,7 +20,7 @@ namespace HandControl.ViewModel
         public CommunicationManager Communication { get; set; }
 
         /// <summary>
-        /// Список комманд
+        /// Список жестов протеза.
         /// </summary>
         public ObservableCollection<GestureModel> ListGesture { get; set; }
 
@@ -118,7 +118,7 @@ namespace HandControl.ViewModel
         {
             ListGesture = GestureModel.GetGestures();
             Communication = CommunicationManager.GetInstance();
-
+            Communication.СonnectedDevices.ConnectDevice();
 
             // CommunicationManager.MotionListRequestCommand();
             // CommunicationManager.SaveCommandsToVoice(Commands);
@@ -213,7 +213,8 @@ namespace HandControl.ViewModel
 
         private void HandHandler(object obj)
         {
-            Communication.SaveGestures(ListGesture);
+            CommunicationManager.GetInstance().ExecuteTheGesture("Сжать");
+            //Communication.SaveGestures(ListGesture);
             // CommunicationManager.GetInstance().ExecuteTheGesture("Сжать");
         }
 

@@ -10,7 +10,7 @@ using System.Windows.Threading;
 using System.IO.Ports;
 using System.Diagnostics;
 
-namespace MyoSensor.Model
+namespace HandControl
 {
 
     class DataModel

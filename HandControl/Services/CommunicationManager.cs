@@ -12,6 +12,7 @@ namespace HandControl.Services
     using System.Linq;
     using System.Text;
     using HandControl.Model;
+    using HandControl.Services;
 
     /// <summary>
     /// Класс, предоставляющий API для управления устройствами системы.
@@ -55,7 +56,8 @@ namespace HandControl.Services
         /// </summary>
         public CommunicationManager()
         {
-            this.СonnectedDevices = new IODeviceCom();
+            // this.СonnectedDevices = new IODeviceCom();
+            this.СonnectedDevices = new IODeviceBluetooth();
         }
         #endregion
 

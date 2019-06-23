@@ -77,7 +77,7 @@ namespace HandControl.Model
         /// Gets or sets информацию о жесте, такую как время создания/изменения жеста, кол-во действий, кол-во повторений действия и итеративность действий.
         /// </summary>
         [JsonProperty(PropertyName = "info_gesture")]
-        public InfoCommandModel InfoGesture { get; set; }
+        public InfoGestureModel InfoGesture { get; set; }
 
         /// <summary>
         /// Gets or sets список действий жеста.
@@ -123,7 +123,7 @@ namespace HandControl.Model
 
                 byteArray[32] = Convert.ToByte(this.InfoGesture.IsCombinedGesture);
                 byteArray[33] = Convert.ToByte(this.InfoGesture.IterableGesture);
-                byteArray[34] = Convert.ToByte(this.InfoGesture.GestureRepetitions);
+                byteArray[34] = Convert.ToByte(this.InfoGesture.NumberOfGestureRepetitions);
                 byteArray[35] = Convert.ToByte(this.InfoGesture.NumberOfMotions);
 
                 for (int i = 0; i < this.InfoGesture.NumberOfMotions; i++)
@@ -154,7 +154,7 @@ namespace HandControl.Model
         {
             GestureModel result = new GestureModel(nameGesture)
             {
-                InfoGesture = InfoCommandModel.GetDefault(),
+                InfoGesture = InfoGestureModel.GetDefault(),
                 ListMotions = new ObservableCollection<GestureModel.MotionModel>()
             };
 
@@ -174,7 +174,7 @@ namespace HandControl.Model
 
                 if (loadedCommand.InfoGesture == null)
                 {
-                    loadedCommand.InfoGesture = InfoCommandModel.GetDefault();
+                    loadedCommand.InfoGesture = InfoGestureModel.GetDefault();
                 }
 
                 sessionLoaded.Add(loadedCommand);
@@ -220,7 +220,7 @@ namespace HandControl.Model
             return new GestureModel((string)this.Name.Clone())
             {
                 ID = this.ID,
-                InfoGesture = (InfoCommandModel)this.InfoGesture.Clone(),
+                InfoGesture = (InfoGestureModel)this.InfoGesture.Clone(),
                 ListMotions = newDataMotion
             };
         }
@@ -290,35 +290,38 @@ namespace HandControl.Model
             [JsonProperty(PropertyName = "state_pos_thumb")]
             public int StatePosThumb { get; set; }
 
+            /// <summary>
+            /// Gets or sets задержка между действиями в секундах.
+            /// </summary>
             [JsonIgnore]
             public double DelMotionSec
             {
                 get
                 {
-                    return DelMotion / 10.0;
+                    return this.DelMotion / 10.0;
                 }
 
                 set
                 {
-                    if(value < 0)
+                    if (value < 0)
                     {
                         value = 0;
                     }
 
-                    if(value > 10)
+                    if (value > 10)
                     {
                         value = 10;
                     }
 
-                    DelMotion = (int)(value * 10);
+                    this.DelMotion = (int)(value * 10);
                 }
             }
 
             /// <summary>
-            /// Gets or sets задержку между действиями в мили секундах.
+            /// Gets or sets задержку между действиями в милисекундах.
             /// </summary>
             [JsonProperty(PropertyName = "del_action")]
-            public int DelMotion{ get; set; }
+            public int DelMotion { get; set; }
             #endregion
 
             #region Methods
@@ -399,13 +402,13 @@ namespace HandControl.Model
         /// <summary>
         /// Класс содержащий информацию о жесте <see cref="GestureModel"/>.
         /// </summary>
-        public class InfoCommandModel : BaseModel, ICloneable
+        public class InfoGestureModel : BaseModel, ICloneable
         {
             #region Constructors
             /// <summary>
-            /// Prevents a default instance of the <see cref="InfoCommandModel" /> class from being created.
+            /// Prevents a default instance of the <see cref="InfoGestureModel" /> class from being created.
             /// </summary>
-            private InfoCommandModel()
+            private InfoGestureModel()
             {
             }
             #endregion
@@ -417,6 +420,7 @@ namespace HandControl.Model
             [JsonProperty(PropertyName = "iterable_gestures")]
             public bool IterableGesture { get; set; }
 
+            // TODO: убрать.
             /// <summary>
             /// Gets or sets a value indicating whether состояние доступности комбинированного управления для жеста.
             /// </summary>
@@ -427,7 +431,7 @@ namespace HandControl.Model
             /// Gets or sets количество повторений жеста.
             /// </summary>
             [JsonProperty(PropertyName = "num_act_rep")]
-            public int GestureRepetitions { get; set; }
+            public int NumberOfGestureRepetitions { get; set; }
 
             /// <summary>
             /// Gets or sets количество действий в жесте.
@@ -447,14 +451,14 @@ namespace HandControl.Model
             /// Фабричный метод для получения экземпляра InfoCommandModel с дефолтными параметрами.
             /// </summary>
             /// <returns>Экземпляр InfoCommandModel.</returns>
-            public static InfoCommandModel GetDefault()
+            public static InfoGestureModel GetDefault()
             {
-                InfoCommandModel result = new InfoCommandModel()
+                InfoGestureModel result = new InfoGestureModel()
                 {
                     Date = string.Empty,
                     IterableGesture = false,
                     IsCombinedGesture = false,
-                    GestureRepetitions = 1,
+                    NumberOfGestureRepetitions = 1,
                     NumberOfMotions = 0
                 };
                 return result;
