@@ -1,12 +1,17 @@
-﻿using System;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
-using InTheHand.Net.Sockets;
-
+﻿// -------------------------------------------------------------------------------------
+// <copyright file = "ReceiverBluetoothService.cs" company = "Студенческий проект HandControl‎"> 
+//      Copyright © 2019 HandControl. All rights reserved.
+// </copyright> 
+// -------------------------------------------------------------------------------------
 namespace Bluetooth.Services
 {
+    using System;
+    using System.IO;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using GalaSoft.MvvmLight;
+    using InTheHand.Net.Sockets;
+
     /// <summary>
     /// Define the receiver Bluetooth service.
     /// </summary>
@@ -17,7 +22,6 @@ namespace Bluetooth.Services
         private BluetoothListener _listener;
         private CancellationTokenSource _cancelSource;
         private bool _wasStarted;
-        private string _status;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ReceiverBluetoothService" /> class.
@@ -53,10 +57,12 @@ namespace Bluetooth.Services
             {
                 Dispose(true);
             }
+
             _listener = new BluetoothListener(_serviceClassId)
             {
                 ServiceName = "MyService"
             };
+
             _listener.Start();
 
             _cancelSource = new CancellationTokenSource();

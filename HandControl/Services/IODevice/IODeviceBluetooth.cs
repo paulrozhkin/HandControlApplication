@@ -33,9 +33,8 @@ namespace HandControl.Services
     {
         #region Constructors
         private readonly SenderBluetoothService senderService;
-        private readonly ReceiverBluetoothService receiverService;
-        BluetoothInfo bluetoothInfo;
-        Device device;
+        private readonly BluetoothInfo bluetoothInfo;
+        private Device device;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IODeviceBluetooth" /> class.
@@ -43,7 +42,6 @@ namespace HandControl.Services
         public IODeviceBluetooth()
         {
             senderService = new SenderBluetoothService();
-            receiverService = new ReceiverBluetoothService();
             bluetoothInfo = BluetoothInfo.InfoLoad();
             // receiverService.Start(null);
         }
@@ -91,7 +89,10 @@ namespace HandControl.Services
         /// <returns>Состояние отправки.</returns>
         public void SendToDevice(byte[] dataTx)
         {
-            _ = senderService.Send(device, dataTx);
+            if (this.StateDeviceHand)
+            {
+                _ = senderService.Send(device, dataTx);
+            }
             //try
             //{
             //    Task task = senderService.Send(device, dataTx);
@@ -128,7 +129,6 @@ namespace HandControl.Services
 
                             bool status = await senderService.Connect(device);
 
-
                             if (status == true)
                             {
                                 this.StateDeviceHand = true;
@@ -143,7 +143,6 @@ namespace HandControl.Services
 
                 await Task.Delay(1000);
             }
-
         }
 
         public async void ConnectionCheackerAsync()
@@ -175,7 +174,7 @@ namespace HandControl.Services
                     Console.WriteLine("Thread check interrupt");
                     break;
                 }
-               
+
             }
         }
 
@@ -183,15 +182,6 @@ namespace HandControl.Services
         public void ReceiveFromDevice(string asd)
         {
             throw new NotImplementedException();
-        }
-
-        private void CheckConnect()
-        {
-            while (true)
-            {
-                // senderService.Send();
-                Thread.Sleep(5000);
-            }
         }
 
         public void ConnectDevice()
@@ -204,7 +194,7 @@ namespace HandControl.Services
 
         public void DisconnectDevice()
         {
-            throw new NotImplementedException();
+            senderService.Disconnect();
         }
         #endregion
 
@@ -226,22 +216,12 @@ namespace HandControl.Services
             /// <summary>
             /// Поток для данных bluetooth соединения.
             /// </summary>
-            private volatile System.Net.Sockets.NetworkStream bluetoothStream;
-
-            /////// <summary>
-            /////// Поток для чтения данных bluetooth.
-            /////// </summary>
-            ////BinaryReader readerBluetooth;
-
-            /////// <summary>
-            /////// Поток для записи данных bluetooth.
-            /////// </summary>
-            ////BinaryWriter writerBluetooth;
+            private volatile NetworkStream bluetoothStream;
 
             /// <summary>
             /// Буфер приема.
             /// </summary>
-            byte[] readBuffer = new byte[1024];
+            readonly byte[] readBuffer = new byte[1024];
 
             /// <summary>  
             /// Initializes a new instance of the <see cref="SenderBluetoothService"/> class.   
@@ -393,29 +373,32 @@ namespace HandControl.Services
             /// <returns>If was sent or not.</returns>  
             public async Task<bool> Send(Device device, byte[] content)
             {
-                var task = Task.Run(() =>
+                if (bluetoothStream != null)
                 {
-                    if (content.Count() == 0 && content.Any())
+                    var task = Task.Run(() =>
                     {
-                        throw new ArgumentNullException("content");
-                    }
+                        if (content.Count() == 0 && content.Any())
+                        {
+                            throw new ArgumentNullException("content");
+                        }
 
-                    //while (!bluetoothStream.DataAvailable) ;
-                    //byte[] buffer = new byte[1000];
-                    //this.bluetoothStream.Read(buffer, 0 ,1000);
-                    lock (bluetoothStream)
-                    {
-                        bluetoothStream.Write(content, 0, content.Length);
-                    }
+                        lock (bluetoothStream)
+                        {
+                            bluetoothStream.Write(content, 0, content.Length);
+                        }
 
-                    Console.WriteLine("BYTES SENDED:{0}", content.Length);
-                    Console.WriteLine("DATA:{0}", content);
-                    // bluetoothStream.Write(content, 0, content.Length);
+                        Console.WriteLine("BYTES SENDED:{0}", content.Length);
+                        Console.WriteLine("DATA:{0}", content);
 
-                    return true;
-                });
+                        return true;
+                    });
 
-                return await task;
+                    return await task;
+                }
+                else
+                {
+                    return false;
+                }
             }
 
             /// <summary>  
