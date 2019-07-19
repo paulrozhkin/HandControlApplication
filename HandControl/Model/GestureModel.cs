@@ -8,7 +8,9 @@ namespace HandControl.Model
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.IO;
     using System.Linq;
+    using System.Text;
     using HandControl.Services;
 
     /// <summary>
@@ -20,7 +22,7 @@ namespace HandControl.Model
     /// \date Март 2019 года
     /// \authors Paul Rozhkin(blackiiifox@gmail.com)
     /// </summary>
-    public class GestureModel : BaseModel, ICloneable
+    public class GestureModel : BaseModel, ICloneable, IBinarySerialize
     {
         #region Fields
         /// <summary>
@@ -189,6 +191,64 @@ namespace HandControl.Model
         }
 
         /// <summary>
+        /// Выполняет сериализацию экземпляра <see cref="GestureModel"/> в бинарный формат.
+        /// </summary>
+        /// <returns>Экземпляр <see cref="GestureModel"/>, представленный в виде бинарного потока.</returns>
+        public byte[] BinarySerialize()
+        {
+            using (MemoryStream m = new MemoryStream())
+            {
+                using (BinaryWriter writer = new BinaryWriter(m))
+                {
+                    writer.Write(this.ID.ToByteArray());
+                    writer.Write(this.Name.Length);
+                    writer.Write(Encoding.UTF8.GetBytes(this.Name));
+                    writer.Write(this.InfoGesture.BinarySerialize());
+
+                    if (this.InfoGesture.NumberOfMotions != this.ListMotions.Count)
+                    {
+                        throw new ArgumentException("NumberOfMotions and ListMotions count do not match.");
+                    }
+                    else
+                    {
+                        for (int i = 0; i < this.InfoGesture.NumberOfMotions; i++)
+                        {
+                            writer.Write(this.ListMotions[i].BinarySerialize());
+                        }
+                    }
+                }
+
+                return m.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Выполняет десериализацию экземпляра <see cref="GestureModel"/> из бинарного потока.
+        /// </summary>
+        /// <param name="data">Бинарный поток.</param>
+        public void BinaryDesserialize(byte[] data)
+        {
+            using (MemoryStream m = new MemoryStream(data))
+            {
+                using (BinaryReader reader = new BinaryReader(m))
+                {
+                    this.ID = new Guid(reader.ReadBytes(2));
+                    int lengthName = reader.ReadByte();
+                    this.Name = Encoding.UTF8.GetString(reader.ReadBytes(lengthName));
+                    byte[] dataInfo = reader.ReadBytes(3);
+                    this.InfoGesture.BinaryDesserialize(reader.ReadBytes(5));
+
+                    this.ListMotions.Clear();
+                    for (int i = 0; i < this.InfoGesture.NumberOfMotions; i++)
+                    {
+                        MotionModel motion = MotionModel.GetDefault(i);
+                        motion.BinaryDesserialize(reader.ReadBytes(8));
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Сравнение двух экземпляров класса <see cref="GestureModel"/>.
         /// </summary>
         /// <param name="other">Экземпляр класса <see cref="GestureModel"/> для сравнения.</param>
@@ -222,7 +282,7 @@ namespace HandControl.Model
         /// <summary>
         /// Класс содержащий единичное положение протеза.
         /// </summary>
-        public class MotionModel : BaseModel, ICloneable
+        public class MotionModel : BaseModel, ICloneable, IBinarySerialize
         {
             #region Constructors
             /// <summary>
@@ -365,6 +425,50 @@ namespace HandControl.Model
             }
 
             /// <summary>
+            /// Выполняет сериализацию экземпляра <see cref="MotionModel"/> в бинарный формат.
+            /// </summary>
+            /// <returns>Экземпляр <see cref="MotionModel"/>, представленный в виде бинарного потока.</returns>
+            public byte[] BinarySerialize()
+            {
+                using (MemoryStream m = new MemoryStream())
+                {
+                    using (BinaryWriter writer = new BinaryWriter(m))
+                    {
+                        writer.Write((byte)this.PointerFinger);
+                        writer.Write((byte)this.MiddleFinger);
+                        writer.Write((byte)this.RingFinder);
+                        writer.Write((byte)this.LittleFinger);
+                        writer.Write((byte)this.ThumbFinger);
+                        writer.Write((byte)this.StatePosBrush);
+                        writer.Write((ushort)this.DelMotion);
+                    }
+
+                    return m.ToArray();
+                }
+            }
+
+            /// <summary>
+            /// Выполняет десериализацию экземпляра <see cref="MotionModel"/> из бинарного потока.
+            /// </summary>
+            /// <param name="data">Бинарный поток.</param>
+            public void BinaryDesserialize(byte[] data)
+            {
+                using (MemoryStream m = new MemoryStream(data))
+                {
+                    using (BinaryReader reader = new BinaryReader(m))
+                    {
+                        this.PointerFinger = reader.ReadByte();
+                        this.MiddleFinger = reader.ReadByte();
+                        this.RingFinder = reader.ReadByte();
+                        this.LittleFinger = reader.ReadByte();
+                        this.ThumbFinger = reader.ReadByte();
+                        this.StatePosBrush = reader.ReadByte();
+                        this.DelMotion = reader.ReadUInt16();
+                    }
+                }
+            }
+
+            /// <summary>
             /// Полное клонирование экземпляра MotionModel.
             /// </summary>
             /// <returns>Клонированный экземпляр MotionModel.</returns>
@@ -445,7 +549,7 @@ namespace HandControl.Model
         /// <summary>
         /// Класс содержащий информацию о жесте <see cref="GestureModel"/>.
         /// </summary>
-        public class InfoGestureModel : BaseModel, ICloneable
+        public class InfoGestureModel : BaseModel, ICloneable, IBinarySerialize
         {
             #region Constructors
             /// <summary>
@@ -475,7 +579,7 @@ namespace HandControl.Model
             /// <summary>
             /// Gets or sets время последнего изменения/создания жеста.
             /// </summary>
-            public string Date { get; set; }
+            public DateTime TimeChange { get; set; }
             #endregion
 
             #region Methods
@@ -487,12 +591,51 @@ namespace HandControl.Model
             {
                 InfoGestureModel result = new InfoGestureModel()
                 {
-                    Date = string.Empty,
+                    TimeChange = DateTime.Now,
                     IterableGesture = false,
                     NumberOfGestureRepetitions = 1,
                     NumberOfMotions = 0
                 };
                 return result;
+            }
+
+            /// <summary>
+            /// Выполняет сериализацию экземпляра <see cref="InfoGestureModel"/> в бинарный формат.
+            /// </summary>
+            /// <returns>Экземпляр <see cref="InfoGestureModel"/>, представленный в виде бинарного потока.</returns>
+            public byte[] BinarySerialize()
+            {
+                using (MemoryStream m = new MemoryStream())
+                {
+                    using (BinaryWriter writer = new BinaryWriter(m))
+                    {
+                        double unixTime = (this.TimeChange.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds;
+                        writer.Write(unixTime);
+                        writer.Write(Convert.ToByte(this.IterableGesture));
+                        writer.Write((byte)this.NumberOfGestureRepetitions);
+                        writer.Write((byte)this.NumberOfMotions);
+                    }
+
+                    return m.ToArray();
+                }
+            }
+
+            /// <summary>
+            /// Выполняет десериализацию экземпляра <see cref="InfoGestureModel"/> из бинарного потока.
+            /// </summary>
+            /// <param name="data">Бинарный поток.</param>
+            public void BinaryDesserialize(byte[] data)
+            {
+                using (MemoryStream m = new MemoryStream(data))
+                {
+                    using (BinaryReader reader = new BinaryReader(m))
+                    {
+                        this.TimeChange = (new DateTime(1970, 1, 1, 0, 0, 0, 0)).AddSeconds(reader.ReadDouble());
+                        this.IterableGesture = Convert.ToBoolean(reader.ReadByte());
+                        this.NumberOfGestureRepetitions = reader.ReadByte();
+                        this.NumberOfMotions = reader.ReadByte();
+                    }
+                }
             }
 
             /// <summary>
@@ -514,7 +657,7 @@ namespace HandControl.Model
                 hashCode = (hashCode * -1521134295) + this.IterableGesture.GetHashCode();
                 hashCode = (hashCode * -1521134295) + this.NumberOfGestureRepetitions.GetHashCode();
                 hashCode = (hashCode * -1521134295) + this.NumberOfMotions.GetHashCode();
-                hashCode = (hashCode * -1521134295) + EqualityComparer<string>.Default.GetHashCode(this.Date);
+                hashCode = (hashCode * -1521134295) + EqualityComparer<DateTime>.Default.GetHashCode(this.TimeChange);
                 return hashCode;
             }
 
@@ -541,9 +684,9 @@ namespace HandControl.Model
                 }
 
                 return (
-                    object.ReferenceEquals(this.Date, other.Date) ||
-                    (this.Date != null &&
-                    this.Date.Equals(other.Date)))
+                    object.ReferenceEquals(this.TimeChange, other.TimeChange) ||
+                    (this.TimeChange != null &&
+                    this.TimeChange.Equals(other.TimeChange)))
                     && (
                     object.ReferenceEquals(this.IterableGesture, other.IterableGesture) ||
                     this.IterableGesture.Equals(other.IterableGesture))
