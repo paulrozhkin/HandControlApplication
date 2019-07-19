@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28010.2048
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29025.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandControl", "HandControl\HandControl.csproj", "{A36A88B6-5052-45B7-AB22-FD3C2FA2776A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HandControl.Tests", "HandControl.Tests\HandControl.Tests.csproj", "{55734CB8-41FE-4209-BFDF-69347629E0CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{A36A88B6-5052-45B7-AB22-FD3C2FA2776A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A36A88B6-5052-45B7-AB22-FD3C2FA2776A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A36A88B6-5052-45B7-AB22-FD3C2FA2776A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{55734CB8-41FE-4209-BFDF-69347629E0CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55734CB8-41FE-4209-BFDF-69347629E0CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55734CB8-41FE-4209-BFDF-69347629E0CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55734CB8-41FE-4209-BFDF-69347629E0CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
