@@ -8,9 +8,8 @@ namespace HandControl.Model
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Text;
+    using System.Linq;
     using HandControl.Services;
-    using Newtonsoft.Json;
 
     /// <summary>
     /// Класс содержащий целостный жест (некоторое действие или движение протеза, имеющее определённое значение или смысл) протеза.
@@ -34,9 +33,11 @@ namespace HandControl.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="GestureModel" /> class.
         /// </summary>
+        /// <param name="id">Id жеста.</param>
         /// <param name="nameGesture">Имя жеста.</param>
-        private GestureModel(string nameGesture)
+        private GestureModel(Guid id, string nameGesture)
         {
+            this.ID = id;
             this.Name = nameGesture;
         }
 
@@ -52,13 +53,11 @@ namespace HandControl.Model
         /// <summary>
         /// Gets or sets уникальный идентификатор жеста.
         /// </summary>
-        [JsonProperty(PropertyName = "id_gesture")]
         public Guid ID { get; set; }
 
         /// <summary>
         /// Gets or sets имя жеста, должно быть уникальным.
         /// </summary>
-        [JsonProperty(PropertyName = "name_gesture")]
         public string Name
         {
             get
@@ -76,86 +75,27 @@ namespace HandControl.Model
         /// <summary>
         /// Gets or sets информацию о жесте, такую как время создания/изменения жеста, кол-во действий, кол-во повторений действия и итеративность действий.
         /// </summary>
-        [JsonProperty(PropertyName = "info_gesture")]
         public InfoGestureModel InfoGesture { get; set; }
 
         /// <summary>
         /// Gets or sets список действий жеста.
         /// </summary>
-        [JsonProperty(PropertyName = "list_motions")]
-        public ObservableCollection<MotionModel> ListMotions { get; set; }
-
-        /// <summary>
-        /// Gets полную информацию и данные жеста в бинарном виде
-        /// </summary>
-        [JsonIgnore]
-        public byte[] BinaryDate
-        {
-            get
-            {
-                byte[] byteArray = new byte[20 + 12 + 4 + (this.InfoGesture.NumberOfMotions * 8)];
-
-                byte[] byteName = Encoding.GetEncoding(1251).GetBytes(this.Name);
-
-                if (byteName.Length == 20)
-                {
-                    byteName[18] = Convert.ToByte('\0');
-                    byteName[19] = Convert.ToByte('\0');
-                }
-
-                for (int i = 0; i < 20; i++)
-                {
-                    if (byteName.Length > i)
-                    {
-                        byteArray[i] = byteName[i];
-                    }
-                    else
-                    {
-                        byteArray[i] = Convert.ToByte('\0');
-                    }
-                }
-
-                byte[] byteDate = System.Text.Encoding.UTF8.GetBytes(this.InfoGesture.Date);
-                for (int i = 0; i < 12; i++)
-                {
-                    byteArray[20 + i] = byteDate[i];
-                }
-
-                byteArray[32] = Convert.ToByte(this.InfoGesture.IsCombinedGesture);
-                byteArray[33] = Convert.ToByte(this.InfoGesture.IterableGesture);
-                byteArray[34] = Convert.ToByte(this.InfoGesture.NumberOfGestureRepetitions);
-                byteArray[35] = Convert.ToByte(this.InfoGesture.NumberOfMotions);
-
-                for (int i = 0; i < this.InfoGesture.NumberOfMotions; i++)
-                {
-                    int index = 36 + (i * 8);
-                    byteArray[index] = Convert.ToByte(this.ListMotions[i].LittleFinger);
-                    byteArray[index + 1] = Convert.ToByte(this.ListMotions[i].RingFinder);
-                    byteArray[index + 2] = Convert.ToByte(this.ListMotions[i].MiddleFinger);
-                    byteArray[index + 3] = Convert.ToByte(this.ListMotions[i].PointerFinger);
-                    byteArray[index + 4] = Convert.ToByte(this.ListMotions[i].DelMotion);
-                    byteArray[index + 5] = Convert.ToByte(this.ListMotions[i].StatePosThumb);
-                    byteArray[index + 6] = Convert.ToByte(this.ListMotions[i].StatePosBrush);
-                    byteArray[index + 7] = Convert.ToByte(this.ListMotions[i].ThumbFinger);
-                }
-
-                return byteArray;
-            }
-        }
+        public List<MotionModel> ListMotions { get; set; }
         #endregion
 
         #region Methods
         /// <summary>
         /// Фабричный метод для получения экземпляра <see cref="GestureModel"/> с дефолтными параметрами, но с уникальным именем.
         /// </summary>
+        /// <param name="id">Id жеста.</param>
         /// <param name="nameGesture">Имя жеста.</param>
         /// <returns>Экземпляра <see cref="GestureModel"/>.</returns>
-        public static GestureModel GetDefault(string nameGesture)
+        public static GestureModel GetDefault(Guid id, string nameGesture)
         {
-            GestureModel result = new GestureModel(nameGesture)
+            GestureModel result = new GestureModel(id, nameGesture)
             {
                 InfoGesture = InfoGestureModel.GetDefault(),
-                ListMotions = new ObservableCollection<GestureModel.MotionModel>()
+                ListMotions = new List<MotionModel>()
             };
 
             return result;
@@ -207,7 +147,7 @@ namespace HandControl.Model
         /// <returns>Клонированный экземпляр CommandModel.</returns>
         public object Clone()
         {
-            var newDataMotion = new ObservableCollection<MotionModel>();
+            var newDataMotion = new List<MotionModel>();
 
             if (this.ListMotions != null)
             {
@@ -217,12 +157,64 @@ namespace HandControl.Model
                 }
             }
 
-            return new GestureModel((string)this.Name.Clone())
+            return new GestureModel(this.ID, (string)this.Name.Clone())
             {
-                ID = this.ID,
                 InfoGesture = (InfoGestureModel)this.InfoGesture.Clone(),
                 ListMotions = newDataMotion
             };
+        }
+
+        /// <summary>
+        /// Получить хэш код экземпляра класса<see cref="GestureModel"/>.
+        /// </summary>
+        /// <returns>HashCode экземпляра<see cref= "GestureModel"/>.</returns>
+        public override int GetHashCode()
+        {
+            var hashCode = -677228334;
+            hashCode = (hashCode * -1521134295) + EqualityComparer<Guid>.Default.GetHashCode(this.ID);
+            hashCode = (hashCode * -1521134295) + EqualityComparer<string>.Default.GetHashCode(this.Name);
+            hashCode = (hashCode * -1521134295) + EqualityComparer<InfoGestureModel>.Default.GetHashCode(this.InfoGesture);
+            hashCode = (hashCode * -1521134295) + EqualityComparer<List<MotionModel>>.Default.GetHashCode(this.ListMotions);
+            return hashCode;
+        }
+
+        /// <summary>
+        /// Сравнение экземпляра класса <see cref="GestureModel"/> с передаваемым объектом.
+        /// </summary>
+        /// <param name="obj">Передаваемый объект.</param>
+        /// <returns>True, если экземпляры равны.</returns>
+        public override bool Equals(object obj)
+        {
+            return this.Equals(obj as GestureModel);
+        }
+
+        /// <summary>
+        /// Сравнение двух экземпляров класса <see cref="GestureModel"/>.
+        /// </summary>
+        /// <param name="other">Экземпляр класса <see cref="GestureModel"/> для сравнения.</param>
+        /// <returns>True, если экземпляры равны.</returns>
+        private bool Equals(GestureModel other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+
+            return (
+                object.ReferenceEquals(this.Name, other.Name) ||
+                (this.Name != null &&
+                this.Name.Equals(other.Name)))
+                && (
+                object.ReferenceEquals(this.ID, other.ID) ||
+                this.ID.Equals(other.ID))
+                && (
+                object.ReferenceEquals(this.InfoGesture, other.InfoGesture) ||
+                (this.InfoGesture != null &&
+                this.InfoGesture.Equals(other.InfoGesture)))
+                && (
+                object.ReferenceEquals(this.ListMotions, other.ListMotions) ||
+                (this.ListMotions != null &&
+                this.ListMotions.SequenceEqual(other.ListMotions)));
         }
         #endregion
 
@@ -245,55 +237,41 @@ namespace HandControl.Model
             /// <summary>
             /// Gets or sets номер действия.
             /// </summary>
-            [JsonProperty(PropertyName = "id_action")]
             public int Id { get; set; }
 
             /// <summary>
             /// Gets or sets положение большого пальца в градусах.
             /// </summary>
-            [JsonProperty(PropertyName = "thumb_finger")]
             public int ThumbFinger { get; set; }
 
             /// <summary>
             /// Gets or sets положение указательного пальца в градусах.
             /// </summary>
-            [JsonProperty(PropertyName = "pointer_finger")]
             public int PointerFinger { get; set; }
 
             /// <summary>
             /// Gets or sets положение среднего пальца в градусах.
             /// </summary>
-            [JsonProperty(PropertyName = "middle_finger")]
             public int MiddleFinger { get; set; }
 
             /// <summary>
             /// Gets or sets положение безымянного пальца в градусах.
             /// </summary>
-            [JsonProperty(PropertyName = "ring_finder")]
             public int RingFinder { get; set; }
 
             /// <summary>
             /// Gets or sets положение мезинца в градусах.
             /// </summary>
-            [JsonProperty(PropertyName = "little_finger")]
             public int LittleFinger { get; set; }
 
             /// <summary>
             /// Gets or sets положение кисти в градусах.
             /// </summary>
-            [JsonProperty(PropertyName = "state_pos_brush")]
             public int StatePosBrush { get; set; }
-
-            /// <summary>
-            /// Gets or sets положение поворота большого пальца в градусах.
-            /// </summary>
-            [JsonProperty(PropertyName = "state_pos_thumb")]
-            public int StatePosThumb { get; set; }
 
             /// <summary>
             /// Gets or sets задержка между действиями в секундах.
             /// </summary>
-            [JsonIgnore]
             public double DelMotionSec
             {
                 get
@@ -320,7 +298,6 @@ namespace HandControl.Model
             /// <summary>
             /// Gets or sets задержку между действиями в милисекундах.
             /// </summary>
-            [JsonProperty(PropertyName = "del_action")]
             public int DelMotion { get; set; }
             #endregion
 
@@ -343,7 +320,6 @@ namespace HandControl.Model
                     LittleFinger = 0,
                     DelMotion = 0,
                     StatePosBrush = 0,
-                    StatePosThumb = 0,
                     DelMotionSec = 0
                 };
                 return result;
@@ -396,6 +372,73 @@ namespace HandControl.Model
             {
                 return this.MemberwiseClone();
             }
+
+            /// <summary>
+            /// Получить хэш код экземпляра класса<see cref="MotionModel"/>.
+            /// </summary>
+            /// <returns>HashCode экземпляра<see cref= "MotionModel"/>.</returns>
+            public override int GetHashCode()
+            {
+                var hashCode = 1587829154;
+                hashCode = (hashCode * -1521134295) + this.Id.GetHashCode();
+                hashCode = (hashCode * -1521134295) + this.ThumbFinger.GetHashCode();
+                hashCode = (hashCode * -1521134295) + this.PointerFinger.GetHashCode();
+                hashCode = (hashCode * -1521134295) + this.MiddleFinger.GetHashCode();
+                hashCode = (hashCode * -1521134295) + this.RingFinder.GetHashCode();
+                hashCode = (hashCode * -1521134295) + this.LittleFinger.GetHashCode();
+                hashCode = (hashCode * -1521134295) + this.StatePosBrush.GetHashCode();
+                hashCode = (hashCode * -1521134295) + this.DelMotionSec.GetHashCode();
+                hashCode = (hashCode * -1521134295) + this.DelMotion.GetHashCode();
+                return hashCode;
+            }
+
+            /// <summary>
+            /// Сравнение экземпляра класса <see cref="MotionModel"/> с передаваемым объектом.
+            /// </summary>
+            /// <param name="obj">Передаваемый объект.</param>
+            /// <returns>True, если экземпляры равны.</returns>
+            public override bool Equals(object obj)
+            {
+                return this.Equals(obj as MotionModel);
+            }
+
+            /// <summary>
+            /// Сравнение двух экземпляров класса <see cref="MotionModel"/>.
+            /// </summary>
+            /// <param name="other">Экземпляр класса <see cref="MotionModel"/> для сравнения.</param>
+            /// <returns>True, если экземпляры равны.</returns>
+            private bool Equals(MotionModel other)
+            {
+                if (other == null)
+                {
+                    return false;
+                }
+
+                return (
+                   object.ReferenceEquals(this.Id, other.Id) ||
+                   this.Id.Equals(other.Id))
+                   && (
+                   object.ReferenceEquals(this.LittleFinger, other.LittleFinger) ||
+                   this.LittleFinger.Equals(other.LittleFinger))
+                   && (
+                   object.ReferenceEquals(this.MiddleFinger, other.MiddleFinger) ||
+                   this.MiddleFinger.Equals(other.MiddleFinger))
+                   && (
+                   object.ReferenceEquals(this.PointerFinger, other.PointerFinger) ||
+                   this.PointerFinger.Equals(other.PointerFinger))
+                   && (
+                   object.ReferenceEquals(this.RingFinder, other.RingFinder) ||
+                   this.RingFinder.Equals(other.RingFinder))
+                   && (
+                   object.ReferenceEquals(this.StatePosBrush, other.StatePosBrush) ||
+                   this.StatePosBrush.Equals(other.StatePosBrush))
+                   && (
+                   object.ReferenceEquals(this.ThumbFinger, other.ThumbFinger) ||
+                   this.ThumbFinger.Equals(other.ThumbFinger))
+                   && (
+                   object.ReferenceEquals(this.DelMotion, other.DelMotion) ||
+                   this.DelMotion.Equals(other.DelMotion));
+            }
             #endregion
         }
 
@@ -417,32 +460,21 @@ namespace HandControl.Model
             /// <summary>
             /// Gets or sets a value indicating whether итерируемость жеста.
             /// </summary>
-            [JsonProperty(PropertyName = "iterable_gestures")]
             public bool IterableGesture { get; set; }
-
-            // TODO: убрать.
-            /// <summary>
-            /// Gets or sets a value indicating whether состояние доступности комбинированного управления для жеста.
-            /// </summary>
-            [JsonProperty(PropertyName = "combined_gesture")]
-            public bool IsCombinedGesture { get; set; }
 
             /// <summary>
             /// Gets or sets количество повторений жеста.
             /// </summary>
-            [JsonProperty(PropertyName = "num_act_rep")]
             public int NumberOfGestureRepetitions { get; set; }
 
             /// <summary>
             /// Gets or sets количество действий в жесте.
             /// </summary>
-            [JsonProperty(PropertyName = "count_command")]
             public int NumberOfMotions { get; set; }
 
             /// <summary>
             /// Gets or sets время последнего изменения/создания жеста.
             /// </summary>
-            [JsonProperty(PropertyName = "date")]
             public string Date { get; set; }
             #endregion
 
@@ -457,7 +489,6 @@ namespace HandControl.Model
                 {
                     Date = string.Empty,
                     IterableGesture = false,
-                    IsCombinedGesture = false,
                     NumberOfGestureRepetitions = 1,
                     NumberOfMotions = 0
                 };
@@ -471,6 +502,57 @@ namespace HandControl.Model
             public object Clone()
             {
                 return this.MemberwiseClone();
+            }
+
+            /// <summary>
+            /// Получить хэш код экземпляра класса<see cref="InfoGestureModel"/>.
+            /// </summary>
+            /// <returns>HashCode экземпляра<see cref= "InfoGestureModel"/>.</returns>
+            public override int GetHashCode()
+            {
+                var hashCode = 374632536;
+                hashCode = (hashCode * -1521134295) + this.IterableGesture.GetHashCode();
+                hashCode = (hashCode * -1521134295) + this.NumberOfGestureRepetitions.GetHashCode();
+                hashCode = (hashCode * -1521134295) + this.NumberOfMotions.GetHashCode();
+                hashCode = (hashCode * -1521134295) + EqualityComparer<string>.Default.GetHashCode(this.Date);
+                return hashCode;
+            }
+
+            /// <summary>
+            /// Сравнение экземпляра класса <see cref="InfoGestureModel"/> с передаваемым объектом.
+            /// </summary>
+            /// <param name="obj">Передаваемый объект.</param>
+            /// <returns>True, если экземпляры равны.</returns>
+            public override bool Equals(object obj)
+            {
+                return this.Equals(obj as InfoGestureModel);
+            }
+
+            /// <summary>
+            /// Сравнение двух экземпляров класса <see cref="InfoGestureModel"/>.
+            /// </summary>
+            /// <param name="other">Экземпляр класса <see cref="InfoGestureModel"/> для сравнения.</param>
+            /// <returns>True, если экземпляры равны.</returns>
+            private bool Equals(InfoGestureModel other)
+            {
+                if (other == null)
+                {
+                    return false;
+                }
+
+                return (
+                    object.ReferenceEquals(this.Date, other.Date) ||
+                    (this.Date != null &&
+                    this.Date.Equals(other.Date)))
+                    && (
+                    object.ReferenceEquals(this.IterableGesture, other.IterableGesture) ||
+                    this.IterableGesture.Equals(other.IterableGesture))
+                    && (
+                    object.ReferenceEquals(this.NumberOfGestureRepetitions, other.NumberOfGestureRepetitions) ||
+                    this.NumberOfGestureRepetitions.Equals(other.NumberOfGestureRepetitions))
+                    && (
+                    object.ReferenceEquals(this.NumberOfMotions, other.NumberOfMotions) ||
+                    this.NumberOfMotions.Equals(other.NumberOfMotions));
             }
             #endregion
         }

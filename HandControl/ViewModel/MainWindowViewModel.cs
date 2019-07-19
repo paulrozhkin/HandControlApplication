@@ -56,7 +56,7 @@ namespace HandControl.ViewModel
                 if (value != null)
                 {
                     selectedGesture = value.Clone() as GestureModel;
-                    SelectedListGestureMotions = selectedGesture.ListMotions;
+                    SelectedListGestureMotions = new ObservableCollection<GestureModel.MotionModel>(selectedGesture.ListMotions);
                 }
                 else
                 {
@@ -133,8 +133,7 @@ namespace HandControl.ViewModel
         #region Methods
         private void AddGesture(object obj)
         {
-            GestureModel newGesture = GestureModel.GetDefault("Новый жест");
-            newGesture.ID = Guid.NewGuid();
+            GestureModel newGesture = GestureModel.GetDefault(Guid.NewGuid(), "Новый жест");
             ListGesture.Add(newGesture);
         }
 
@@ -162,7 +161,7 @@ namespace HandControl.ViewModel
 
         private void SaveGesture()
         {
-            SelectedGesture.ListMotions = SelectedListGestureMotions;
+            SelectedGesture.ListMotions = SelectedListGestureMotions.ToList();
             SelectedGesture.InfoGesture.Date = DateTime.Now.ToString("yyMMddHHmmss");
             SelectedGesture.InfoGesture.NumberOfMotions = SelectedListGestureMotions.Count();
             GestureModel.Save(SelectedGesture);

@@ -183,7 +183,8 @@ namespace HandControl.Services
 
             foreach (GestureModel command in gestureList)
             {
-                dataField.AddRange(command.BinaryDate.ToList<byte>());
+                //// TODO: вернуть.
+                ////dataField.AddRange(command.BinaryDate.ToList<byte>());
             }
 
             byte[] package = CreatePackage((byte)DeviceType.Prosthesis, dataField);
@@ -213,8 +214,9 @@ namespace HandControl.Services
         /// <param name="gesture">Исполняемый жест.</param>
         public void ExecuteTheGesture(GestureModel gesture)
         {
+            //// TODO: вернуть.
             List<byte> dataField = new List<byte> { (byte)CommandType.ExecByMotion };
-            dataField.AddRange(gesture.BinaryDate.ToList<byte>());
+            ////dataField.AddRange(gesture.BinaryDate.ToList<byte>());
             byte[] package = CreatePackage((byte)DeviceType.Prosthesis, dataField);
             this.СonnectedDevices.SendToDevice(package);
         }
