@@ -8,6 +8,8 @@ namespace HandControl.Model
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.IO;
+    using System.Numerics;
     using System.Text;
     using HandControl.Services;
     using Newtonsoft.Json;
@@ -21,7 +23,7 @@ namespace HandControl.Model
     /// \date Март 2019 года
     /// \authors Paul Rozhkin(blackiiifox@gmail.com)
     /// </summary>
-    public class GestureModel : BaseModel, ICloneable
+    public class GestureModel : BaseModel, ICloneable, IBinarySerialize
     {
         #region Fields
         /// <summary>
@@ -85,63 +87,63 @@ namespace HandControl.Model
         [JsonProperty(PropertyName = "list_motions")]
         public ObservableCollection<MotionModel> ListMotions { get; set; }
 
-        /// <summary>
-        /// Gets полную информацию и данные жеста в бинарном виде
-        /// </summary>
-        [JsonIgnore]
-        public byte[] BinaryDate
-        {
-            get
-            {
-                byte[] byteArray = new byte[20 + 12 + 4 + (this.InfoGesture.NumberOfMotions * 8)];
+        /////// <summary>
+        /////// Gets полную информацию и данные жеста в бинарном виде
+        /////// </summary>
+        ////[JsonIgnore]
+        ////public byte[] BinaryDate
+        ////{
+        ////    get
+        ////    {
+        ////        byte[] byteArray = new byte[20 + 12 + 4 + (this.InfoGesture.NumberOfMotions * 8)];
 
-                byte[] byteName = Encoding.GetEncoding(1251).GetBytes(this.Name);
+        ////        byte[] byteName = Encoding.GetEncoding(1251).GetBytes(this.Name);
 
-                if (byteName.Length == 20)
-                {
-                    byteName[18] = Convert.ToByte('\0');
-                    byteName[19] = Convert.ToByte('\0');
-                }
+        ////        if (byteName.Length == 20)
+        ////        {
+        ////            byteName[18] = Convert.ToByte('\0');
+        ////            byteName[19] = Convert.ToByte('\0');
+        ////        }
 
-                for (int i = 0; i < 20; i++)
-                {
-                    if (byteName.Length > i)
-                    {
-                        byteArray[i] = byteName[i];
-                    }
-                    else
-                    {
-                        byteArray[i] = Convert.ToByte('\0');
-                    }
-                }
+        ////        for (int i = 0; i < 20; i++)
+        ////        {
+        ////            if (byteName.Length > i)
+        ////            {
+        ////                byteArray[i] = byteName[i];
+        ////            }
+        ////            else
+        ////            {
+        ////                byteArray[i] = Convert.ToByte('\0');
+        ////            }
+        ////        }
 
-                byte[] byteDate = System.Text.Encoding.UTF8.GetBytes(this.InfoGesture.Date);
-                for (int i = 0; i < 12; i++)
-                {
-                    byteArray[20 + i] = byteDate[i];
-                }
+        ////        byte[] byteDate = System.Text.Encoding.UTF8.GetBytes(this.InfoGesture.Date);
+        ////        for (int i = 0; i < 12; i++)
+        ////        {
+        ////            byteArray[20 + i] = byteDate[i];
+        ////        }
 
-                byteArray[32] = Convert.ToByte(this.InfoGesture.IsCombinedGesture);
-                byteArray[33] = Convert.ToByte(this.InfoGesture.IterableGesture);
-                byteArray[34] = Convert.ToByte(this.InfoGesture.NumberOfGestureRepetitions);
-                byteArray[35] = Convert.ToByte(this.InfoGesture.NumberOfMotions);
+        ////        byteArray[32] = Convert.ToByte(this.InfoGesture.IsCombinedGesture);
+        ////        byteArray[33] = Convert.ToByte(this.InfoGesture.IterableGesture);
+        ////        byteArray[34] = Convert.ToByte(this.InfoGesture.NumberOfGestureRepetitions);
+        ////        byteArray[35] = Convert.ToByte(this.InfoGesture.NumberOfMotions);
 
-                for (int i = 0; i < this.InfoGesture.NumberOfMotions; i++)
-                {
-                    int index = 36 + (i * 8);
-                    byteArray[index] = Convert.ToByte(this.ListMotions[i].LittleFinger);
-                    byteArray[index + 1] = Convert.ToByte(this.ListMotions[i].RingFinder);
-                    byteArray[index + 2] = Convert.ToByte(this.ListMotions[i].MiddleFinger);
-                    byteArray[index + 3] = Convert.ToByte(this.ListMotions[i].PointerFinger);
-                    byteArray[index + 4] = Convert.ToByte(this.ListMotions[i].DelMotion);
-                    byteArray[index + 5] = Convert.ToByte(this.ListMotions[i].StatePosThumb);
-                    byteArray[index + 6] = Convert.ToByte(this.ListMotions[i].StatePosBrush);
-                    byteArray[index + 7] = Convert.ToByte(this.ListMotions[i].ThumbFinger);
-                }
+        ////        for (int i = 0; i < this.InfoGesture.NumberOfMotions; i++)
+        ////        {
+        ////            int index = 36 + (i * 8);
+        ////            byteArray[index] = Convert.ToByte(this.ListMotions[i].LittleFinger);
+        ////            byteArray[index + 1] = Convert.ToByte(this.ListMotions[i].RingFinder);
+        ////            byteArray[index + 2] = Convert.ToByte(this.ListMotions[i].MiddleFinger);
+        ////            byteArray[index + 3] = Convert.ToByte(this.ListMotions[i].PointerFinger);
+        ////            byteArray[index + 4] = Convert.ToByte(this.ListMotions[i].DelMotion);
+        ////            byteArray[index + 5] = Convert.ToByte(this.ListMotions[i].StatePosThumb);
+        ////            byteArray[index + 6] = Convert.ToByte(this.ListMotions[i].StatePosBrush);
+        ////            byteArray[index + 7] = Convert.ToByte(this.ListMotions[i].ThumbFinger);
+        ////        }
 
-                return byteArray;
-            }
-        }
+        ////        return byteArray;
+        ////    }
+        ////}
         #endregion
 
         #region Methods
@@ -224,13 +226,70 @@ namespace HandControl.Model
                 ListMotions = newDataMotion
             };
         }
+
+        /// <summary>
+        /// Выполняет сериализацию экземпляра <see cref="GestureModel"/> в бинарный формат.
+        /// </summary>
+        /// <returns></returns>
+        public byte[] BinarySerialize()
+        {
+            using (MemoryStream m = new MemoryStream())
+            {
+                using (BinaryWriter writer = new BinaryWriter(m))
+                {
+                    writer.Write(this.ID.ToByteArray());
+                    writer.Write(this.Name.Length);
+                    writer.Write(Encoding.UTF8.GetBytes(this.Name));
+                    writer.Write(this.InfoGesture.BinarySerialize());
+
+                    if (this.InfoGesture.NumberOfMotions != this.ListMotions.Count)
+                    {
+                        throw new ArgumentException("NumberOfMotions and ListMotions count do not match.");
+                    }
+                    else
+                    {
+                        for (int i = 0; i < this.InfoGesture.NumberOfMotions; i++)
+                        {
+                            writer.Write(this.ListMotions[i].BinarySerialize());
+                        }
+                    }
+                }
+
+                return m.ToArray();
+            }
+        }
+
+        public void BinaryDesserialize(byte[] data)
+        {
+            //BigInteger bigInt = new BigInteger(this.ID.ToByteArray());
+            using (MemoryStream m = new MemoryStream(data))
+            {
+                using (BinaryReader reader = new BinaryReader(m))
+                {
+                    this.ID = new Guid(reader.ReadBytes(2));
+                    int lengthName = reader.ReadByte();
+                    this.Name = Encoding.UTF8.GetString(reader.ReadBytes(lengthName));
+                    byte[] dataInfo = reader.ReadBytes(3);
+                    this.InfoGesture.BinaryDesserialize(reader.ReadBytes(5));
+
+                    this.ListMotions.Clear();
+                    for (int i = 0; i < this.InfoGesture.NumberOfMotions; i++)
+                    {
+                        MotionModel motion = MotionModel.GetDefault(i);
+                        motion.BinaryDesserialize(reader.ReadBytes(8));
+                    }
+
+                }
+            }
+
+        }
         #endregion
 
         #region Classes
         /// <summary>
         /// Класс содержащий единичное положение протеза.
         /// </summary>
-        public class MotionModel : BaseModel, ICloneable
+        public class MotionModel : BaseModel, ICloneable, IBinarySerialize
         {
             #region Constructors
             /// <summary>
@@ -388,6 +447,42 @@ namespace HandControl.Model
                 return maxId + 1;
             }
 
+            public byte[] BinarySerialize()
+            {
+                using (MemoryStream m = new MemoryStream())
+                {
+                    using (BinaryWriter writer = new BinaryWriter(m))
+                    {
+                        writer.Write((byte)this.PointerFinger);
+                        writer.Write((byte)this.MiddleFinger);
+                        writer.Write((byte)this.RingFinder);
+                        writer.Write((byte)this.LittleFinger);
+                        writer.Write((byte)this.ThumbFinger);
+                        writer.Write((byte)this.StatePosBrush);
+                        writer.Write((ushort)this.DelMotion);
+                    }
+
+                    return m.ToArray();
+                }
+            }
+
+            public void BinaryDesserialize(byte[] data)
+            {
+                using (MemoryStream m = new MemoryStream(data))
+                {
+                    using (BinaryReader reader = new BinaryReader(m))
+                    {
+                        this.PointerFinger = reader.ReadByte();
+                        this.MiddleFinger = reader.ReadByte();
+                        this.RingFinder = reader.ReadByte();
+                        this.LittleFinger = reader.ReadByte();
+                        this.ThumbFinger = reader.ReadByte();
+                        this.StatePosBrush = reader.ReadByte();
+                        this.DelMotion = reader.ReadUInt16();
+                    }
+                }
+            }
+
             /// <summary>
             /// Полное клонирование экземпляра MotionModel.
             /// </summary>
@@ -402,7 +497,7 @@ namespace HandControl.Model
         /// <summary>
         /// Класс содержащий информацию о жесте <see cref="GestureModel"/>.
         /// </summary>
-        public class InfoGestureModel : BaseModel, ICloneable
+        public class InfoGestureModel : BaseModel, ICloneable, IBinarySerialize
         {
             #region Constructors
             /// <summary>
@@ -443,7 +538,7 @@ namespace HandControl.Model
             /// Gets or sets время последнего изменения/создания жеста.
             /// </summary>
             [JsonProperty(PropertyName = "date")]
-            public string Date { get; set; }
+            public DateTime TimeChange { get; set; }
             #endregion
 
             #region Methods
@@ -455,13 +550,44 @@ namespace HandControl.Model
             {
                 InfoGestureModel result = new InfoGestureModel()
                 {
-                    Date = string.Empty,
+                    TimeChange = DateTime.Now,
                     IterableGesture = false,
                     IsCombinedGesture = false,
                     NumberOfGestureRepetitions = 1,
                     NumberOfMotions = 0
                 };
                 return result;
+            }
+
+            public byte[] BinarySerialize()
+            {
+                using (MemoryStream m = new MemoryStream())
+                {
+                    using (BinaryWriter writer = new BinaryWriter(m))
+                    {
+                        double unixTime = (this.TimeChange.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds;
+                        writer.Write(unixTime);
+                        writer.Write(Convert.ToByte(this.IterableGesture));
+                        writer.Write((byte)this.NumberOfGestureRepetitions);
+                        writer.Write((byte)this.NumberOfMotions);
+                    }
+
+                    return m.ToArray();
+                }
+            }
+
+            public void BinaryDesserialize(byte[] data)
+            {
+                using (MemoryStream m = new MemoryStream(data))
+                {
+                    using (BinaryReader reader = new BinaryReader(m))
+                    {
+                        this.TimeChange = (new DateTime(1970, 1, 1, 0, 0, 0, 0)).AddSeconds(reader.ReadDouble());
+                        this.IterableGesture = Convert.ToBoolean(reader.ReadByte());
+                        this.NumberOfGestureRepetitions = reader.ReadByte();
+                        this.NumberOfMotions = reader.ReadByte();
+                    }
+                }
             }
 
             /// <summary>

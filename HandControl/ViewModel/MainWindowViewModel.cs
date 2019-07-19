@@ -163,7 +163,7 @@ namespace HandControl.ViewModel
         private void SaveGesture()
         {
             SelectedGesture.ListMotions = SelectedListGestureMotions;
-            SelectedGesture.InfoGesture.Date = DateTime.Now.ToString("yyMMddHHmmss");
+            SelectedGesture.InfoGesture.TimeChange = DateTime.Now.ToString("yyMMddHHmmss");
             SelectedGesture.InfoGesture.NumberOfMotions = SelectedListGestureMotions.Count();
             GestureModel.Save(SelectedGesture);
 
