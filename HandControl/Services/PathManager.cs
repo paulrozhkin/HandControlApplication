@@ -6,51 +6,51 @@ namespace HandControl.Services
     public static class PathManager
     {
         public static readonly string MainDataPath = System.AppDomain.CurrentDomain.BaseDirectory + "\\Data\\";
-        private static readonly string FileCommandsName = "\\command.json";
-        private static readonly string FolderCommandsName = "Commands\\";
+        private static readonly string FileGesturesName = "\\gesture.json";
+        private static readonly string FolderGesturesName = "Gestures\\";
         private static readonly string FolderConfig = "config\\";
         private static readonly string FolderIODeviceConfig = "IODeviceConfig\\";
 
         public static string Txt = ".txt";
         public static string Json = ".json";
 
-        public static List<string> GetCommandsFilesPaths()
+        public static List<string> GetGesturesFilesPaths()
         {
-            List<string> commands = new List<string>();
-            string startPath = MainDataPath + FolderCommandsName;
+            List<string> gestures = new List<string>();
+            string startPath = MainDataPath + FolderGesturesName;
             if (!Directory.Exists(startPath))
                 Directory.CreateDirectory(startPath);
             string[] dirs = Directory.GetDirectories(startPath);
             foreach (var item in dirs)
             {
-                string p = item + FileCommandsName;
+                string p = item + FileGesturesName;
                 if (File.Exists(p))
                 {
-                    commands.Add(p);
+                    gestures.Add(p);
                 }
             }
-            return commands;
+            return gestures;
         }
 
-        public static string GetCommandPath(string NameCommand)
+        public static string GetGesturePath(string idGesture)
         {
-            string commandFolderPath = GetCommandFolderPath(NameCommand);
+            string gestureFolderPath = GetGestureFolderPath(idGesture);
 
-            string sessionPath = commandFolderPath + "\\" + FileCommandsName;
-            if (!File.Exists(sessionPath))
+            string gesturePath = gestureFolderPath + "\\" + FileGesturesName;
+            if (!File.Exists(gesturePath))
             {
-                File.Create(sessionPath).Close();
+                File.Create(gesturePath).Close();
             }
-            return sessionPath;
+            return gesturePath;
         }
 
-        public static string GetCommandFolderPath(string NameCommand)
+        public static string GetGestureFolderPath(string idGesture)
         {
-            string commandFolderPath = MainDataPath + FolderCommandsName + NameCommand + "\\";
-            if (!Directory.Exists(commandFolderPath))
-                Directory.CreateDirectory(commandFolderPath);
+            string gestureFolderPath = MainDataPath + FolderGesturesName + idGesture + "\\";
+            if (!Directory.Exists(gestureFolderPath))
+                Directory.CreateDirectory(gestureFolderPath);
 
-            return commandFolderPath;
+            return gestureFolderPath;
         }
 
         public static string IODevicePath(string nameDevice)

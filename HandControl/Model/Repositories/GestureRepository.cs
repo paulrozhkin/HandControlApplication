@@ -1,14 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HandControl.Model;
-
+﻿// --------------------------------------------------------------------------------------
+// <copyright file = "GestureRepository.cs" company = "Студенческий проект HandControl‎"> 
+//      Copyright © 2019 HandControl. All rights reserved.
+// </copyright> 
+// -------------------------------------------------------------------------------------
 namespace HandControl.Model.Repositories
 {
+
+    using System;
+    using System.Collections.Generic;
+    using HandControl.Services;
+
+    /// <summary>
+    /// Репозиторий, содержащий жесты, хранимые в системе.
+    /// </summary>
     public class GestureRepository : IRepository<GestureModel>
     {
+        /// <summary>
+        /// Коллекция жестов.
+        /// </summary>
         private List<GestureModel> gesturesField = null;
 
         private List<GestureModel> Gestures
@@ -29,14 +38,16 @@ namespace HandControl.Model.Repositories
 
         public void Add(GestureModel gesture)
         {
-            lock (this.Gestures)
+            lock (this)
             {
+                gesture = gesture.Clone() as GestureModel;
+
                 bool isContains = false;
                 for (int i = 0; i < this.Gestures.Count; i++)
                 {
                     if (gesture.ID.Equals(this.Gestures[i].ID))
                     {
-                        this.Gestures[i] = gesture.Clone() as GestureModel;
+                        this.Gestures[i] = gesture;
                         isContains = true;
                         break;
                     }
@@ -54,7 +65,9 @@ namespace HandControl.Model.Repositories
                     this.Gestures.Add(gesture);
                 }
 
-                //TODO: Сохранение в файловую систему и синхронизация.
+                ////TODO: Сохранение в файловую систему и синхронизация.
+                byte[] data = gesture.BinarySerialize();
+                FileSystemFacade.WriteBinaryData(PathManager.GetGesturePath(gesture.ID.ToString()), data);
 
             }
         }
@@ -87,7 +100,8 @@ namespace HandControl.Model.Repositories
                 }
                 else
                 {
-                    //TODO: Удаление из файловой системы и синхронизация.
+                    ////TODO: Удаление из файловой системы и синхронизация.
+                    FileSystemFacade.DeleteFolder(PathManager.GetGestureFolderPath(gesture.ID.ToString()));
                 }
             }
         }
@@ -96,7 +110,19 @@ namespace HandControl.Model.Repositories
         {
             List<GestureModel> gestures = new List<GestureModel>();
 
-
+            foreach (string file in PathManager.GetGesturesFilesPaths())
+            {
+                try
+                {
+                    GestureModel newGesture = GestureModel.GetDefault(new Guid(),string.Empty);
+                    newGesture.BinaryDesserialize(FileSystemFacade.ReadBinaryData(file));
+                    gestures.Add(newGesture);
+                }
+                catch(Exception)
+                {
+                    continue;
+                }
+            }
 
             return gestures;
         }

@@ -15,7 +15,7 @@ namespace HandControl.Services
         {
             try
             {
-                FileIOManager.WriteData(path, JsonConvert.SerializeObject(obj));
+                FileSystemFacade.WriteData(path, JsonConvert.SerializeObject(obj));
                 return true;
             }
             catch (Exception e)
@@ -29,13 +29,13 @@ namespace HandControl.Services
         {
             try
             {
-                if (FileIOManager.ReadData(path) == "")
+                if (FileSystemFacade.ReadData(path) == "")
                 {
                     return null;
                 }
                 else
                 {
-                    return JsonConvert.DeserializeObject<T>(FileIOManager.ReadData(path));
+                    return JsonConvert.DeserializeObject<T>(FileSystemFacade.ReadData(path));
                 }                
             }
             catch(Exception e)

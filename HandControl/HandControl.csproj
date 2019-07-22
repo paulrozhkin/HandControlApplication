@@ -138,7 +138,7 @@
     <Compile Include="Model\GestureModel.cs" />
     <Compile Include="Services\CommunicationManager.cs" />
     <Compile Include="Services\Converters\IdToNameMotionConverter.cs" />
-    <Compile Include="Services\FileIOManager.cs" />
+    <Compile Include="Services\FileSystemFacade.cs" />
     <Compile Include="Services\IODevice\IIODevice.cs">
       <ExcludeFromStyleCop>False</ExcludeFromStyleCop>
     </Compile>

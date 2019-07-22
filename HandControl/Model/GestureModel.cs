@@ -110,7 +110,7 @@ namespace HandControl.Model
         public static ObservableCollection<GestureModel> GetGestures()
         {
             ObservableCollection<GestureModel> sessionLoaded = new ObservableCollection<GestureModel>();
-            foreach (var item in PathManager.GetCommandsFilesPaths())
+            foreach (var item in PathManager.GetGesturesFilesPaths())
             {
                 GestureModel loadedCommand = (GestureModel)JsonSerDer.LoadObject<GestureModel>(item);
 
@@ -123,24 +123,6 @@ namespace HandControl.Model
             }
 
             return sessionLoaded;
-        }
-
-        /// <summary>
-        /// Сохранение жеста в файловую систему.
-        /// </summary>
-        /// <param name="command">Экземпляр сохраняемого жеста.</param>
-        public static void Save(GestureModel command)
-        {
-            JsonSerDer.SaveObject(command, PathManager.GetCommandPath(command.ID.ToString()));
-        }
-
-        /// <summary>
-        /// Удаление жеста из файловой системы.
-        /// </summary>
-        /// <param name="command">Экземпляр удаляемого жеста.</param>
-        public static void Delete(GestureModel command)
-        {
-            FileIOManager.DeleteFolder(PathManager.GetCommandFolderPath(command.ID.ToString()));
         }
 
         /// <summary>
@@ -201,8 +183,9 @@ namespace HandControl.Model
                 using (BinaryWriter writer = new BinaryWriter(m))
                 {
                     writer.Write(this.ID.ToByteArray());
-                    writer.Write(this.Name.Length);
-                    writer.Write(Encoding.UTF8.GetBytes(this.Name));
+                    byte[] nameBts = Encoding.UTF8.GetBytes(this.Name);
+                    writer.Write((byte)nameBts.Length);
+                    writer.Write(nameBts);
                     writer.Write(this.InfoGesture.BinarySerialize());
 
                     if (this.InfoGesture.NumberOfMotions != this.ListMotions.Count)
@@ -232,17 +215,17 @@ namespace HandControl.Model
             {
                 using (BinaryReader reader = new BinaryReader(m))
                 {
-                    this.ID = new Guid(reader.ReadBytes(2));
+                    this.ID = new Guid(reader.ReadBytes(16));
                     int lengthName = reader.ReadByte();
                     this.Name = Encoding.UTF8.GetString(reader.ReadBytes(lengthName));
-                    byte[] dataInfo = reader.ReadBytes(3);
-                    this.InfoGesture.BinaryDesserialize(reader.ReadBytes(5));
+                    this.InfoGesture.BinaryDesserialize(reader.ReadBytes(11));
 
                     this.ListMotions.Clear();
                     for (int i = 0; i < this.InfoGesture.NumberOfMotions; i++)
                     {
                         MotionModel motion = MotionModel.GetDefault(i);
                         motion.BinaryDesserialize(reader.ReadBytes(8));
+                        this.ListMotions.Add(motion);
                     }
                 }
             }
@@ -379,8 +362,7 @@ namespace HandControl.Model
                     RingFinder = 0,
                     LittleFinger = 0,
                     DelMotion = 0,
-                    StatePosBrush = 0,
-                    DelMotionSec = 0
+                    StatePosBrush = 0
                 };
                 return result;
             }
@@ -474,7 +456,18 @@ namespace HandControl.Model
             /// <returns>Клонированный экземпляр MotionModel.</returns>
             public object Clone()
             {
-                return this.MemberwiseClone();
+                MotionModel result = new MotionModel()
+                {
+                    Id = this.Id,
+                    ThumbFinger = this.ThumbFinger,
+                    PointerFinger = this.PointerFinger,
+                    MiddleFinger = this.MiddleFinger,
+                    RingFinder = this.RingFinder,
+                    LittleFinger = this.LittleFinger,
+                    DelMotion = this.DelMotion,
+                    StatePosBrush = this.StatePosBrush
+                };
+                return result;
             }
 
             /// <summary>
@@ -491,7 +484,6 @@ namespace HandControl.Model
                 hashCode = (hashCode * -1521134295) + this.RingFinder.GetHashCode();
                 hashCode = (hashCode * -1521134295) + this.LittleFinger.GetHashCode();
                 hashCode = (hashCode * -1521134295) + this.StatePosBrush.GetHashCode();
-                hashCode = (hashCode * -1521134295) + this.DelMotionSec.GetHashCode();
                 hashCode = (hashCode * -1521134295) + this.DelMotion.GetHashCode();
                 return hashCode;
             }
@@ -609,7 +601,8 @@ namespace HandControl.Model
                 {
                     using (BinaryWriter writer = new BinaryWriter(m))
                     {
-                        double unixTime = (this.TimeChange.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds;
+                        //double unixTime = (this.TimeChange.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds;
+                        double unixTime = (this.TimeChange- new DateTime(1970, 1, 1)).TotalSeconds;
                         writer.Write(unixTime);
                         writer.Write(Convert.ToByte(this.IterableGesture));
                         writer.Write((byte)this.NumberOfGestureRepetitions);
@@ -686,7 +679,7 @@ namespace HandControl.Model
                 return (
                     object.ReferenceEquals(this.TimeChange, other.TimeChange) ||
                     (this.TimeChange != null &&
-                    this.TimeChange.Equals(other.TimeChange)))
+                    this.TimeChange.Ticks / 10000000 == other.TimeChange.Ticks / 10000000)) //// Деление, т.к. сравнение проводится только до секунд.
                     && (
                     object.ReferenceEquals(this.IterableGesture, other.IterableGesture) ||
                     this.IterableGesture.Equals(other.IterableGesture))

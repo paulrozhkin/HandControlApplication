@@ -11,6 +11,8 @@ namespace HandControl.ViewModel
     using System.Windows;
     using System.Windows.Input;
     using HandControl.Model;
+    using HandControl.Model.Repositories;
+    using HandControl.Model.Repositories.Specifications;
     using HandControl.Services;
 
     class MainWindowViewModel : ViewModelBase
@@ -25,6 +27,9 @@ namespace HandControl.ViewModel
         public ObservableCollection<GestureModel> ListGesture { get; set; }
 
         ObservableCollection<GestureModel.MotionModel> ListMotions = new ObservableCollection<GestureModel.MotionModel>();
+
+        private GestureRepository gestureRepository = new GestureRepository();
+
         public ObservableCollection<GestureModel.MotionModel> SelectedListGestureMotions
         {
             get
@@ -116,7 +121,8 @@ namespace HandControl.ViewModel
         #region Constructor
         public MainWindowViewModel()
         {
-            ListGesture = GestureModel.GetGestures();
+            IEntitySpecification<GestureModel> specGetByAll = new GesturesSpecificationByAll();
+            ListGesture = new ObservableCollection<GestureModel>(gestureRepository.Query(specGetByAll));
             Communication = CommunicationManager.GetInstance();
             Communication.СonnectedDevices.ConnectDevice();
 
@@ -133,14 +139,47 @@ namespace HandControl.ViewModel
         #region Methods
         private void AddGesture(object obj)
         {
-            GestureModel newGesture = GestureModel.GetDefault(Guid.NewGuid(), "Новый жест");
-            ListGesture.Add(newGesture);
+            GestureModel newGesture = GestureModel.GetDefault(Guid.NewGuid(), this.GetNewNameGesture());
+            this.ListGesture.Add(newGesture);
+            this.gestureRepository.Add(newGesture);
+        }
+
+        private string GetNewNameGesture()
+        {
+            var list = this.ListGesture.Where(itemGesture => itemGesture.Name.Contains("Новый жест"));
+            int maxValue = 1;
+
+            if (list.Any())
+            {
+                foreach (GestureModel itemGesture in list)
+                {
+                    string nameGest = itemGesture.Name.Replace("Новый жест ", string.Empty);
+                    try
+                    {
+                        int value = Convert.ToInt32(nameGest);
+                        
+                        if (maxValue <= value)
+                        {
+                            maxValue = value + 1;
+                        }
+                    }
+                    catch (FormatException)
+                    {
+                        continue;
+                    }
+                }
+            }
+
+            return "Новый жест " + maxValue.ToString();
+
         }
 
         private void DeleteMotion(object obj)
         {
             if (obj == null)
+            {
                 return;
+            }
 
             int deletNameMotion = (int)obj;
 
@@ -164,7 +203,9 @@ namespace HandControl.ViewModel
             SelectedGesture.ListMotions = SelectedListGestureMotions.ToList();
             SelectedGesture.InfoGesture.TimeChange = DateTime.Now;
             SelectedGesture.InfoGesture.NumberOfMotions = SelectedListGestureMotions.Count();
-            GestureModel.Save(SelectedGesture);
+            this.gestureRepository.Add(SelectedGesture);
+            ////GestureModel.Save(SelectedGesture);
+            
 
             bool StateFountGesture = false;
             for (int i = 0; i < ListGesture.Count; i++)
@@ -192,22 +233,10 @@ namespace HandControl.ViewModel
 
         private void DeleteGesture(object obj)
         {
-            if (obj == null)
-            {
-                return;
-            }
-
-            Guid deleteID = (Guid)obj;
-
-            foreach (GestureModel gesture in ListGesture)
-            {
-                if (gesture.ID.Equals(deleteID))
-                {
-                    GestureModel.Delete(gesture);
-                    ListGesture.Remove(gesture);
-                    break;
-                }
-            }
+            Guid id = (Guid)obj;
+            GestureModel gesture = this.ListGesture.FirstOrDefault(gestureItem => gestureItem.ID.Equals(id));
+            this.gestureRepository.Remove(gesture);
+            this.ListGesture.Remove(gesture);
         }
 
         private void HandHandler(object obj)
