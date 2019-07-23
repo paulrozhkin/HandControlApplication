@@ -22,7 +22,7 @@ namespace HandControl.Model
     /// \date Март 2019 года
     /// \authors Paul Rozhkin(blackiiifox@gmail.com)
     /// </summary>
-    public class GestureModel : BaseModel, ICloneable, IBinarySerialize
+    public class GestureModel : BaseModel, ICloneable, IBinarySerialize, IEquatable<GestureModel>
     {
         #region Fields
         /// <summary>
@@ -155,10 +155,14 @@ namespace HandControl.Model
         public override int GetHashCode()
         {
             var hashCode = -677228334;
-            hashCode = (hashCode * -1521134295) + EqualityComparer<Guid>.Default.GetHashCode(this.ID);
-            hashCode = (hashCode * -1521134295) + EqualityComparer<string>.Default.GetHashCode(this.Name);
-            hashCode = (hashCode * -1521134295) + EqualityComparer<InfoGestureModel>.Default.GetHashCode(this.InfoGesture);
-            hashCode = (hashCode * -1521134295) + EqualityComparer<List<MotionModel>>.Default.GetHashCode(this.ListMotions);
+            hashCode = (hashCode * -1521134295) + this.ID.GetHashCode();
+            ////hashCode = (hashCode * -1521134295) + EqualityComparer<string>.Default.GetHashCode(this.Name);
+            hashCode = (hashCode * -1521134295) + this.InfoGesture.GetHashCode();
+            for (int i = 0; i < this.ListMotions.Count; i++)
+            {
+                hashCode = (hashCode * -1521134295) + this.ListMotions[i].GetHashCode();
+            }
+
             return hashCode;
         }
 
@@ -170,6 +174,31 @@ namespace HandControl.Model
         public override bool Equals(object obj)
         {
             return this.Equals(obj as GestureModel);
+        }
+
+        public static bool operator ==(GestureModel gesture, GestureModel other)
+        {
+
+            bool isVehicleNull = gesture is null;
+            bool isOtherNull = other is null;
+
+            if (isVehicleNull && isOtherNull)
+            {
+                return true;
+            }
+            else if (isVehicleNull)
+            {
+                return false;
+            }
+            else
+            {
+                return gesture.Equals(other);
+            }
+        }
+
+        public static bool operator !=(GestureModel gesture, GestureModel other)
+        {
+            return !(gesture == other);
         }
 
         /// <summary>
@@ -231,12 +260,17 @@ namespace HandControl.Model
             }
         }
 
+       //bool IEquatable<GestureModel>.Equals(GestureModel other)
+       // {
+       //     throw new NotImplementedException();
+       // }
+
         /// <summary>
         /// Сравнение двух экземпляров класса <see cref="GestureModel"/>.
         /// </summary>
         /// <param name="other">Экземпляр класса <see cref="GestureModel"/> для сравнения.</param>
         /// <returns>True, если экземпляры равны.</returns>
-        private bool Equals(GestureModel other)
+        public bool Equals(GestureModel other)
         {
             if (other == null)
             {
@@ -477,14 +511,14 @@ namespace HandControl.Model
             public override int GetHashCode()
             {
                 var hashCode = 1587829154;
-                hashCode = (hashCode * -1521134295) + this.Id.GetHashCode();
-                hashCode = (hashCode * -1521134295) + this.ThumbFinger.GetHashCode();
-                hashCode = (hashCode * -1521134295) + this.PointerFinger.GetHashCode();
-                hashCode = (hashCode * -1521134295) + this.MiddleFinger.GetHashCode();
-                hashCode = (hashCode * -1521134295) + this.RingFinder.GetHashCode();
-                hashCode = (hashCode * -1521134295) + this.LittleFinger.GetHashCode();
-                hashCode = (hashCode * -1521134295) + this.StatePosBrush.GetHashCode();
-                hashCode = (hashCode * -1521134295) + this.DelMotion.GetHashCode();
+                ////hashCode = (hashCode * -1521134295) + this.Id.GetHashCode();
+                ////hashCode = (hashCode * -1521134295) + this.ThumbFinger.GetHashCode();
+                ////hashCode = (hashCode * -1521134295) + this.PointerFinger.GetHashCode();
+                ////hashCode = (hashCode * -1521134295) + this.MiddleFinger.GetHashCode();
+                ////hashCode = (hashCode * -1521134295) + this.RingFinder.GetHashCode();
+                ////hashCode = (hashCode * -1521134295) + this.LittleFinger.GetHashCode();
+                ////hashCode = (hashCode * -1521134295) + this.StatePosBrush.GetHashCode();
+                ////hashCode = (hashCode * -1521134295) + this.DelMotion.GetHashCode();
                 return hashCode;
             }
 
@@ -496,6 +530,31 @@ namespace HandControl.Model
             public override bool Equals(object obj)
             {
                 return this.Equals(obj as MotionModel);
+            }
+
+            public static bool operator ==(MotionModel motion, MotionModel other)
+            {
+
+                bool isVehicleNull = motion is null;
+                bool isOtherNull = other is null;
+
+                if (isVehicleNull && isOtherNull)
+                {
+                    return true;
+                }
+                else if (isVehicleNull)
+                {
+                    return false;
+                }
+                else
+                {
+                    return motion.Equals(other);
+                }
+            }
+
+            public static bool operator !=(MotionModel motion, MotionModel other)
+            {
+                return !(motion == other);
             }
 
             /// <summary>
@@ -647,10 +706,10 @@ namespace HandControl.Model
             public override int GetHashCode()
             {
                 var hashCode = 374632536;
-                hashCode = (hashCode * -1521134295) + this.IterableGesture.GetHashCode();
-                hashCode = (hashCode * -1521134295) + this.NumberOfGestureRepetitions.GetHashCode();
-                hashCode = (hashCode * -1521134295) + this.NumberOfMotions.GetHashCode();
-                hashCode = (hashCode * -1521134295) + EqualityComparer<DateTime>.Default.GetHashCode(this.TimeChange);
+                ////hashCode = (hashCode * -1521134295) + this.IterableGesture.GetHashCode();
+                ////hashCode = (hashCode * -1521134295) + this.NumberOfGestureRepetitions.GetHashCode();
+                ////hashCode = (hashCode * -1521134295) + this.NumberOfMotions.GetHashCode();
+                ////hashCode = (hashCode * -1521134295) + EqualityComparer<DateTime>.Default.GetHashCode(this.TimeChange);
                 return hashCode;
             }
 
@@ -662,6 +721,31 @@ namespace HandControl.Model
             public override bool Equals(object obj)
             {
                 return this.Equals(obj as InfoGestureModel);
+            }
+
+            public static bool operator ==(InfoGestureModel info, InfoGestureModel other)
+            {
+
+                bool isVehicleNull = info is null;
+                bool isOtherNull = other is null;
+
+                if (isVehicleNull && isOtherNull)
+                {
+                    return true;
+                }
+                else if (isVehicleNull)
+                {
+                    return false;
+                }
+                else
+                {
+                    return info.Equals(other);
+                }
+            }
+
+            public static bool operator !=(InfoGestureModel info, InfoGestureModel other)
+            {
+                return !(info == other);
             }
 
             /// <summary>

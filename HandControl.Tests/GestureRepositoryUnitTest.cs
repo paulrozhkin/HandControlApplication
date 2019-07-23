@@ -11,7 +11,7 @@ namespace HandControl.Tests
     using HandControl.Model.Repositories;
     using HandControl.Model.Repositories.Specifications;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
-    
+
     /// <summary>
     /// Unit test класса <see cref="GestureRepository"/>.
     /// Для тестирорования требуется отсутсвие данных на физическом носителе.

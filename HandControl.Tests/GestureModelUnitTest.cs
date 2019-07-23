@@ -46,5 +46,24 @@ namespace HandControl.Tests
             // Assert
             Assert.AreEqual(gesture, gestureDes);
         }
+
+        /// <summary>
+        /// Тест сравнения экземпляров <see cref="GestureModel"/>.
+        /// </summary>
+        [TestMethod]
+        public void EqualsGestureTest()
+        {
+            // Arrange
+            GestureModel gesture = GestureModel.GetDefault(Guid.NewGuid(), "Сжать");
+            GestureModel gestureClone = gesture.Clone() as GestureModel;
+            GestureModel gesture2 = GestureModel.GetDefault(Guid.NewGuid(), "Разжать");
+
+            // Act
+
+            // Assert
+            EqualityTests.TestUnequalObjects(gesture, gesture2);
+            EqualityTests.TestEqualObjects(gesture, gestureClone);
+            EqualityTests.TestAgainstNull(gesture);
+        }
     }
 }
