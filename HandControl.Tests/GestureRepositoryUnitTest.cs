@@ -7,10 +7,12 @@ namespace HandControl.Tests
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using HandControl.Model;
     using HandControl.Model.Repositories;
     using HandControl.Model.Repositories.GestureRepositories;
     using HandControl.Model.Repositories.GestureRepositories.Specifications;
+    using HandControl.Services;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
@@ -29,9 +31,10 @@ namespace HandControl.Tests
         public void AddTestSimple_TwoEnityAddToRepo()
         {
             // Arrange
+            Directory.Delete(System.AppDomain.CurrentDomain.BaseDirectory + "\\Data\\Gestures", true);
             GestureFileSystemRepository gestures = new GestureFileSystemRepository();
-            GestureModel gesture1 = GestureModel.GetDefault(Guid.NewGuid(), "Жест 1");
-            GestureModel gesture2 = GestureModel.GetDefault(Guid.NewGuid(), "Жест 2");
+            GestureModel gesture1 = GestureModel.GetDefault(Guid.NewGuid(), "AddTestSimple1");
+            GestureModel gesture2 = GestureModel.GetDefault(Guid.NewGuid(), "AddTestSimple2");
 
             // Act
             gestures.Add(gesture1);
@@ -51,8 +54,9 @@ namespace HandControl.Tests
         public void AddTestUpdate_EnityUpdateByIdInRepo()
         {
             // Arrange
-            string nameBase = "Name";
-            string nameNew = "NewName";
+            Directory.Delete(System.AppDomain.CurrentDomain.BaseDirectory + "\\Data\\Gestures", true);
+            string nameBase = "AddTestUpdateBase";
+            string nameNew = "AddTestUpdateNew";
             GestureFileSystemRepository gestures = new GestureFileSystemRepository();
             GestureModel gesture1 = GestureModel.GetDefault(Guid.NewGuid(), nameBase);
             GestureModel gesture2 = gesture1.Clone() as GestureModel;
@@ -77,9 +81,10 @@ namespace HandControl.Tests
         public void AddTestError_TwoEnityWithTheSameNameAddToRepo()
         {
             // Arrange
+            Directory.Delete(System.AppDomain.CurrentDomain.BaseDirectory + "\\Data\\Gestures", true);
             GestureFileSystemRepository gestures = new GestureFileSystemRepository();
-            GestureModel gesture1 = GestureModel.GetDefault(Guid.NewGuid(), "Жест 1");
-            GestureModel gesture2 = GestureModel.GetDefault(Guid.NewGuid(), "Жест 1");
+            GestureModel gesture1 = GestureModel.GetDefault(Guid.NewGuid(), "AddTestError1");
+            GestureModel gesture2 = GestureModel.GetDefault(Guid.NewGuid(), "AddTestError1");
             bool isThrowArgumentException = false;
 
             // Act
@@ -109,8 +114,8 @@ namespace HandControl.Tests
         public void RemoveTestSimple_TwoEnityAddToRepoAndOneDelite()
         {
             // Arrange
-            string nameFirst = "Name1";
-            string nameSecond = "Name2";
+            string nameFirst = "RemoveTestSimple1";
+            string nameSecond = "RemoveTestSimple2";
             GestureFileSystemRepository gestures = new GestureFileSystemRepository();
             GestureModel gesture1 = GestureModel.GetDefault(Guid.NewGuid(), nameFirst);
             GestureModel gesture2 = GestureModel.GetDefault(Guid.NewGuid(), nameSecond);
@@ -136,8 +141,8 @@ namespace HandControl.Tests
         public void QueryTestSimple_TwoEnityAndFirstGetByNameAndID()
         {
             // Arrange
-            string nameFirst = "Name1";
-            string nameSecond = "Name2";
+            string nameFirst = "QueryTestSimple1";
+            string nameSecond = "QueryTestSimple2";
             GestureFileSystemRepository gestures = new GestureFileSystemRepository();
             GestureModel gesture1 = GestureModel.GetDefault(Guid.NewGuid(), nameFirst);
             GestureModel gesture2 = GestureModel.GetDefault(Guid.NewGuid(), nameSecond);
