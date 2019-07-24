@@ -9,11 +9,12 @@ namespace HandControl.Tests
     using System.Collections.Generic;
     using HandControl.Model;
     using HandControl.Model.Repositories;
-    using HandControl.Model.Repositories.Specifications;
+    using HandControl.Model.Repositories.GestureRepositories;
+    using HandControl.Model.Repositories.GestureRepositories.Specifications;
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     /// <summary>
-    /// Unit test класса <see cref="GestureRepository"/>.
+    /// Unit test класса <see cref="GestureFileSystemRepository"/>.
     /// Для тестирорования требуется отсутсвие данных на физическом носителе.
     /// Выполняется проверка только хранение в памяти, а не в файловой системе.
     /// </summary>
@@ -28,7 +29,7 @@ namespace HandControl.Tests
         public void AddTestSimple_TwoEnityAddToRepo()
         {
             // Arrange
-            GestureRepository gestures = new GestureRepository();
+            GestureFileSystemRepository gestures = new GestureFileSystemRepository();
             GestureModel gesture1 = GestureModel.GetDefault(Guid.NewGuid(), "Жест 1");
             GestureModel gesture2 = GestureModel.GetDefault(Guid.NewGuid(), "Жест 2");
 
@@ -52,7 +53,7 @@ namespace HandControl.Tests
             // Arrange
             string nameBase = "Name";
             string nameNew = "NewName";
-            GestureRepository gestures = new GestureRepository();
+            GestureFileSystemRepository gestures = new GestureFileSystemRepository();
             GestureModel gesture1 = GestureModel.GetDefault(Guid.NewGuid(), nameBase);
             GestureModel gesture2 = gesture1.Clone() as GestureModel;
             gesture2.Name = nameNew;
@@ -76,7 +77,7 @@ namespace HandControl.Tests
         public void AddTestError_TwoEnityWithTheSameNameAddToRepo()
         {
             // Arrange
-            GestureRepository gestures = new GestureRepository();
+            GestureFileSystemRepository gestures = new GestureFileSystemRepository();
             GestureModel gesture1 = GestureModel.GetDefault(Guid.NewGuid(), "Жест 1");
             GestureModel gesture2 = GestureModel.GetDefault(Guid.NewGuid(), "Жест 1");
             bool isThrowArgumentException = false;
@@ -110,7 +111,7 @@ namespace HandControl.Tests
             // Arrange
             string nameFirst = "Name1";
             string nameSecond = "Name2";
-            GestureRepository gestures = new GestureRepository();
+            GestureFileSystemRepository gestures = new GestureFileSystemRepository();
             GestureModel gesture1 = GestureModel.GetDefault(Guid.NewGuid(), nameFirst);
             GestureModel gesture2 = GestureModel.GetDefault(Guid.NewGuid(), nameSecond);
 
@@ -137,7 +138,7 @@ namespace HandControl.Tests
             // Arrange
             string nameFirst = "Name1";
             string nameSecond = "Name2";
-            GestureRepository gestures = new GestureRepository();
+            GestureFileSystemRepository gestures = new GestureFileSystemRepository();
             GestureModel gesture1 = GestureModel.GetDefault(Guid.NewGuid(), nameFirst);
             GestureModel gesture2 = GestureModel.GetDefault(Guid.NewGuid(), nameSecond);
             gestures.Add(gesture1);

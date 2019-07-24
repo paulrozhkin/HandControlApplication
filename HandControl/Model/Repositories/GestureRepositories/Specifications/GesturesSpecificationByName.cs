@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HandControl.Model.Repositories.Specifications
+namespace HandControl.Model.Repositories.GestureRepositories.Specifications
 {
     public class GesturesSpecificationByName : IEntitySpecification<GestureModel>
     {

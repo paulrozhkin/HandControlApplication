@@ -1,24 +1,24 @@
-﻿// --------------------------------------------------------------------------------------
+﻿// -------------------------------------------------------------------------------------
 // <copyright file = "GestureRepository.cs" company = "Студенческий проект HandControl‎"> 
 //      Copyright © 2019 HandControl. All rights reserved.
 // </copyright> 
 // -------------------------------------------------------------------------------------
-namespace HandControl.Model.Repositories
+namespace HandControl.Model.Repositories.GestureRepositories
 {
 
     using System;
     using System.Collections.Generic;
     using HandControl.Services;
-
+    
     /// <summary>
     /// Репозиторий, содержащий жесты, хранимые в системе.
     /// </summary>
-    public class GestureRepository : IRepository<GestureModel>
+    public class GestureFileSystemRepository : IGestureRepository
     {
         /// <summary>
         /// Коллекция жестов.
         /// </summary>
-        private List<GestureModel> gesturesField = null;
+        private List<GestureModel> gesturesCacheField = null;
 
         private List<GestureModel> Gestures
         {
@@ -26,12 +26,12 @@ namespace HandControl.Model.Repositories
             {
                 lock (this)
                 {
-                    if (this.gesturesField == null)
+                    if (this.gesturesCacheField == null)
                     {
-                        this.gesturesField = this.LoadGestures();
+                        this.gesturesCacheField = this.LoadGestures();
                     }
 
-                    return this.gesturesField;
+                    return this.gesturesCacheField;
                 }
             }
         }

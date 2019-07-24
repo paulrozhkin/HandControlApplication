@@ -110,12 +110,14 @@
     </ApplicationDefinition>
     <Compile Include="Model\BaseModel.cs" />
     <Compile Include="Model\Device.cs" />
+    <Compile Include="Model\Repositories\GestureRepositories\GestureRepositoryFactory.cs" />
     <Compile Include="Model\Repositories\IEntitySpecification.cs" />
-    <Compile Include="Model\Repositories\GestureRepository.cs" />
+    <Compile Include="Model\Repositories\GestureRepositories\GestureFileSystemRepository.cs" />
+    <Compile Include="Model\Repositories\GestureRepositories\IGestureRepository.cs" />
     <Compile Include="Model\Repositories\IRepository.cs" />
-    <Compile Include="Model\Repositories\Specifications\GesturesSpecificationByAll.cs" />
-    <Compile Include="Model\Repositories\Specifications\GesturesSpecificationById.cs" />
-    <Compile Include="Model\Repositories\Specifications\GesturesSpecificationByName.cs" />
+    <Compile Include="Model\Repositories\GestureRepositories\Specifications\GesturesSpecificationByAll.cs" />
+    <Compile Include="Model\Repositories\GestureRepositories\Specifications\GesturesSpecificationById.cs" />
+    <Compile Include="Model\Repositories\GestureRepositories\Specifications\GesturesSpecificationByName.cs" />
     <Compile Include="Model\IBinarySerialize.cs" />
     <Compile Include="Services\IODevice\IODeviceBluetooth.cs" />
     <Compile Include="Services\IReceiverBluetoothService.cs" />
