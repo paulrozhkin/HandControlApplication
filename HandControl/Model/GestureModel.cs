@@ -39,7 +39,7 @@ namespace HandControl.Model
         /// <param name="nameGesture">Имя жеста.</param>
         private GestureModel(Guid id, string nameGesture)
         {
-            this.ID = id;
+            this.Id = id;
             this.Name = nameGesture;
         }
 
@@ -55,7 +55,7 @@ namespace HandControl.Model
         /// <summary>
         /// Gets or sets уникальный идентификатор жеста.
         /// </summary>
-        public Guid ID { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// Gets or sets имя жеста, должно быть уникальным.
@@ -103,82 +103,8 @@ namespace HandControl.Model
             return result;
         }
 
-        /// <summary>
-        /// Извлечение списка жестов системы.
-        /// </summary>
-        /// <returns>Коллекция жестов хранимых в системе.</returns>
-        public static ObservableCollection<GestureModel> GetGestures()
-        {
-            ObservableCollection<GestureModel> sessionLoaded = new ObservableCollection<GestureModel>();
-            foreach (var item in PathManager.GetGesturesFilesPaths())
-            {
-                GestureModel loadedCommand = (GestureModel)JsonSerDer.LoadObject<GestureModel>(item);
-
-                if (loadedCommand.InfoGesture == null)
-                {
-                    loadedCommand.InfoGesture = InfoGestureModel.GetDefault();
-                }
-
-                sessionLoaded.Add(loadedCommand);
-            }
-
-            return sessionLoaded;
-        }
-
-        /// <summary>
-        /// Полное клонирование экземпляра CommandModel.
-        /// </summary>
-        /// <returns>Клонированный экземпляр CommandModel.</returns>
-        public object Clone()
-        {
-            var newDataMotion = new List<MotionModel>();
-
-            if (this.ListMotions != null)
-            {
-                foreach (var action in this.ListMotions)
-                {
-                    newDataMotion.Add((MotionModel)action.Clone());
-                }
-            }
-
-            return new GestureModel(this.ID, (string)this.Name.Clone())
-            {
-                InfoGesture = (InfoGestureModel)this.InfoGesture.Clone(),
-                ListMotions = newDataMotion
-            };
-        }
-
-        /// <summary>
-        /// Получить хэш код экземпляра класса<see cref="GestureModel"/>.
-        /// </summary>
-        /// <returns>HashCode экземпляра<see cref= "GestureModel"/>.</returns>
-        public override int GetHashCode()
-        {
-            var hashCode = -677228334;
-            hashCode = (hashCode * -1521134295) + this.ID.GetHashCode();
-            ////hashCode = (hashCode * -1521134295) + EqualityComparer<string>.Default.GetHashCode(this.Name);
-            hashCode = (hashCode * -1521134295) + this.InfoGesture.GetHashCode();
-            for (int i = 0; i < this.ListMotions.Count; i++)
-            {
-                hashCode = (hashCode * -1521134295) + this.ListMotions[i].GetHashCode();
-            }
-
-            return hashCode;
-        }
-
-        /// <summary>
-        /// Сравнение экземпляра класса <see cref="GestureModel"/> с передаваемым объектом.
-        /// </summary>
-        /// <param name="obj">Передаваемый объект.</param>
-        /// <returns>True, если экземпляры равны.</returns>
-        public override bool Equals(object obj)
-        {
-            return this.Equals(obj as GestureModel);
-        }
-
         public static bool operator ==(GestureModel gesture, GestureModel other)
         {
-
             bool isVehicleNull = gesture is null;
             bool isOtherNull = other is null;
 
@@ -202,6 +128,57 @@ namespace HandControl.Model
         }
 
         /// <summary>
+        /// Полное клонирование экземпляра CommandModel.
+        /// </summary>
+        /// <returns>Клонированный экземпляр CommandModel.</returns>
+        public object Clone()
+        {
+            var newDataMotion = new List<MotionModel>();
+
+            if (this.ListMotions != null)
+            {
+                foreach (var action in this.ListMotions)
+                {
+                    newDataMotion.Add((MotionModel)action.Clone());
+                }
+            }
+
+            return new GestureModel(this.Id, (string)this.Name.Clone())
+            {
+                InfoGesture = (InfoGestureModel)this.InfoGesture.Clone(),
+                ListMotions = newDataMotion
+            };
+        }
+
+        /// <summary>
+        /// Получить хэш код экземпляра класса<see cref="GestureModel"/>.
+        /// </summary>
+        /// <returns>HashCode экземпляра<see cref= "GestureModel"/>.</returns>
+        public override int GetHashCode()
+        {
+            var hashCode = -677228334;
+            hashCode = (hashCode * -1521134295) + this.Id.GetHashCode();
+            ////hashCode = (hashCode * -1521134295) + EqualityComparer<string>.Default.GetHashCode(this.Name);
+            hashCode = (hashCode * -1521134295) + this.InfoGesture.GetHashCode();
+            for (int i = 0; i < this.ListMotions.Count; i++)
+            {
+                hashCode = (hashCode * -1521134295) + this.ListMotions[i].GetHashCode();
+            }
+
+            return hashCode;
+        }
+
+        /// <summary>
+        /// Сравнение экземпляра класса <see cref="GestureModel"/> с передаваемым объектом.
+        /// </summary>
+        /// <param name="obj">Передаваемый объект.</param>
+        /// <returns>True, если экземпляры равны.</returns>
+        public override bool Equals(object obj)
+        {
+            return this.Equals(obj as GestureModel);
+        }
+
+        /// <summary>
         /// Выполняет сериализацию экземпляра <see cref="GestureModel"/> в бинарный формат.
         /// </summary>
         /// <returns>Экземпляр <see cref="GestureModel"/>, представленный в виде бинарного потока.</returns>
@@ -211,7 +188,7 @@ namespace HandControl.Model
             {
                 using (BinaryWriter writer = new BinaryWriter(m))
                 {
-                    writer.Write(this.ID.ToByteArray());
+                    writer.Write(this.Id.ToByteArray());
                     byte[] nameBts = Encoding.UTF8.GetBytes(this.Name);
                     writer.Write((byte)nameBts.Length);
                     writer.Write(nameBts);
@@ -244,7 +221,7 @@ namespace HandControl.Model
             {
                 using (BinaryReader reader = new BinaryReader(m))
                 {
-                    this.ID = new Guid(reader.ReadBytes(16));
+                    this.Id = new Guid(reader.ReadBytes(16));
                     int lengthName = reader.ReadByte();
                     this.Name = Encoding.UTF8.GetString(reader.ReadBytes(lengthName));
                     this.InfoGesture.BinaryDesserialize(reader.ReadBytes(11));
@@ -259,11 +236,6 @@ namespace HandControl.Model
                 }
             }
         }
-
-       //bool IEquatable<GestureModel>.Equals(GestureModel other)
-       // {
-       //     throw new NotImplementedException();
-       // }
 
         /// <summary>
         /// Сравнение двух экземпляров класса <see cref="GestureModel"/>.
@@ -282,8 +254,8 @@ namespace HandControl.Model
                 (this.Name != null &&
                 this.Name.Equals(other.Name)))
                 && (
-                object.ReferenceEquals(this.ID, other.ID) ||
-                this.ID.Equals(other.ID))
+                object.ReferenceEquals(this.Id, other.Id) ||
+                this.Id.Equals(other.Id))
                 && (
                 object.ReferenceEquals(this.InfoGesture, other.InfoGesture) ||
                 (this.InfoGesture != null &&
@@ -299,7 +271,7 @@ namespace HandControl.Model
         /// <summary>
         /// Класс содержащий единичное положение протеза.
         /// </summary>
-        public class MotionModel : BaseModel, ICloneable, IBinarySerialize
+        public class MotionModel : BaseModel, ICloneable, IBinarySerialize, IEquatable<MotionModel>
         {
             #region Constructors
             /// <summary>
@@ -379,6 +351,30 @@ namespace HandControl.Model
             #endregion
 
             #region Methods
+            public static bool operator ==(MotionModel motion, MotionModel other)
+            {
+                bool isVehicleNull = motion is null;
+                bool isOtherNull = other is null;
+
+                if (isVehicleNull && isOtherNull)
+                {
+                    return true;
+                }
+                else if (isVehicleNull)
+                {
+                    return false;
+                }
+                else
+                {
+                    return motion.Equals(other);
+                }
+            }
+
+            public static bool operator !=(MotionModel motion, MotionModel other)
+            {
+                return !(motion == other);
+            }
+
             /// <summary>
             /// Фабричный метод для получения экземпляра MotionModel с дефолтными параметрами.
             /// Для создания экземпляра требуется передача Id действия.
@@ -511,14 +507,6 @@ namespace HandControl.Model
             public override int GetHashCode()
             {
                 var hashCode = 1587829154;
-                ////hashCode = (hashCode * -1521134295) + this.Id.GetHashCode();
-                ////hashCode = (hashCode * -1521134295) + this.ThumbFinger.GetHashCode();
-                ////hashCode = (hashCode * -1521134295) + this.PointerFinger.GetHashCode();
-                ////hashCode = (hashCode * -1521134295) + this.MiddleFinger.GetHashCode();
-                ////hashCode = (hashCode * -1521134295) + this.RingFinder.GetHashCode();
-                ////hashCode = (hashCode * -1521134295) + this.LittleFinger.GetHashCode();
-                ////hashCode = (hashCode * -1521134295) + this.StatePosBrush.GetHashCode();
-                ////hashCode = (hashCode * -1521134295) + this.DelMotion.GetHashCode();
                 return hashCode;
             }
 
@@ -532,37 +520,12 @@ namespace HandControl.Model
                 return this.Equals(obj as MotionModel);
             }
 
-            public static bool operator ==(MotionModel motion, MotionModel other)
-            {
-
-                bool isVehicleNull = motion is null;
-                bool isOtherNull = other is null;
-
-                if (isVehicleNull && isOtherNull)
-                {
-                    return true;
-                }
-                else if (isVehicleNull)
-                {
-                    return false;
-                }
-                else
-                {
-                    return motion.Equals(other);
-                }
-            }
-
-            public static bool operator !=(MotionModel motion, MotionModel other)
-            {
-                return !(motion == other);
-            }
-
             /// <summary>
             /// Сравнение двух экземпляров класса <see cref="MotionModel"/>.
             /// </summary>
             /// <param name="other">Экземпляр класса <see cref="MotionModel"/> для сравнения.</param>
             /// <returns>True, если экземпляры равны.</returns>
-            private bool Equals(MotionModel other)
+            public bool Equals(MotionModel other)
             {
                 if (other == null)
                 {
@@ -600,7 +563,7 @@ namespace HandControl.Model
         /// <summary>
         /// Класс содержащий информацию о жесте <see cref="GestureModel"/>.
         /// </summary>
-        public class InfoGestureModel : BaseModel, ICloneable, IBinarySerialize
+        public class InfoGestureModel : BaseModel, ICloneable, IBinarySerialize, IEquatable<InfoGestureModel>
         {
             #region Constructors
             /// <summary>
@@ -650,6 +613,30 @@ namespace HandControl.Model
                 return result;
             }
 
+            public static bool operator ==(InfoGestureModel info, InfoGestureModel other)
+            {
+                bool isVehicleNull = info is null;
+                bool isOtherNull = other is null;
+
+                if (isVehicleNull && isOtherNull)
+                {
+                    return true;
+                }
+                else if (isVehicleNull)
+                {
+                    return false;
+                }
+                else
+                {
+                    return info.Equals(other);
+                }
+            }
+
+            public static bool operator !=(InfoGestureModel info, InfoGestureModel other)
+            {
+                return !(info == other);
+            }
+
             /// <summary>
             /// Выполняет сериализацию экземпляра <see cref="InfoGestureModel"/> в бинарный формат.
             /// </summary>
@@ -660,8 +647,7 @@ namespace HandControl.Model
                 {
                     using (BinaryWriter writer = new BinaryWriter(m))
                     {
-                        //double unixTime = (this.TimeChange.ToUniversalTime() - new DateTime(1970, 1, 1)).TotalSeconds;
-                        double unixTime = (this.TimeChange- new DateTime(1970, 1, 1)).TotalSeconds;
+                        double unixTime = (this.TimeChange - new DateTime(1970, 1, 1)).TotalSeconds;
                         writer.Write(unixTime);
                         writer.Write(Convert.ToByte(this.IterableGesture));
                         writer.Write((byte)this.NumberOfGestureRepetitions);
@@ -723,37 +709,12 @@ namespace HandControl.Model
                 return this.Equals(obj as InfoGestureModel);
             }
 
-            public static bool operator ==(InfoGestureModel info, InfoGestureModel other)
-            {
-
-                bool isVehicleNull = info is null;
-                bool isOtherNull = other is null;
-
-                if (isVehicleNull && isOtherNull)
-                {
-                    return true;
-                }
-                else if (isVehicleNull)
-                {
-                    return false;
-                }
-                else
-                {
-                    return info.Equals(other);
-                }
-            }
-
-            public static bool operator !=(InfoGestureModel info, InfoGestureModel other)
-            {
-                return !(info == other);
-            }
-
             /// <summary>
             /// Сравнение двух экземпляров класса <see cref="InfoGestureModel"/>.
             /// </summary>
             /// <param name="other">Экземпляр класса <see cref="InfoGestureModel"/> для сравнения.</param>
             /// <returns>True, если экземпляры равны.</returns>
-            private bool Equals(InfoGestureModel other)
+            public bool Equals(InfoGestureModel other)
             {
                 if (other == null)
                 {

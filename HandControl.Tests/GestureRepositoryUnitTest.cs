@@ -145,7 +145,7 @@ namespace HandControl.Tests
             gestures.Add(gesture2);
 
             // Act
-            IEntitySpecification<GestureModel> specGetById = new GesturesSpecificationById(gesture1.ID);
+            IEntitySpecification<GestureModel> specGetById = new GesturesSpecificationById(gesture1.Id);
             List<GestureModel> gesturesInRepoFirstTest = new List<GestureModel>(gestures.Query(specGetById));
 
             IEntitySpecification<GestureModel> specGetByName = new GesturesSpecificationByName(gesture2.Name);

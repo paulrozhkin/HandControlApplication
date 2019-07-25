@@ -45,7 +45,7 @@ namespace HandControl.Model.Repositories.GestureRepositories
                 bool isContains = false;
                 for (int i = 0; i < this.Gestures.Count; i++)
                 {
-                    if (gesture.ID.Equals(this.Gestures[i].ID))
+                    if (gesture.Id.Equals(this.Gestures[i].Id))
                     {
                         this.Gestures[i] = gesture;
                         isContains = true;
@@ -67,7 +67,7 @@ namespace HandControl.Model.Repositories.GestureRepositories
 
                 ////TODO: Сохранение в файловую систему и синхронизация.
                 byte[] data = gesture.BinarySerialize();
-                FileSystemFacade.WriteBinaryData(PathManager.GetGesturePath(gesture.ID.ToString()), data);
+                FileSystemFacade.WriteBinaryData(PathManager.GetGesturePath(gesture.Id.ToString()), data);
 
             }
         }
@@ -101,7 +101,7 @@ namespace HandControl.Model.Repositories.GestureRepositories
                 else
                 {
                     ////TODO: Удаление из файловой системы и синхронизация.
-                    FileSystemFacade.DeleteFolder(PathManager.GetGestureFolderPath(gesture.ID.ToString()));
+                    FileSystemFacade.DeleteFolder(PathManager.GetGestureFolderPath(gesture.Id.ToString()));
                 }
             }
         }

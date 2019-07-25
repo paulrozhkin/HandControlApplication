@@ -17,7 +17,7 @@ namespace HandControl.Model.Repositories.GestureRepositories.Specifications
 
         public bool Specified(GestureModel entity)
         {
-            return this.expectedIdField.Equals(entity.ID);
+            return this.expectedIdField.Equals(entity.Id);
         }
     }
 }

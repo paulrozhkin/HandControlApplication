@@ -20,6 +20,7 @@ namespace HandControl.Model
     [Serializable]
     public abstract class BaseModel : INotifyPropertyChanged
     {
+#pragma warning disable
         /// <summary>
         /// Имплементация интерфейса INotifyPropertyChanged.
         /// </summary>

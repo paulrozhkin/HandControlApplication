@@ -48,6 +48,7 @@ namespace HandControl.Services
         #endregion
 
         #region Events
+#pragma warning disable
         /// <summary>
         /// Имплементация INotifyPropertyChanged.
         /// </summary>

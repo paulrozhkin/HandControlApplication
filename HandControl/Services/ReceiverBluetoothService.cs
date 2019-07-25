@@ -117,7 +117,7 @@ namespace Bluetooth.Services
                     }
                 }
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                // todo handle the exception
             }

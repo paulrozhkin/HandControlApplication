@@ -15,7 +15,7 @@ namespace HandControl.Services
     using HandControl.Services;
 
     /// <summary>
-    /// Класс, предоставляющий API для управления устройствами системы.
+    /// Класс, предоставляющий API для управления протезом руки.
     /// Является имплементацией паттерна Singleton.
     /// \version 1.0
     /// \date Январь 2019 года
@@ -62,6 +62,7 @@ namespace HandControl.Services
         #endregion
 
         #region Events
+#pragma warning disable
         /// <summary>
         /// Имплементация интерфейса INotifyPropertyChanged.
         /// </summary>

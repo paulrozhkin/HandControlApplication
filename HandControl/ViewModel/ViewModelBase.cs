@@ -17,6 +17,7 @@ namespace HandControl.ViewModel
     /// </summary>
     public abstract class ViewModelBase : INotifyPropertyChanged
     {
+#pragma warning disable
         /// <summary>
         /// Имплементация интерфейса INotifyPropertyChanged.
         /// </summary>
