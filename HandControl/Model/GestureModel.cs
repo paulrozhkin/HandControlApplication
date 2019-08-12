@@ -230,7 +230,7 @@ namespace HandControl.Model
                     for (int i = 0; i < this.InfoGesture.NumberOfMotions; i++)
                     {
                         MotionModel motion = MotionModel.GetDefault(i);
-                        motion.BinaryDesserialize(reader.ReadBytes(8));
+                        motion.BinaryDesserialize(reader.ReadBytes(9));
                         this.ListMotions.Add(motion);
                     }
                 }
@@ -451,7 +451,7 @@ namespace HandControl.Model
                         writer.Write((byte)this.RingFinder);
                         writer.Write((byte)this.LittleFinger);
                         writer.Write((byte)this.ThumbFinger);
-                        writer.Write((byte)this.StatePosBrush);
+                        writer.Write((ushort)this.StatePosBrush);
                         writer.Write((ushort)this.DelMotion);
                     }
 
@@ -474,7 +474,7 @@ namespace HandControl.Model
                         this.RingFinder = reader.ReadByte();
                         this.LittleFinger = reader.ReadByte();
                         this.ThumbFinger = reader.ReadByte();
-                        this.StatePosBrush = reader.ReadByte();
+                        this.StatePosBrush = reader.ReadUInt16();
                         this.DelMotion = reader.ReadUInt16();
                     }
                 }
