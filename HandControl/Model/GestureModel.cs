@@ -451,7 +451,7 @@ namespace HandControl.Model
                         writer.Write((byte)this.RingFinder);
                         writer.Write((byte)this.LittleFinger);
                         writer.Write((byte)this.ThumbFinger);
-                        writer.Write((byte)this.StatePosBrush);
+                        writer.Write((ushort)this.StatePosBrush);
                         writer.Write((ushort)this.DelMotion);
                     }
 
@@ -638,6 +638,26 @@ namespace HandControl.Model
             }
 
             /// <summary>
+            /// Выполняет преобразование текущей даты и времени изменения в Unix время.
+            /// </summary>
+            /// <returns>Unix time.</returns>
+            private double TimeChangeToUnix()
+            {
+                DateTime origin = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+                TimeSpan diff = this.TimeChange.ToUniversalTime() - origin;
+                return Math.Floor(diff.TotalSeconds);
+            }
+
+            /// <summary>
+            /// Выполняет установку последнего времени изменения из unix времени.
+            /// </summary>
+            private void TimeChangeFromUnix(double dateTime)
+            {
+                DateTime outer = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+                this.TimeChange = outer.AddSeconds(dateTime).ToLocalTime();
+            }
+
+            /// <summary>
             /// Выполняет сериализацию экземпляра <see cref="InfoGestureModel"/> в бинарный формат.
             /// </summary>
             /// <returns>Экземпляр <see cref="InfoGestureModel"/>, представленный в виде бинарного потока.</returns>
@@ -647,8 +667,9 @@ namespace HandControl.Model
                 {
                     using (BinaryWriter writer = new BinaryWriter(m))
                     {
-                        double unixTime = (this.TimeChange - new DateTime(1970, 1, 1)).TotalSeconds;
-                        writer.Write(unixTime);
+                        //double unixTime = (this.TimeChange - new DateTime(1970, 1, 1)).TotalSeconds;
+                        
+                        writer.Write((uint)this.TimeChangeToUnix());
                         writer.Write(Convert.ToByte(this.IterableGesture));
                         writer.Write((byte)this.NumberOfGestureRepetitions);
                         writer.Write((byte)this.NumberOfMotions);
@@ -668,7 +689,7 @@ namespace HandControl.Model
                 {
                     using (BinaryReader reader = new BinaryReader(m))
                     {
-                        this.TimeChange = (new DateTime(1970, 1, 1, 0, 0, 0, 0)).AddSeconds(reader.ReadDouble());
+                        TimeChangeFromUnix(reader.ReadUInt32());
                         this.IterableGesture = Convert.ToBoolean(reader.ReadByte());
                         this.NumberOfGestureRepetitions = reader.ReadByte();
                         this.NumberOfMotions = reader.ReadByte();
