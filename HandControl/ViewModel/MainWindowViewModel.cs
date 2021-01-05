@@ -3,405 +3,406 @@
 //      Copyright © 2019 HandControl. All rights reserved.
 // </copyright> 
 // -------------------------------------------------------------------------------------
+
+using System;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
+using System.Windows.Data;
+using System.Windows.Input;
+using HandControl.Model;
+using HandControl.Model.Repositories;
+using HandControl.Model.Repositories.GestureRepositories;
+using HandControl.Model.Repositories.GestureRepositories.Specifications;
+using HandControl.Services;
+
 namespace HandControl.ViewModel
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.ComponentModel;
-    using System.Linq;
-    using System.Windows;
-    using System.Windows.Data;
-    using System.Windows.Input;
-    using HandControl.Model;
-    using HandControl.Model.Repositories;
-    using HandControl.Model.Repositories.GestureRepositories;
-    using HandControl.Model.Repositories.GestureRepositories.Specifications;
-    using HandControl.Services;
-
     /// <summary>
-    /// Класс модель-представление главного окна программы. Предоставлет логику для работы с конфигурацией жестов протеза.
+    ///     Класс модель-представление главного окна программы. Предоставлет логику для работы с конфигурацией жестов протеза.
     /// </summary>
     public class MainWindowViewModel : ViewModelBase
     {
         #region Fields
-        /// <summary>
-        /// Поле искомого текста (имени жеста).
-        /// </summary>
-        private string searchTextField;
 
         /// <summary>
-        /// Выбранный жест.
+        ///     Поле искомого текста (имени жеста).
         /// </summary>
-        private GestureModel selectedGestureField;
-       
-        /// <summary>
-        /// Репозиторий жестов системы.
-        /// </summary> 
-        private IGestureRepository gestureRepositoryField;
+        private string _searchTextField;
 
         /// <summary>
-        /// Коллекция действий выбранного жеста <see cref="SelectedGesture"/>.
+        ///     Выбранный жест.
         /// </summary>
-        private ObservableCollection<GestureModel.MotionModel> listMotionsField = new ObservableCollection<GestureModel.MotionModel>();
+        private GestureModel _selectedGestureField;
+
+        /// <summary>
+        ///     Репозиторий жестов системы.
+        /// </summary>
+        private readonly IGestureRepository _gestureRepositoryField;
+
+        /// <summary>
+        ///     Коллекция действий выбранного жеста <see cref="SelectedGesture" />.
+        /// </summary>
+        private ObservableCollection<GestureModel.MotionModel> _listMotionsField =
+            new ObservableCollection<GestureModel.MotionModel>();
+
         #endregion
 
         #region Constructor
         /// <summary>
-        /// Initializes a new instance of the <see cref="MainWindowViewModel" /> class.
+        ///     Initializes a new instance of the <see cref="MainWindowViewModel" /> class.
         /// </summary>
         public MainWindowViewModel()
         {
-            this.Communication = CommunicationManager.GetInstance();
-            this.Communication.СonnectedDevices.ConnectDevice();
-
+            Prosthetic = ProstheticManager.GetInstance();
+            Prosthetic.IsConnectionChanged.Subscribe(ProstheticConnectionChangeHandler);
+            Prosthetic.Connect();
+            
             IEntitySpecification<GestureModel> specGetByAll = new GesturesSpecificationByAll();
 
-            this.gestureRepositoryField = new GestureRepositoryFactory().Create();
-            this.ListGesture = new ObservableCollection<GestureModel>(this.gestureRepositoryField.Query(specGetByAll));
-            this.ListGestureView = CollectionViewSource.GetDefaultView(this.ListGesture);
+            _gestureRepositoryField = new GestureRepositoryFactory().Create();
+            ListGesture = new ObservableCollection<GestureModel>(_gestureRepositoryField.Query(specGetByAll));
+            ListGestureView = CollectionViewSource.GetDefaultView(ListGesture);
 
-            SortGestures(this.ListGesture, 0, this.ListGesture.Count() - 1);
+            SortGestures(ListGesture, 0, ListGesture.Count() - 1);
 
-            //// CommunicationManager.MotionListRequestCommand();
-            //// CommunicationManager.SaveCommandsToVoice(Commands);
-            //// CommunicationManager.SaveCommands(commands);
-            //// CommunicationManager.ExecuteTheCommand("Сжать");
-            //// CommunicationManager.ExecuteTheCommand("ModeVoice");
-            //// CommunicationManager.ExecuteTheCommand(commands[0]);
-            //// CommunicationManager.ExecuteTheRaw(15000);
+            //var bytes = this.ListGesture[0].BinarySerialize();
+            //ProstheticManager.GetInstance().ExecuteTheGesture("asd");
+            //// ProstheticManager.MotionListRequestCommand();
+            //// ProstheticManager.SaveCommandsToVoice(Commands);
+            //// ProstheticManager.SaveCommands(commands);
+
+            //// ProstheticManager.ExecuteTheCommand("ModeVoice");
+            //// ProstheticManager.ExecuteTheCommand(commands[0]);
+            //// ProstheticManager.ExecuteTheRaw(15000);
         }
+
         #endregion
 
         #region Properties
-        /// <summary>
-        /// Gets or sets интерфейс для управления протезом руки.
-        /// </summary>
-        public CommunicationManager Communication { get; set; }
 
         /// <summary>
-        /// Gets or sets Список жестов протеза.
+        ///     Gets or sets состояние подключения протеза.
+        /// </summary>
+        public bool IsConnected { get; private set; }
+
+        /// <summary>
+        ///     Gets or sets интерфейс для управления протезом руки.
+        /// </summary>
+        public ProstheticManager Prosthetic { get; set; }
+
+        /// <summary>
+        ///     Gets or sets Список жестов протеза.
         /// </summary>
         public ObservableCollection<GestureModel> ListGesture { get; set; }
 
         /// <summary>
-        /// Gets or sets управление отображением коллекции <see cref="ListGesture"/>.
+        ///     Gets or sets управление отображением коллекции <see cref="ListGesture" />.
         /// </summary>
         public ICollectionView ListGestureView { get; set; }
 
         /// <summary>
-        /// Gets or sets коллекция действий выбранного жеста <see cref="SelectedGesture"/>.
+        ///     Gets or sets коллекция действий выбранного жеста <see cref="SelectedGesture" />.
         /// </summary>
         public ObservableCollection<GestureModel.MotionModel> SelectedListMotions
         {
-            get
-            {
-                return this.listMotionsField;
-            }
+            get => _listMotionsField;
 
             set
             {
-                this.listMotionsField = new ObservableCollection<GestureModel.MotionModel>();
+                _listMotionsField = new ObservableCollection<GestureModel.MotionModel>();
                 if (value != null)
-                {
-                    foreach (GestureModel.MotionModel action in value)
-                    {
-                        this.listMotionsField.Add((GestureModel.MotionModel)action.Clone());
-                    }
-                }
+                    foreach (var action in value)
+                        _listMotionsField.Add((GestureModel.MotionModel) action.Clone());
 
-                this.SelectedMotion = null;
+                SelectedMotion = null;
             }
         }
 
         /// <summary>
-        /// Gets or sets жест, выбранный пользователем в графическом интерфейсе.
+        ///     Gets or sets жест, выбранный пользователем в графическом интерфейсе.
         /// </summary>
         public GestureModel SelectedGesture
         {
-            get
-            {
-                return this.selectedGestureField;
-            }
+            get => _selectedGestureField;
 
             set
             {
                 if (value != null)
                 {
-                    this.selectedGestureField = value.Clone() as GestureModel;
-                    this.SelectedListMotions = new ObservableCollection<GestureModel.MotionModel>(this.selectedGestureField.ListMotions);
+                    _selectedGestureField = value.Clone() as GestureModel;
+                    SelectedListMotions =
+                        new ObservableCollection<GestureModel.MotionModel>(_selectedGestureField.ListMotions);
                 }
                 else
                 {
-                    this.SelectedListMotions = null;
-                    this.selectedGestureField = null;
+                    SelectedListMotions = null;
+                    _selectedGestureField = null;
                 }
             }
         }
 
         /// <summary>
-        /// Gets or sets предполагаемое имя жеста, искомого пользователем.
-        /// Выполняет управлением отображением <see cref="ListGesture"/> с помощью <see cref="ListGestureView"/>.
+        ///     Gets or sets предполагаемое имя жеста, искомого пользователем.
+        ///     Выполняет управлением отображением <see cref="ListGesture" /> с помощью <see cref="ListGestureView" />.
         /// </summary>
         public string SearchText
         {
-            get
-            {
-                return this.searchTextField;
-            }
+            get => _searchTextField;
 
             set
             {
-                this.searchTextField = value;
+                _searchTextField = value;
 
-                this.ListGestureView.Filter = (obj) =>
+                ListGestureView.Filter = obj =>
                 {
-                    if (obj is GestureModel gesture)
-                    {
-                        return gesture.Name.ToLower().Contains(this.searchTextField.ToLower());
-                    }
+                    if (obj is GestureModel gesture) return gesture.Name.ToLower().Contains(_searchTextField.ToLower());
 
                     return false;
                 };
 
-                this.ListGestureView.Refresh();
+                ListGestureView.Refresh();
             }
         }
 
         /// <summary>
-        /// Gets or sets выбранное пользователем действие в <see cref="SelectedListMotions"/>.
+        ///     Gets or sets выбранное пользователем действие в <see cref="SelectedListMotions" />.
         /// </summary>
         public GestureModel.MotionModel SelectedMotion { get; set; }
+
         #endregion
 
         #region Commands
+
         /// <summary>
-        /// Gets команду сохранения жеста.
+        ///     Gets команду сохранения жеста.
         /// </summary>
         public ICommand SaveGestureCommand
         {
-            get { return new RelayCommand((object obj) => this.SaveGesture()); }
+            get { return new RelayCommand(obj => SaveGesture()); }
         }
 
         /// <summary>
-        /// Gets команду добавления действия.
+        ///     Gets команду добавления действия.
         /// </summary>
         public ICommand AddMotionCommand
         {
-            get { return new RelayCommand((object obj) => this.AddMotion()); }
+            get { return new RelayCommand(obj => AddMotion()); }
         }
 
         /// <summary>
-        /// Gets команду удаления жеста.
+        ///     Gets команду удаления жеста.
         /// </summary>
         public ICommand DeleteGestureCommand
         {
-            get { return new RelayCommand((object obj) => this.DeleteGesture((Guid)obj)); }
+            get { return new RelayCommand(obj => DeleteGesture((Guid) obj)); }
         }
 
         /// <summary>
-        /// Gets команду удаления действия.
+        ///     Gets команду удаления действия.
         /// </summary>
         public ICommand DeleteMotionCommand
         {
-            get { return new RelayCommand((object obj) => this.DeleteMotion((int)obj)); }
+            get { return new RelayCommand(obj => DeleteMotion((int) obj)); }
         }
 
         /// <summary>
-        /// Gets команду добавления жеста.
+        ///     Gets команду добавления жеста.
         /// </summary>
         public ICommand AddGestureCommand
         {
-            get { return new RelayCommand((object obj) => this.AddGesture()); }
+            get { return new RelayCommand(obj => AddGesture()); }
         }
 
         /// <summary>
-        /// Gets команду обработки нажатия на кнопку работы с протезом.
+        ///     Gets команду обработки нажатия на кнопку работы с протезом.
         /// </summary>
         public ICommand HandCommand
         {
-            get { return new RelayCommand((object obj) => this.HandHandler()); }
+            get { return new RelayCommand(obj => HandHandler()); }
         }
 
         /// <summary>
-        /// Gets команду смены состояния бесконечного повторения жеста.
+        ///     Gets команду смены состояния бесконечного повторения жеста.
         /// </summary>
         public ICommand InfinityCheckCommand
         {
-            get { return new RelayCommand((object obj) => this.InfinityGestureChangeState()); }
+            get { return new RelayCommand(obj => InfinityGestureChangeState()); }
         }
 
         /// <summary>
-        /// Gets команду закрытия отображения жеста.
+        ///     Gets команду закрытия отображения жеста.
         /// </summary>
         public ICommand CloseChangeCommand
         {
-            get { return new RelayCommand((object obj) => this.CloseChange()); }
+            get { return new RelayCommand(obj => CloseChange()); }
         }
+
         #endregion
 
         #region Methods
-        /// <summary>
-        /// Создания новой команды.
-        /// </summary>
-        private void AddGesture()
+        private void ProstheticConnectionChangeHandler(bool isConnected)
         {
-            GestureModel newGesture = GestureModel.GetDefault(Guid.NewGuid(), this.GetNewNameGesture());
-            this.ListGesture.Add(newGesture);
-            this.gestureRepositoryField.Add(newGesture);
-            SortGestures(this.ListGesture, 0, this.ListGesture.Count() - 1);
-            this.SelectedGesture = newGesture;
+            IsConnected = isConnected;
         }
 
         /// <summary>
-        /// Получить имя нового жеста.
-        /// Имя состоит из "Новый жест " + @id жеста, которое формируется на основании
-        /// имен жестов находящихся в <see cref="ListGesture"/>.
+        ///     Создания новой команды.
+        /// </summary>
+        private void AddGesture()
+        {
+            var newGesture = GestureModel.GetDefault(Guid.NewGuid(), GetNewNameGesture());
+            ListGesture.Add(newGesture);
+            _gestureRepositoryField.Add(newGesture);
+            SortGestures(ListGesture, 0, ListGesture.Count() - 1);
+            SelectedGesture = newGesture;
+        }
+
+        /// <summary>
+        ///     Получить имя нового жеста.
+        ///     Имя состоит из "Новый жест " + @id жеста, которое формируется на основании
+        ///     имен жестов находящихся в <see cref="ListGesture" />.
         /// </summary>
         /// <returns>Новое имя жеста.</returns>
         private string GetNewNameGesture()
         {
-            var list = this.ListGesture.Where(itemGesture => itemGesture.Name.Contains("Новый жест"));
-            int maxValue = 1;
+            var list = ListGesture.Where(itemGesture => itemGesture.Name.Contains("Новый жест"));
+            var maxValue = 1;
 
             if (list.Any())
             {
-                foreach (GestureModel itemGesture in list)
+                foreach (var itemGesture in list)
                 {
-                    string nameGest = itemGesture.Name.Replace("Новый жест ", string.Empty);
+                    var nameGest = itemGesture.Name.Replace("Новый жест ", string.Empty);
                     try
                     {
-                        int value = Convert.ToInt32(nameGest);
-                        
-                        if (maxValue <= value)
-                        {
-                            maxValue = value + 1;
-                        }
+                        var value = Convert.ToInt32(nameGest);
+                        if (maxValue <= value) maxValue = value + 1;
                     }
                     catch (FormatException)
                     {
-                        continue;
                     }
                 }
             }
 
-            return "Новый жест " + maxValue.ToString();
+            return "Новый жест " + maxValue;
         }
 
         /// <summary>
-        /// Сохранение жеста. Выполняет обновление жеста в <see cref="ListGesture"/> и добавление в репозиторий <see cref="gestureRepositoryField"/>.
+        ///     Сохранение жеста. Выполняет обновление жеста в <see cref="ListGesture" /> и добавление в репозиторий
+        ///     <see cref="_gestureRepositoryField" />.
         /// </summary>
         private void SaveGesture()
         {
-            this.SelectedGesture.ListMotions = this.SelectedListMotions.ToList();
-            this.SelectedGesture.InfoGesture.TimeChange = DateTime.Now;
-            this.SelectedGesture.InfoGesture.NumberOfMotions = this.SelectedListMotions.Count();
-            this.gestureRepositoryField.Add(this.SelectedGesture);
+            SelectedGesture.ListMotions = SelectedListMotions.ToList();
+            SelectedGesture.InfoGesture.TimeChange = DateTime.Now;
+            SelectedGesture.InfoGesture.NumberOfMotions = SelectedListMotions.Count();
+            _gestureRepositoryField.Add(SelectedGesture);
             ////GestureModel.Save(SelectedGesture);
 
-            bool stateFountGesture = false;
-            for (int i = 0; i < this.ListGesture.Count; i++)
-            {
-                if (this.ListGesture[i].Id == this.SelectedGesture.Id)
+            var stateFountGesture = false;
+            for (var i = 0; i < ListGesture.Count; i++)
+                if (ListGesture[i].Id == SelectedGesture.Id)
                 {
-                    this.ListGesture[i] = this.SelectedGesture.Clone() as GestureModel;
+                    ListGesture[i] = SelectedGesture.Clone() as GestureModel;
                     stateFountGesture = true;
                     break;
                 }
-            }
 
-            if (stateFountGesture is false)
-            {
-                this.ListGesture.Add(this.SelectedGesture.Clone() as GestureModel);
-            }
-            SortGestures(this.ListGesture, 0, this.ListGesture.Count() - 1);
+            if (stateFountGesture is false) ListGesture.Add(SelectedGesture.Clone() as GestureModel);
+
+            SortGestures(ListGesture, 0, ListGesture.Count() - 1);
         }
 
         /// <summary>
-        /// Удаление жеста из системы по Id. Выполняет удаление жеста из <see cref="ListGesture"/> и <see cref="gestureRepositoryField"/>.
+        ///     Удаление жеста из системы по Id. Выполняет удаление жеста из <see cref="ListGesture" /> и
+        ///     <see cref="_gestureRepositoryField" />.
         /// </summary>
         /// <param name="id">Id удаляемого жеста.</param>
         private void DeleteGesture(Guid id)
         {
-            GestureModel gesture = this.ListGesture.FirstOrDefault(gestureItem => gestureItem.Id.Equals(id));
-            this.gestureRepositoryField.Remove(gesture);
-            this.ListGesture.Remove(gesture);
-            SortGestures(this.ListGesture, 0, this.ListGesture.Count() - 1);
+            var gesture = ListGesture.FirstOrDefault(gestureItem => gestureItem.Id.Equals(id));
+            _gestureRepositoryField.Remove(gesture);
+            ListGesture.Remove(gesture);
+            SortGestures(ListGesture, 0, ListGesture.Count() - 1);
         }
 
         /// <summary>
-        /// Удалить действия в <see cref="SelectedListMotions"/>.
+        ///     Удалить действия в <see cref="SelectedListMotions" />.
         /// </summary>
         /// <param name="idDelMotion">Id действия.</param>
         private void DeleteMotion(int idDelMotion)
         {
-            foreach (GestureModel.MotionModel actionModel in this.SelectedListMotions)
+            foreach (var actionModel in SelectedListMotions)
             {
                 if (actionModel.Id == idDelMotion)
                 {
-                    for (int i = actionModel.Id; i < this.SelectedListMotions.Count; i++)
-                    {
-                        this.SelectedListMotions[i].Id = this.SelectedListMotions[i].Id - 1;
-                    }
+                    for (var i = actionModel.Id; i < SelectedListMotions.Count; i++)
+                        SelectedListMotions[i].Id = SelectedListMotions[i].Id - 1;
 
-                    this.SelectedListMotions.Remove(actionModel);
+                    SelectedListMotions.Remove(actionModel);
                     break;
                 }
             }
         }
 
         /// <summary>
-        /// Создание нового действия жеста. Выполняет создание нового экземпляра <see cref="GestureModel.MotionModel"/> и добавление его к <see cref="SelectedListMotions"/>.
+        ///     Создание нового действия жеста. Выполняет создание нового экземпляра <see cref="GestureModel.MotionModel" /> и
+        ///     добавление его к <see cref="SelectedListMotions" />.
         /// </summary>
         private void AddMotion()
         {
-            GestureModel.MotionModel newMotion = GestureModel.MotionModel.GetDefault(GestureModel.MotionModel.GetNewId(this.SelectedListMotions.ToList<GestureModel.MotionModel>()));
-            this.SelectedListMotions.Add(newMotion);
+            var newMotion = GestureModel.MotionModel.GetDefault(
+                GestureModel.MotionModel.GetNewId(SelectedListMotions.ToList()));
+            SelectedListMotions.Add(newMotion);
         }
 
         /// <summary>
-        /// Обработчик действия с протезом руки. Пока что, возможно, нужен для тестов. 
-        /// //TODO: потом убрать
+        ///     Обработчик действия с протезом руки. Пока что, возможно, нужен для тестов.
+        ///     //TODO: потом убрать
         /// </summary>
-        private void HandHandler()
+        private async void HandHandler()
         {
-            ////CommunicationManager.GetInstance().ExecuteTheGesture("Сжать");
-            ////Communication.SaveGestures(ListGesture);
-            ////CommunicationManager.GetInstance().ExecuteTheGesture("Сжать");
+            var gestures = await Prosthetic.GetGestures();
+            ////ProstheticManager.GetInstance().ExecuteTheGesture("Сжать");
+            ////Prosthetic.SaveGestures(ListGesture);
+            ////ProstheticManager.GetInstance().ExecuteTheGesture("Сжать");
         }
 
         /// <summary>
-        /// Выполняет изменение состояния итеративного выполнения выбранного жеста <see cref="SelectedGesture"/>.
+        ///     Выполняет изменение состояния итеративного выполнения выбранного жеста <see cref="SelectedGesture" />.
         /// </summary>
         private void InfinityGestureChangeState()
         {
-            this.SelectedGesture.InfoGesture.IterableGesture = !this.SelectedGesture.InfoGesture.IterableGesture;
+            SelectedGesture.InfoGesture.IterableGesture = !SelectedGesture.InfoGesture.IterableGesture;
         }
 
         /// <summary>
-        /// Выполняет закрытие изменения выбранного жеста <see cref="SelectedGesture"/> путем его сброса в <see cref="null"/>.
+        ///     Выполняет закрытие изменения выбранного жеста <see cref="SelectedGesture" /> путем его сброса в null.
         /// </summary>
         private void CloseChange()
         {
-            this.SelectedGesture = null;
-            this.SelectedMotion = null;
+            SelectedGesture = null;
+            SelectedMotion = null;
         }
 
         /// <summary>
-        /// Выполняет сортировку переданной коллекции <see cref="GestureModel"/> по имени жеста в алфовитном порядке.
+        ///     Выполняет сортировку переданной коллекции <see cref="GestureModel" /> по имени жеста в алфовитном порядке.
         /// </summary>
         /// <param name="collectionGustures">Сортируемоая коллекция.</param>
         /// <param name="start">Индекс начала сортировки.</param>
         /// <param name="end">Индекс конца сортировки.</param>
         private static void SortGestures(ObservableCollection<GestureModel> collectionGustures, int start, int end)
         {
-            int partition(ObservableCollection<GestureModel> collectionGusturesPartition, int startPartition, int endPartition)
+            int Partition(ObservableCollection<GestureModel> collectionGusturesPartition, int startPartition,
+                int endPartition)
             {
-                GestureModel temp;//swap helper
-                int marker = startPartition;//divides left and right subarrays
-                for (int i = startPartition; i < endPartition; i++)
+                GestureModel temp; //swap helper
+                var marker = startPartition; //divides left and right subarrays
+                for (var i = startPartition; i < endPartition; i++)
                 {
-                    if (NeedToReOrder(collectionGusturesPartition[endPartition].Name, collectionGusturesPartition[i].Name)) //array[end] is pivot
+                    if (NeedToReOrder(collectionGusturesPartition[endPartition].Name,
+                        collectionGusturesPartition[i].Name)) //array[end] is pivot
                     {
                         temp = collectionGusturesPartition[marker]; // swap
                         collectionGusturesPartition[marker] = collectionGusturesPartition[i];
@@ -409,6 +410,7 @@ namespace HandControl.ViewModel
                         marker += 1;
                     }
                 }
+
                 //put pivot(array[end]) between left and right subarrays
                 temp = collectionGusturesPartition[marker];
                 collectionGusturesPartition[marker] = collectionGusturesPartition[endPartition];
@@ -418,11 +420,12 @@ namespace HandControl.ViewModel
 
             bool NeedToReOrder(string s1, string s2)
             {
-                for (int i = 0; i < (s1.Length > s2.Length ? s2.Length : s1.Length); i++)
+                for (var i = 0; i < (s1.Length > s2.Length ? s2.Length : s1.Length); i++)
                 {
-                    if (s1.ToCharArray()[i] < s2.ToCharArray()[i]) return false;
-                    if (s1.ToCharArray()[i] > s2.ToCharArray()[i]) return true;
+                    if (s1[i] < s2[i]) return false;
+                    if (s1[i] > s2[i]) return true;
                 }
+
                 return false;
             }
 
@@ -431,10 +434,11 @@ namespace HandControl.ViewModel
                 return;
             }
 
-            int pivot = partition(collectionGustures, start, end);
+            var pivot = Partition(collectionGustures, start, end);
             SortGestures(collectionGustures, start, pivot - 1);
             SortGestures(collectionGustures, pivot + 1, end);
         }
+
         #endregion
     }
 }

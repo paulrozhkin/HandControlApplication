@@ -103,11 +103,28 @@
     <Reference Include="System.Numerics.Vectors, Version=4.1.5.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Numerics.Vectors.4.6.0-preview5.19224.8\lib\net46\System.Numerics.Vectors.dll</HintPath>
     </Reference>
+    <Reference Include="System.Reactive, Version=5.0.0.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.5.0.0\lib\net472\System.Reactive.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Core, Version=3.0.6000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.Core.5.0.0\lib\net472\System.Reactive.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Interfaces, Version=3.0.6000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.Interfaces.5.0.0\lib\net472\System.Reactive.Interfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Reactive.Linq, Version=3.0.6000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Reactive.Linq.5.0.0\lib\net472\System.Reactive.Linq.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.5.0.0\lib\net45\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
@@ -130,7 +147,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Model\BaseModel.cs" />
+    <Compile Include="Model\BluetoothDto\PackageDto.cs" />
+    <Compile Include="Model\Enums\CommandType.cs" />
     <Compile Include="Model\Device.cs" />
+    <Compile Include="Model\Enums\ModuleStatus.cs" />
     <Compile Include="Model\Repositories\GestureRepositories\GestureRepositoryFactory.cs" />
     <Compile Include="Model\Repositories\IEntitySpecification.cs" />
     <Compile Include="Model\Repositories\GestureRepositories\GestureFileSystemRepository.cs" />
@@ -140,16 +160,16 @@
     <Compile Include="Model\Repositories\GestureRepositories\Specifications\GesturesSpecificationById.cs" />
     <Compile Include="Model\Repositories\GestureRepositories\Specifications\GesturesSpecificationByName.cs" />
     <Compile Include="Model\IBinarySerialize.cs" />
-    <Compile Include="Services\IODevice\IODeviceBluetooth.cs" />
+    <Compile Include="Model\Telemetry.cs" />
+    <Compile Include="Services\Crc8Calculator.cs" />
+    <Compile Include="Services\IODevice\DeviceBluetooth.cs" />
+    <Compile Include="Services\IProtocolParser.cs" />
     <Compile Include="Services\IReceiverBluetoothService.cs" />
-    <Compile Include="Services\ISenderBluetoothService.cs" />
+    <Compile Include="Services\IBluetoothService.cs" />
+    <Compile Include="Services\ProtocolParser.cs" />
     <Compile Include="Services\ReceiverBluetoothService.cs" />
-    <Compile Include="Services\SenderBluetoothService.cs" />
+    <Compile Include="Services\IODevice\BluetoothService.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
-    <Page Include="View\ServoControlRaw.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -159,22 +179,16 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Model\GestureModel.cs" />
-    <Compile Include="Services\CommunicationManager.cs" />
+    <Compile Include="Services\ProstheticManager.cs" />
     <Compile Include="Services\Converters\IdToNameMotionConverter.cs" />
     <Compile Include="Services\FileSystemFacade.cs" />
-    <Compile Include="Services\IODevice\IIODevice.cs">
+    <Compile Include="Services\IODevice\IIoDevice.cs">
       <ExcludeFromStyleCop>False</ExcludeFromStyleCop>
-    </Compile>
-    <Compile Include="Services\IODevice\IODeviceCom.cs">
-      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
     </Compile>
     <Compile Include="Services\JsonSerDer.cs" />
     <Compile Include="Services\PathManager.cs" />
     <Compile Include="Services\RelayCommand.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
-    <Compile Include="View\ServoControlRaw.xaml.cs">
-      <DependentUpon>ServoControlRaw.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -246,7 +260,7 @@
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
       <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.6.1 %28x86 и x64%29</ProductName>
+      <ProductName>Microsoft .NET Framework 4.6.1 %28x86 and x64%29</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
@@ -258,6 +272,7 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

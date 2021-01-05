@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace HandControl.Services
 {
     public static class PathManager
     {
-        public static readonly string MainDataPath = System.AppDomain.CurrentDomain.BaseDirectory + "\\Data\\";
+        public static readonly string MainDataPath = AppDomain.CurrentDomain.BaseDirectory + "\\Data\\";
         private static readonly string FileGesturesName = "\\gesture.json";
         private static readonly string FolderGesturesName = "Gestures\\";
         private static readonly string FolderConfig = "config\\";
@@ -16,37 +17,32 @@ namespace HandControl.Services
 
         public static List<string> GetGesturesFilesPaths()
         {
-            List<string> gestures = new List<string>();
-            string startPath = MainDataPath + FolderGesturesName;
+            var gestures = new List<string>();
+            var startPath = MainDataPath + FolderGesturesName;
             if (!Directory.Exists(startPath))
                 Directory.CreateDirectory(startPath);
-            string[] dirs = Directory.GetDirectories(startPath);
+            var dirs = Directory.GetDirectories(startPath);
             foreach (var item in dirs)
             {
-                string p = item + FileGesturesName;
-                if (File.Exists(p))
-                {
-                    gestures.Add(p);
-                }
+                var p = item + FileGesturesName;
+                if (File.Exists(p)) gestures.Add(p);
             }
+
             return gestures;
         }
 
         public static string GetGesturePath(string idGesture)
         {
-            string gestureFolderPath = GetGestureFolderPath(idGesture);
+            var gestureFolderPath = GetGestureFolderPath(idGesture);
 
-            string gesturePath = gestureFolderPath + "\\" + FileGesturesName;
-            if (!File.Exists(gesturePath))
-            {
-                File.Create(gesturePath).Close();
-            }
+            var gesturePath = gestureFolderPath + "\\" + FileGesturesName;
+            if (!File.Exists(gesturePath)) File.Create(gesturePath).Close();
             return gesturePath;
         }
 
         public static string GetGestureFolderPath(string idGesture)
         {
-            string gestureFolderPath = MainDataPath + FolderGesturesName + idGesture + "\\";
+            var gestureFolderPath = MainDataPath + FolderGesturesName + idGesture + "\\";
             if (!Directory.Exists(gestureFolderPath))
                 Directory.CreateDirectory(gestureFolderPath);
 
@@ -55,17 +51,13 @@ namespace HandControl.Services
 
         public static string IODevicePath(string nameDevice)
         {
-            string IODeviceFolderPath = MainDataPath + FolderConfig + FolderIODeviceConfig;
+            var IODeviceFolderPath = MainDataPath + FolderConfig + FolderIODeviceConfig;
             if (!Directory.Exists(IODeviceFolderPath))
                 Directory.CreateDirectory(IODeviceFolderPath);
-            string configFilePath = IODeviceFolderPath + "IODevice" + nameDevice + ".conf";
-            if (!File.Exists(configFilePath))
-            {
-                File.Create(configFilePath).Close();
-            }
+            var configFilePath = IODeviceFolderPath + "IODevice" + nameDevice + ".conf";
+            if (!File.Exists(configFilePath)) File.Create(configFilePath).Close();
 
             return configFilePath;
         }
-        
     }
 }

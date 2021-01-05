@@ -3,12 +3,13 @@
 //      Copyright © 2019 HandControl. All rights reserved.
 // </copyright> 
 // -------------------------------------------------------------------------------------
+
+using System.Windows;
+
 namespace HandControl
 {
-    using System.Windows;
-
     /// <summary>
-    /// Логика взаимодействия для App.xaml
+    ///     Логика взаимодействия для App.xaml
     /// </summary>
     public partial class App : Application
     {

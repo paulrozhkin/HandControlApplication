@@ -1,50 +1,61 @@
 ﻿// --------------------------------------------------------------------------------------
-// <copyright file = "IIODevice.cs" company = "Студенческий проект HandControl‎"> 
+// <copyright file = "IIoDevice.cs" company = "Студенческий проект HandControl‎"> 
 //      Copyright © 2019 HandControl. All rights reserved.
 // </copyright>
 // -------------------------------------------------------------------------------------
-namespace HandControl.Services
-{
-    using System.ComponentModel;
 
+using System;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using HandControl.Model;
+using HandControl.Model.BluetoothDto;
+using HandControl.Model.Enums;
+
+namespace HandControl.Services.IODevice
+{
     /// <summary>
-    /// Интерфейс определяющий основные методы требующие имплементации для функций примо-передающих устройств системы.
-    /// \brief Интерфейс для ввода-вывода данных системы.
-    /// \version 1.0
-    /// \date Январь 2019 года
-    /// \authors Paul Rozhkin(blackiiifox@gmail.com)
+    ///     Интерфейс определяющий основные методы требующие имплементации для функций примо-передающих устройств системы.
+    ///     \brief Интерфейс для ввода-вывода данных системы.
+    ///     \version 1.0
+    ///     \date Январь 2019 года
+    ///     \authors Paul Rozhkin(blackiiifox@gmail.com)
     /// </summary>
-    public interface IIODevice : INotifyPropertyChanged
+    public interface IIoDevice
     {
         /// <summary>
-        /// Gets a value indicating whether cостояние устройства ввода-вывода.
+        ///     Gets a value indicating whether cостояние устройства ввода-вывода.
         /// </summary>
-        bool StateDeviceHand { get; }
+        IObservable<bool> IsConnectedStatusChanged { get; }
 
         /// <summary>
-        /// Выполняет подключение к устройству.
+        /// Gets a value indicating whether телеметрию устройства.
+        /// </summary>
+        IObservable<PackageDto> TelemetryPackages { get; }
+
+        /// <summary>
+        ///     Выполняет подключение к устройству.
         /// </summary>
         /// <returns></returns>
         void ConnectDevice();
 
         /// <summary>
-        /// Выполняет отключение от устройству.
+        ///     Выполняет отключение от устройству.
         /// </summary>
         void DisconnectDevice();
 
+        /// <summary>
+        ///     Отправка данных на устройство.
+        /// </summary>
+        /// <param name="command">Команда протеза.</param>
+        /// <param name="payload">Отправляемые данные в byte</param>
+        /// <returns>Ответ с протеза.</returns>
+        Task<byte[]> SendToDevice(CommandType command, byte[] payload);
 
         /// <summary>
-        /// Отправка данных на устройство.
+        ///     Отправка данных на устройство.
         /// </summary>
-        /// <param name="dataTx">Отправляемые данные в byte</param>
-        /// <returns>Состояние отправки.</returns>
-        void SendToDevice(byte[] dataTx);
-
-        /// <summary>
-        /// Прием данных с устройства.
-        /// </summary>
-        /// <param name="commandRx">Команда по которой устройство определяет возвращаемые данные.</param>
-        /// <returns>Принятые данные, содержащие ответ на команду.</returns>
-        byte[] ReceiveFromDevice(byte commandRx);
+        /// <param name="command">Команда протеза.</param>
+        /// <returns>Ответ с протеза.</returns>
+        Task<byte[]> SendToDevice(CommandType command);
     }
 }

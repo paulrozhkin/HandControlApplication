@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HandControl.Model.Repositories.GestureRepositories.Specifications
+﻿namespace HandControl.Model.Repositories.GestureRepositories.Specifications
 {
     public class GesturesSpecificationByName : IEntitySpecification<GestureModel>
     {
@@ -12,12 +6,12 @@ namespace HandControl.Model.Repositories.GestureRepositories.Specifications
 
         public GesturesSpecificationByName(string expectedName)
         {
-            this.expectedNameField = expectedName;
+            expectedNameField = expectedName;
         }
 
         public bool Specified(GestureModel entity)
         {
-            return this.expectedNameField.Equals(entity.Name);
+            return expectedNameField.Equals(entity.Name);
         }
     }
 }

@@ -7,11 +7,13 @@
     xmlns:local="clr-namespace:HandControl"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModel="clr-namespace:HandControl.ViewModel"
     Title="HandControl"
     Width="1024"
     Height="768"
     Icon="/img/logo.ico"
     WindowStyle="SingleBorderWindow"
+    d:DataContext="{d:DesignInstance viewModel:MainWindowViewModel}"
     mc:Ignorable="d">
 
     <Window.Resources>
@@ -171,7 +173,8 @@
 
                         <ControlTemplate.Triggers>
                             <Trigger SourceName="Thumb" Property="IsMouseOver" Value="true">
-                                <Setter TargetName="Thumb" Property="Background" Value="{DynamicResource ButtonSelectBrush}" />
+                                <Setter TargetName="Thumb" Property="Background"
+                                        Value="{DynamicResource ButtonSelectBrush}" />
                             </Trigger>
                             <Trigger SourceName="Thumb" Property="IsDragging" Value="true">
                                 <Setter TargetName="Thumb" Property="Background" Value="{DynamicResource DarkBrush}" />
@@ -292,7 +295,8 @@
                     <Setter Property="materialDesign:ButtonProgressAssist.IsIndeterminate" Value="True" />
                     <Setter Property="BorderBrush" Value="White" />
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding Path=Communication.СonnectedDevices.StateDeviceHand}" Value="True">
+                        <DataTrigger Binding="{Binding IsConnected}"
+                                     Value="True">
                             <Setter Property="materialDesign:ButtonProgressAssist.IsIndeterminate" Value="False" />
                             <Setter Property="BorderBrush" Value="Yellow" />
                         </DataTrigger>
@@ -308,29 +312,14 @@
                     <Style TargetType="materialDesign:PackIcon">
                         <Setter Property="Foreground" Value="White" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding Path=Communication.СonnectedDevices.StateDeviceHand}" Value="True">
+                            <DataTrigger Binding="{Binding Path=IsConnected}"
+                                         Value="True">
                                 <Setter Property="Foreground" Value="Yellow" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </materialDesign:PackIcon.Style>
             </materialDesign:PackIcon>
-
-
-            <!--<Image Width="55">
-                <Image.Style>
-                    <Style TargetType="Image">
-                        <Setter Property="Source" Value="/img/Header/usb_turn_off.png"/>
-                        <Style.Triggers>
-                            <DataTrigger
-                                Binding="{Binding Path=Communication.СonnectedDevices.StateDeviceHand}"
-                                Value="True">
-                                <Setter Property="Source" Value="/img/Header/usb_turn_on.png"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Image.Style>
-            </Image>-->
         </Button>
 
         <Button
@@ -379,7 +368,8 @@
                         <Style TargetType="materialDesign:PackIcon">
                             <Setter Property="Foreground" Value="Black" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Path=SelectedGesture.InfoGesture.IterableGesture}" Value="True">
+                                <DataTrigger Binding="{Binding Path=SelectedGesture.InfoGesture.IterableGesture}"
+                                             Value="True">
                                     <Setter Property="Foreground" Value="Yellow" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -597,7 +587,9 @@
                                                 <Setter Property="TextBlock.Foreground" Value="White" />
                                                 <Setter Property="FontSize" Value="14" />
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}}" Value="True">
+                                                    <DataTrigger
+                                                        Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}}"
+                                                        Value="True">
                                                         <Setter Property="TextBlock.Foreground" Value="Black" />
                                                         <Setter Property="FontSize" Value="16" />
                                                     </DataTrigger>
@@ -623,7 +615,9 @@
                                                 <Style TargetType="materialDesign:PackIcon">
                                                     <Setter Property="Foreground" Value="White" />
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}}" Value="True">
+                                                        <DataTrigger
+                                                            Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}}"
+                                                            Value="True">
                                                             <Setter Property="Foreground" Value="Black" />
                                                         </DataTrigger>
                                                     </Style.Triggers>
@@ -642,7 +636,9 @@
                                             <Style TargetType="Rectangle">
                                                 <Setter Property="Visibility" Value="Visible" />
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}}" Value="True">
+                                                    <DataTrigger
+                                                        Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}}"
+                                                        Value="True">
                                                         <Setter Property="Visibility" Value="Hidden" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
@@ -953,7 +949,6 @@
                                     </Grid.RowDefinitions>
 
 
-
                                     <Grid
                                         Grid.Row="0"
                                         Height="40"
@@ -1043,7 +1038,9 @@
                                         <Setter Property="Foreground" Value="White" />
                                         <Setter Property="FontSize" Value="16" />
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}}" Value="True">
+                                            <DataTrigger
+                                                Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}}"
+                                                Value="True">
                                                 <Setter Property="Foreground" Value="Black" />
                                                 <Setter Property="FontSize" Value="18" />
                                             </DataTrigger>
@@ -1070,7 +1067,9 @@
                                         <Style TargetType="materialDesign:PackIcon">
                                             <Setter Property="Foreground" Value="White" />
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}}" Value="True">
+                                                <DataTrigger
+                                                    Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}}"
+                                                    Value="True">
                                                     <Setter Property="Foreground" Value="Black" />
                                                 </DataTrigger>
                                             </Style.Triggers>
@@ -1089,7 +1088,9 @@
                                     <Style TargetType="Rectangle">
                                         <Setter Property="Visibility" Value="Visible" />
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}}" Value="True">
+                                            <DataTrigger
+                                                Binding="{Binding Path=IsSelected, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ListBoxItem}}}"
+                                                Value="True">
                                                 <Setter Property="Visibility" Value="Hidden" />
                                             </DataTrigger>
                                         </Style.Triggers>

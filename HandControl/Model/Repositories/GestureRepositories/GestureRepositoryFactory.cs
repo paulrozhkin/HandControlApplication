@@ -1,13 +1,11 @@
-﻿using HandControl.Services;
-
-namespace HandControl.Model.Repositories.GestureRepositories
+﻿namespace HandControl.Model.Repositories.GestureRepositories
 {
     public class GestureRepositoryFactory
     {
         public IGestureRepository Create()
         {
             return new GestureFileSystemRepository();
-            //if (CommunicationManager.GetInstance().СonnectedDevices.StateDeviceHand)
+            //if (ProstheticManager.GetInstance()._connectedDevices._stateDeviceHand)
             //{
             //    return null;
             //}

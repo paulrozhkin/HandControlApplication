@@ -1,12 +1,15 @@
-﻿namespace HandControl.Services
-{
-    using System;
-    using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 
-    class RelayCommand : ICommand
+namespace HandControl.Services
+{
+    /// <summary>
+    ///     Имплементация интерфейса <see cref="ICommand" /> для осуществляения биндинга команд из View.
+    /// </summary>
+    internal class RelayCommand : ICommand
     {
-        private readonly Action<object> _execute;
         private readonly Predicate<object> _canExecute;
+        private readonly Action<object> _execute;
 
         public RelayCommand(Action<object> execute, Predicate<object> canExecute = null)
         {
@@ -23,8 +26,8 @@
 
         public event EventHandler CanExecuteChanged
         {
-            add { CommandManager.RequerySuggested += value; }
-            remove { CommandManager.RequerySuggested -= value; }
+            add => CommandManager.RequerySuggested += value;
+            remove => CommandManager.RequerySuggested -= value;
         }
 
         public void Execute(object parameter)

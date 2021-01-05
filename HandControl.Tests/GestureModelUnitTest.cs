@@ -3,28 +3,27 @@
 //      Copyright © 2019 HandControl. All rights reserved.
 // </copyright> 
 // -------------------------------------------------------------------------------------
+
+using System;
+using HandControl.Model;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 namespace HandControl.Tests
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using Microsoft.VisualStudio.TestTools.UnitTesting;
-    using HandControl.Model;
-
     /// <summary>
-    /// Unit test класса <see cref="GestureModel"/>.
+    ///     Unit test класса <see cref="GestureModel" />.
     /// </summary>
     [TestClass]
     public class GestureModelUnitTest
     {
         /// <summary>
-        /// Тест сериализации и десериализации экземляра <see cref="GestureModel"/>.
+        ///     Тест сериализации и десериализации экземляра <see cref="GestureModel" />.
         /// </summary>
         [TestMethod]
         public void BinaryForamtterTest_SerializerAndDesirializeGestureModel()
         {
             // Arrange
-            GestureModel gesture = GestureModel.GetDefault(Guid.NewGuid(), "Какое то имя");
+            var gesture = GestureModel.GetDefault(Guid.NewGuid(), "Какое то имя");
             gesture.InfoGesture.NumberOfMotions = 3;
             gesture.ListMotions.Add(GestureModel.MotionModel.GetDefault(0));
             gesture.ListMotions.Add(GestureModel.MotionModel.GetDefault(1));
@@ -39,8 +38,8 @@ namespace HandControl.Tests
             gesture.ListMotions[0].DelMotion = 7;
 
             // Act
-            byte[] dataSerialize = gesture.BinarySerialize();
-            GestureModel gestureDes = GestureModel.GetDefault(new Guid(), string.Empty);
+            var dataSerialize = gesture.BinarySerialize();
+            var gestureDes = GestureModel.GetDefault(new Guid(), string.Empty);
             gestureDes.BinaryDesserialize(dataSerialize);
 
             // Assert
@@ -48,15 +47,15 @@ namespace HandControl.Tests
         }
 
         /// <summary>
-        /// Тест сравнения экземпляров <see cref="GestureModel"/>.
+        ///     Тест сравнения экземпляров <see cref="GestureModel" />.
         /// </summary>
         [TestMethod]
         public void EqualsGestureTest()
         {
             // Arrange
-            GestureModel gesture = GestureModel.GetDefault(Guid.NewGuid(), "Сжать");
-            GestureModel gestureClone = gesture.Clone() as GestureModel;
-            GestureModel gesture2 = GestureModel.GetDefault(Guid.NewGuid(), "Разжать");
+            var gesture = GestureModel.GetDefault(Guid.NewGuid(), "Сжать");
+            var gestureClone = gesture.Clone() as GestureModel;
+            var gesture2 = GestureModel.GetDefault(Guid.NewGuid(), "Разжать");
 
             // Act
 

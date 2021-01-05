@@ -3,22 +3,22 @@
 //      Copyright © 2019 HandControl. All rights reserved.
 // </copyright> 
 // -------------------------------------------------------------------------------------
+
+using System;
+using System.Collections.Generic;
+using HandControl.Services;
+
 namespace HandControl.Model.Repositories.GestureRepositories
 {
-
-    using System;
-    using System.Collections.Generic;
-    using HandControl.Services;
-    
     /// <summary>
-    /// Репозиторий, содержащий жесты, хранимые в системе.
+    ///     Репозиторий, содержащий жесты, хранимые в системе.
     /// </summary>
     public class GestureFileSystemRepository : IGestureRepository
     {
         /// <summary>
-        /// Коллекция жестов.
+        ///     Коллекция жестов.
         /// </summary>
-        private List<GestureModel> gesturesCacheField = null;
+        private List<GestureModel> gesturesCacheField;
 
         private List<GestureModel> Gestures
         {
@@ -26,12 +26,9 @@ namespace HandControl.Model.Repositories.GestureRepositories
             {
                 lock (this)
                 {
-                    if (this.gesturesCacheField == null)
-                    {
-                        this.gesturesCacheField = this.LoadGestures();
-                    }
+                    if (gesturesCacheField == null) gesturesCacheField = LoadGestures();
 
-                    return this.gesturesCacheField;
+                    return gesturesCacheField;
                 }
             }
         }
@@ -42,49 +39,41 @@ namespace HandControl.Model.Repositories.GestureRepositories
             {
                 gesture = gesture.Clone() as GestureModel;
 
-                bool isContains = false;
-                for (int i = 0; i < this.Gestures.Count; i++)
-                {
-                    if (gesture.Id.Equals(this.Gestures[i].Id))
+                var isContains = false;
+                for (var i = 0; i < Gestures.Count; i++)
+                    if (gesture.Id.Equals(Gestures[i].Id))
                     {
-                        this.Gestures[i] = gesture;
+                        Gestures[i] = gesture;
                         isContains = true;
                         break;
                     }
                     else
                     {
-                        if (gesture.Name.Equals(this.Gestures[i].Name))
-                        {
+                        if (gesture.Name.Equals(Gestures[i].Name))
                             throw new ArgumentException("An entity with the same name is already in the collection.");
-                        }
                     }
-                }
 
-                if (!isContains)
-                {
-                    this.Gestures.Add(gesture);
-                }
+                if (!isContains) Gestures.Add(gesture);
 
                 ////TODO: Сохранение в файловую систему и синхронизация.
-                byte[] data = gesture.BinarySerialize();
+                var data = gesture.BinarySerialize();
                 FileSystemFacade.WriteBinaryData(PathManager.GetGesturePath(gesture.Id.ToString()), data);
 
+                //TODO: для прототипа, потом убрать.
+                FileSystemFacade.WriteBinaryData(
+                    PathManager.GetGestureFolderPath(gesture.Id.ToString()) + gesture.Name + ".bin", data);
             }
         }
 
         public IEnumerable<GestureModel> Query(IEntitySpecification<GestureModel> specification)
         {
-            List<GestureModel> resultGestures = new List<GestureModel>();
+            var resultGestures = new List<GestureModel>();
 
             lock (this)
             {
-                foreach (GestureModel gesture in this.Gestures)
-                {
+                foreach (var gesture in Gestures)
                     if (specification.Specified(gesture))
-                    {
                         resultGestures.Add(gesture.Clone() as GestureModel);
-                    }
-                }
             }
 
             return resultGestures;
@@ -94,35 +83,26 @@ namespace HandControl.Model.Repositories.GestureRepositories
         {
             lock (this)
             {
-                if (!this.Gestures.Remove(gesture))
-                {
+                if (!Gestures.Remove(gesture))
                     throw new ArgumentException("Unable to delete.");
-                }
-                else
-                {
-                    ////TODO: Удаление из файловой системы и синхронизация.
-                    FileSystemFacade.DeleteFolder(PathManager.GetGestureFolderPath(gesture.Id.ToString()));
-                }
+                FileSystemFacade.DeleteFolder(PathManager.GetGestureFolderPath(gesture.Id.ToString()));
             }
         }
 
         private List<GestureModel> LoadGestures()
         {
-            List<GestureModel> gestures = new List<GestureModel>();
+            var gestures = new List<GestureModel>();
 
-            foreach (string file in PathManager.GetGesturesFilesPaths())
-            {
+            foreach (var file in PathManager.GetGesturesFilesPaths())
                 try
                 {
-                    GestureModel newGesture = GestureModel.GetDefault(new Guid(),string.Empty);
+                    var newGesture = GestureModel.GetDefault(new Guid(), string.Empty);
                     newGesture.BinaryDesserialize(FileSystemFacade.ReadBinaryData(file));
                     gestures.Add(newGesture);
                 }
-                catch(Exception)
+                catch (Exception)
                 {
-                    continue;
                 }
-            }
 
             return gestures;
         }

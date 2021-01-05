@@ -1,11 +1,6 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using System.Windows;
+using Newtonsoft.Json;
 
 namespace HandControl.Services
 {
@@ -20,7 +15,7 @@ namespace HandControl.Services
             }
             catch (Exception e)
             {
-                System.Windows.MessageBox.Show(e.Message);
+                MessageBox.Show(e.Message);
                 return false;
             }
         }
@@ -30,22 +25,14 @@ namespace HandControl.Services
             try
             {
                 if (FileSystemFacade.ReadData(path) == "")
-                {
                     return null;
-                }
-                else
-                {
-                    return JsonConvert.DeserializeObject<T>(FileSystemFacade.ReadData(path));
-                }                
+                return JsonConvert.DeserializeObject<T>(FileSystemFacade.ReadData(path));
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 MessageBox.Show(e.ToString());
                 return null;
             }
-
         }
-       
-
     }
 }

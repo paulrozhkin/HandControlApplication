@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace HandControl.Model.Repositories.GestureRepositories
+﻿namespace HandControl.Model.Repositories.GestureRepositories
 {
     public interface IGestureRepository : IRepository<GestureModel>
     {
