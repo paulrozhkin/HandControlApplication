@@ -9,9 +9,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Google.Protobuf;
 using HandControl.Model;
 using HandControl.Model.Enums;
 using HandControl.Services.IODevice;
+using SaveGestureProtobuf = HandControl.Model.Protobuf.SaveGesture;
+using GestureProtobuf = HandControl.Model.Protobuf.Gesture;
+using GetGesturesProtobuf = HandControl.Model.Protobuf.GetGestures;
 
 namespace HandControl.Services
 {
@@ -92,6 +96,7 @@ namespace HandControl.Services
         public async Task<IEnumerable<GestureModel>> GetGestures()
         {
             var payload = await _connectedDevices.SendToDevice(CommandType.GetGestures);
+            var gestures = GetGesturesProtobuf.Parser.ParseFrom(payload);
             return null;
         }
 
@@ -99,9 +104,18 @@ namespace HandControl.Services
         ///     Сохранение или обновление жеста на протезе.
         /// </summary>
         /// <param name="gestureList">Сохраняемый жест.</param>
-        public void SaveGestures(GestureModel gesture)
+        public async Task SaveGestures(GestureModel gesture)
         {
-            _connectedDevices.SendToDevice(CommandType.SaveGestures, null);
+            var saveGesture = new SaveGestureProtobuf()
+            {
+                TimeSync = DateTimeOffset.Now.ToUnixTimeSeconds(),
+                Gesture = new GestureProtobuf()
+                {
+                }
+            };
+            
+            saveGesture.ToByteArray();
+            await _connectedDevices.SendToDevice(CommandType.SaveGestures, null);
         }
 
         /// <summary>

@@ -568,7 +568,7 @@
                         ItemContainerStyle="{StaticResource StyleListBox}"
                         ItemsSource="{Binding SelectedListMotions}"
                         ScrollViewer.VerticalScrollBarVisibility="Visible"
-                        SelectedItem="{Binding SelectedMotion}">
+                        SelectedItem="{Binding SelectedAction}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid
@@ -665,7 +665,7 @@
                         <Style TargetType="ItemsControl">
                             <Setter Property="Visibility" Value="Visible" />
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding Path=SelectedMotion}" Value="{x:Null}">
+                                <DataTrigger Binding="{Binding Path=SelectedAction}" Value="{x:Null}">
                                     <Setter Property="Visibility" Value="Collapsed" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -693,7 +693,7 @@
                             BorderBrush="Transparent"
                             FontSize="24"
                             MaxLength="3"
-                            Text="{Binding SelectedMotion.ThumbFinger}"
+                            Text="{Binding SelectedAction.ThumbFinger}"
                             TextAlignment="Center" />
 
                         <TextBlock
@@ -736,7 +736,7 @@
                             BorderBrush="Transparent"
                             FontSize="24"
                             MaxLength="3"
-                            Text="{Binding SelectedMotion.PointerFinger}"
+                            Text="{Binding SelectedAction.PointerFinger}"
                             TextAlignment="Center" />
 
                         <TextBlock
@@ -779,7 +779,7 @@
                             BorderBrush="Transparent"
                             FontSize="24"
                             MaxLength="3"
-                            Text="{Binding SelectedMotion.MiddleFinger}"
+                            Text="{Binding SelectedAction.MiddleFinger}"
                             TextAlignment="Center" />
 
                         <TextBlock
@@ -824,7 +824,7 @@
                             BorderBrush="Transparent"
                             FontSize="24"
                             MaxLength="3"
-                            Text="{Binding SelectedMotion.RingFinder}"
+                            Text="{Binding SelectedAction.RingFinder}"
                             TextAlignment="Center" />
 
                         <TextBlock
@@ -868,7 +868,7 @@
                             BorderBrush="Transparent"
                             FontSize="24"
                             MaxLength="3"
-                            Text="{Binding SelectedMotion.LittleFinger}"
+                            Text="{Binding SelectedAction.LittleFinger}"
                             TextAlignment="Center" />
 
                         <TextBlock
@@ -912,7 +912,7 @@
                             BorderBrush="Transparent"
                             FontSize="24"
                             MaxLength="5"
-                            Text="{Binding SelectedMotion.DelMotionSec}"
+                            Text="{Binding SelectedAction.DelMotionSec}"
                             TextAlignment="Center" />
 
                         <TextBlock

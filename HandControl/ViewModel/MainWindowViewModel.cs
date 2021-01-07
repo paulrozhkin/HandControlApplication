@@ -43,12 +43,13 @@ namespace HandControl.ViewModel
         /// <summary>
         ///     Коллекция действий выбранного жеста <see cref="SelectedGesture" />.
         /// </summary>
-        private ObservableCollection<GestureModel.MotionModel> _listMotionsField =
-            new ObservableCollection<GestureModel.MotionModel>();
+        private ObservableCollection<GestureModel.ActionModel> _listMotionsField =
+            new ObservableCollection<GestureModel.ActionModel>();
 
         #endregion
 
         #region Constructor
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="MainWindowViewModel" /> class.
         /// </summary>
@@ -57,7 +58,7 @@ namespace HandControl.ViewModel
             Prosthetic = ProstheticManager.GetInstance();
             Prosthetic.IsConnectionChanged.Subscribe(ProstheticConnectionChangeHandler);
             Prosthetic.Connect();
-            
+
             IEntitySpecification<GestureModel> specGetByAll = new GesturesSpecificationByAll();
 
             _gestureRepositoryField = new GestureRepositoryFactory().Create();
@@ -104,18 +105,18 @@ namespace HandControl.ViewModel
         /// <summary>
         ///     Gets or sets коллекция действий выбранного жеста <see cref="SelectedGesture" />.
         /// </summary>
-        public ObservableCollection<GestureModel.MotionModel> SelectedListMotions
+        public ObservableCollection<GestureModel.ActionModel> SelectedListMotions
         {
             get => _listMotionsField;
 
             set
             {
-                _listMotionsField = new ObservableCollection<GestureModel.MotionModel>();
+                _listMotionsField = new ObservableCollection<GestureModel.ActionModel>();
                 if (value != null)
                     foreach (var action in value)
-                        _listMotionsField.Add((GestureModel.MotionModel) action.Clone());
+                        _listMotionsField.Add((GestureModel.ActionModel) action.Clone());
 
-                SelectedMotion = null;
+                SelectedAction = null;
             }
         }
 
@@ -132,7 +133,7 @@ namespace HandControl.ViewModel
                 {
                     _selectedGestureField = value.Clone() as GestureModel;
                     SelectedListMotions =
-                        new ObservableCollection<GestureModel.MotionModel>(_selectedGestureField.ListMotions);
+                        new ObservableCollection<GestureModel.ActionModel>(_selectedGestureField.ListMotions);
                 }
                 else
                 {
@@ -168,7 +169,7 @@ namespace HandControl.ViewModel
         /// <summary>
         ///     Gets or sets выбранное пользователем действие в <see cref="SelectedListMotions" />.
         /// </summary>
-        public GestureModel.MotionModel SelectedMotion { get; set; }
+        public GestureModel.ActionModel SelectedAction { get; set; }
 
         #endregion
 
@@ -241,6 +242,7 @@ namespace HandControl.ViewModel
         #endregion
 
         #region Methods
+
         private void ProstheticConnectionChangeHandler(bool isConnected)
         {
             IsConnected = isConnected;
@@ -347,13 +349,13 @@ namespace HandControl.ViewModel
         }
 
         /// <summary>
-        ///     Создание нового действия жеста. Выполняет создание нового экземпляра <see cref="GestureModel.MotionModel" /> и
+        ///     Создание нового действия жеста. Выполняет создание нового экземпляра <see cref="GestureModel.ActionModel" /> и
         ///     добавление его к <see cref="SelectedListMotions" />.
         /// </summary>
         private void AddMotion()
         {
-            var newMotion = GestureModel.MotionModel.GetDefault(
-                GestureModel.MotionModel.GetNewId(SelectedListMotions.ToList()));
+            var newMotion = GestureModel.ActionModel.GetDefault(
+                GestureModel.ActionModel.GetNewId(SelectedListMotions.ToList()));
             SelectedListMotions.Add(newMotion);
         }
 
@@ -383,7 +385,7 @@ namespace HandControl.ViewModel
         private void CloseChange()
         {
             SelectedGesture = null;
-            SelectedMotion = null;
+            SelectedAction = null;
         }
 
         /// <summary>

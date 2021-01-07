@@ -1,0 +1,7 @@
+syntax="proto3";
+package uuid;
+option csharp_namespace = "HandControl.Model.Protobuf";
+
+message UUID {
+  string value = 1;
+}

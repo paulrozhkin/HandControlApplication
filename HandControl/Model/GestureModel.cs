@@ -85,7 +85,7 @@ namespace HandControl.Model
         /// <summary>
         ///     Gets or sets список действий жеста.
         /// </summary>
-        public List<MotionModel> ListMotions { get; set; }
+        public List<ActionModel> ListMotions { get; set; }
 
         #endregion
 
@@ -103,7 +103,7 @@ namespace HandControl.Model
             var result = new GestureModel(id, nameGesture)
             {
                 InfoGesture = InfoGestureModel.GetDefault(),
-                ListMotions = new List<MotionModel>()
+                ListMotions = new List<ActionModel>()
             };
 
             return result;
@@ -132,11 +132,11 @@ namespace HandControl.Model
         /// <returns>Клонированный экземпляр CommandModel.</returns>
         public object Clone()
         {
-            var newDataMotion = new List<MotionModel>();
+            var newDataMotion = new List<ActionModel>();
 
             if (ListMotions != null)
                 foreach (var action in ListMotions)
-                    newDataMotion.Add((MotionModel) action.Clone());
+                    newDataMotion.Add((ActionModel) action.Clone());
 
             return new GestureModel(Id, (string) Name.Clone())
             {
@@ -215,7 +215,7 @@ namespace HandControl.Model
                     ListMotions.Clear();
                     for (var i = 0; i < InfoGesture.NumberOfMotions; i++)
                     {
-                        var motion = MotionModel.GetDefault(i);
+                        var motion = ActionModel.GetDefault(i);
                         motion.BinaryDesserialize(reader.ReadBytes(9));
                         ListMotions.Add(motion);
                     }
@@ -256,14 +256,14 @@ namespace HandControl.Model
         /// <summary>
         ///     Класс содержащий единичное положение протеза.
         /// </summary>
-        public class MotionModel : BaseModel, ICloneable, IBinarySerialize, IEquatable<MotionModel>
+        public class ActionModel : BaseModel, ICloneable, IBinarySerialize, IEquatable<ActionModel>
         {
             #region Constructors
 
             /// <summary>
-            ///     Prevents a default instance of the <see cref="MotionModel" /> class from being created.
+            ///     Prevents a default instance of the <see cref="ActionModel" /> class from being created.
             /// </summary>
-            private MotionModel()
+            private ActionModel()
             {
             }
 
@@ -332,32 +332,32 @@ namespace HandControl.Model
 
             #region Methods
 
-            public static bool operator ==(MotionModel motion, MotionModel other)
+            public static bool operator ==(ActionModel action, ActionModel other)
             {
-                var isVehicleNull = motion is null;
+                var isVehicleNull = action is null;
                 var isOtherNull = other is null;
 
                 if (isVehicleNull && isOtherNull)
                     return true;
                 if (isVehicleNull)
                     return false;
-                return motion.Equals(other);
+                return action.Equals(other);
             }
 
-            public static bool operator !=(MotionModel motion, MotionModel other)
+            public static bool operator !=(ActionModel action, ActionModel other)
             {
-                return !(motion == other);
+                return !(action == other);
             }
 
             /// <summary>
-            ///     Фабричный метод для получения экземпляра MotionModel с дефолтными параметрами.
+            ///     Фабричный метод для получения экземпляра ActionModel с дефолтными параметрами.
             ///     Для создания экземпляра требуется передача Id действия.
             /// </summary>
             /// <param name="idMotion">Id действия</param>
             /// <returns>Новый уникальный идентификатор действия.</returns>
-            public static MotionModel GetDefault(int idMotion)
+            public static ActionModel GetDefault(int idMotion)
             {
-                var result = new MotionModel
+                var result = new ActionModel
                 {
                     Id = idMotion,
                     ThumbFinger = 0,
@@ -376,7 +376,7 @@ namespace HandControl.Model
             /// </summary>
             /// <param name="listMotions">Коллекция имеющихся действий в жесте.</param>
             /// <returns>Коллекция действий жеста.</returns>
-            public static int GetNewId(List<MotionModel> listMotions)
+            public static int GetNewId(List<ActionModel> listMotions)
             {
                 var maxId = 0;
 
@@ -405,9 +405,9 @@ namespace HandControl.Model
             }
 
             /// <summary>
-            ///     Выполняет сериализацию экземпляра <see cref="MotionModel" /> в бинарный формат.
+            ///     Выполняет сериализацию экземпляра <see cref="ActionModel" /> в бинарный формат.
             /// </summary>
-            /// <returns>Экземпляр <see cref="MotionModel" />, представленный в виде бинарного потока.</returns>
+            /// <returns>Экземпляр <see cref="ActionModel" />, представленный в виде бинарного потока.</returns>
             public byte[] BinarySerialize()
             {
                 using (var m = new MemoryStream())
@@ -428,7 +428,7 @@ namespace HandControl.Model
             }
 
             /// <summary>
-            ///     Выполняет десериализацию экземпляра <see cref="MotionModel" /> из бинарного потока.
+            ///     Выполняет десериализацию экземпляра <see cref="ActionModel" /> из бинарного потока.
             /// </summary>
             /// <param name="data">Бинарный поток.</param>
             public void BinaryDesserialize(byte[] data)
@@ -449,12 +449,12 @@ namespace HandControl.Model
             }
 
             /// <summary>
-            ///     Полное клонирование экземпляра MotionModel.
+            ///     Полное клонирование экземпляра ActionModel.
             /// </summary>
-            /// <returns>Клонированный экземпляр MotionModel.</returns>
+            /// <returns>Клонированный экземпляр ActionModel.</returns>
             public object Clone()
             {
-                var result = new MotionModel
+                var result = new ActionModel
                 {
                     Id = Id,
                     ThumbFinger = ThumbFinger,
@@ -469,9 +469,9 @@ namespace HandControl.Model
             }
 
             /// <summary>
-            ///     Получить хэш код экземпляра класса<see cref="MotionModel" />.
+            ///     Получить хэш код экземпляра класса<see cref="ActionModel" />.
             /// </summary>
-            /// <returns>HashCode экземпляра<see cref="MotionModel" />.</returns>
+            /// <returns>HashCode экземпляра<see cref="ActionModel" />.</returns>
             public override int GetHashCode()
             {
                 var hashCode = 1587829154;
@@ -479,21 +479,21 @@ namespace HandControl.Model
             }
 
             /// <summary>
-            ///     Сравнение экземпляра класса <see cref="MotionModel" /> с передаваемым объектом.
+            ///     Сравнение экземпляра класса <see cref="ActionModel" /> с передаваемым объектом.
             /// </summary>
             /// <param name="obj">Передаваемый объект.</param>
             /// <returns>True, если экземпляры равны.</returns>
             public override bool Equals(object obj)
             {
-                return Equals(obj as MotionModel);
+                return Equals(obj as ActionModel);
             }
 
             /// <summary>
-            ///     Сравнение двух экземпляров класса <see cref="MotionModel" />.
+            ///     Сравнение двух экземпляров класса <see cref="ActionModel" />.
             /// </summary>
-            /// <param name="other">Экземпляр класса <see cref="MotionModel" /> для сравнения.</param>
+            /// <param name="other">Экземпляр класса <see cref="ActionModel" /> для сравнения.</param>
             /// <returns>True, если экземпляры равны.</returns>
-            public bool Equals(MotionModel other)
+            public bool Equals(ActionModel other)
             {
                 if (other == null) return false;
 

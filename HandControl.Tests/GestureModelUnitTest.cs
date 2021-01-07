@@ -16,6 +16,16 @@ namespace HandControl.Tests
     [TestClass]
     public class GestureModelUnitTest
     {
+        [TestMethod]
+        public void SerializeProtobufTest()
+        {
+            // Arrange
+
+            // Act
+
+            // Assert
+        }
+
         /// <summary>
         ///     Тест сериализации и десериализации экземляра <see cref="GestureModel" />.
         /// </summary>
@@ -25,9 +35,9 @@ namespace HandControl.Tests
             // Arrange
             var gesture = GestureModel.GetDefault(Guid.NewGuid(), "Какое то имя");
             gesture.InfoGesture.NumberOfMotions = 3;
-            gesture.ListMotions.Add(GestureModel.MotionModel.GetDefault(0));
-            gesture.ListMotions.Add(GestureModel.MotionModel.GetDefault(1));
-            gesture.ListMotions.Add(GestureModel.MotionModel.GetDefault(2));
+            gesture.ListMotions.Add(GestureModel.ActionModel.GetDefault(0));
+            gesture.ListMotions.Add(GestureModel.ActionModel.GetDefault(1));
+            gesture.ListMotions.Add(GestureModel.ActionModel.GetDefault(2));
 
             gesture.ListMotions[0].LittleFinger = 1;
             gesture.ListMotions[0].MiddleFinger = 2;
