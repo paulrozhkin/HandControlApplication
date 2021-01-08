@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------
 // <copyright file = "ProstheticManager.cs" company = "Студенческий проект HandControl‎"> 
 //      Copyright © 2019 HandControl. All rights reserved.
 // </copyright> 
@@ -11,6 +11,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Google.Protobuf;
 using HandControl.Model;
+using HandControl.Model.Dto;
 using HandControl.Model.Enums;
 using HandControl.Services.IODevice;
 using SaveGestureProtobuf = HandControl.Model.Protobuf.SaveGesture;
@@ -36,7 +37,7 @@ namespace HandControl.Services
         private ProstheticManager()
         {
             _connectedDevices = new DeviceBluetooth();
-            TelemetryReceived = _connectedDevices.TelemetryPackages.Select(x => new Telemetry());
+            TelemetryReceived = _connectedDevices.TelemetryPackages.Select(x => new TelemetryDto());
             TelemetryReceived.Subscribe(TelemetryReceivedHandler);
         }
 
@@ -73,7 +74,7 @@ namespace HandControl.Services
         #region Enums
         public IObservable<bool> IsConnectionChanged => _connectedDevices.IsConnectedStatusChanged;
 
-        public IObservable<Telemetry> TelemetryReceived { get; }
+        public IObservable<TelemetryDto> TelemetryReceived { get; }
         #endregion
 
         #region Methods
@@ -144,7 +145,7 @@ namespace HandControl.Services
             _connectedDevices.ConnectDevice();
         }
 
-        private void TelemetryReceivedHandler(Telemetry telemetry)
+        private void TelemetryReceivedHandler(TelemetryDto telemetryDto)
         {
             var test = 0;
         }

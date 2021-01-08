@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\PropertyChanged.Fody.3.3.1\build\PropertyChanged.Fody.props" Condition="Exists('..\packages\PropertyChanged.Fody.3.3.1\build\PropertyChanged.Fody.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -54,6 +54,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=10.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.10.1.1\lib\net461\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="CommonServiceLocator, Version=2.0.5.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.2.0.5\lib\net47\CommonServiceLocator.dll</HintPath>
     </Reference>
@@ -145,6 +148,10 @@
     </ApplicationDefinition>
     <Compile Include="Model\BaseModel.cs" />
     <Compile Include="Model\BluetoothDto\PackageDto.cs" />
+    <Compile Include="Model\Dto\GestureActionDto.cs" />
+    <Compile Include="Model\Dto\DeleteGestureDto.cs" />
+    <Compile Include="Model\Dto\GestureDto.cs" />
+    <Compile Include="Model\Dto\GetGesturesDto.cs" />
     <Compile Include="Model\Dto\SaveGestureDto.cs" />
     <Compile Include="Model\Enums\CommandType.cs" />
     <Compile Include="Model\Device.cs" />
@@ -162,16 +169,19 @@
     <Compile Include="Model\Repositories\GestureRepositories\Specifications\GesturesSpecificationByAll.cs" />
     <Compile Include="Model\Repositories\GestureRepositories\Specifications\GesturesSpecificationById.cs" />
     <Compile Include="Model\Repositories\GestureRepositories\Specifications\GesturesSpecificationByName.cs" />
-    <Compile Include="Model\IBinarySerialize.cs" />
-    <Compile Include="Model\Telemetry.cs" />
+    <Compile Include="Model\Dto\IBinarySerialize.cs" />
+    <Compile Include="Model\Dto\TelemetryDto.cs" />
     <Compile Include="Services\Crc8Calculator.cs" />
     <Compile Include="Services\IODevice\DeviceBluetooth.cs" />
     <Compile Include="Services\IProtocolParser.cs" />
     <Compile Include="Services\IReceiverBluetoothService.cs" />
     <Compile Include="Services\IBluetoothService.cs" />
+    <Compile Include="Services\Mappers\IMapperFabric.cs" />
+    <Compile Include="Services\Mappers\MapperFabric.cs" />
     <Compile Include="Services\ProtocolParser.cs" />
     <Compile Include="Services\ReceiverBluetoothService.cs" />
     <Compile Include="Services\IODevice\BluetoothService.cs" />
+    <Compile Include="Services\UnixTimestampConverter.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

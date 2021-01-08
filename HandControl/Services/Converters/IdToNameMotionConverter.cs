@@ -8,7 +8,7 @@ using System;
 using System.Globalization;
 using System.Windows.Data;
 
-namespace HandControl.Services
+namespace HandControl.Services.Converters
 {
     /// <summary>
     ///     Класс содержащий конвертер преобразующий Id действия в строковое представление.

@@ -6,9 +6,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace HandControl.Model
 {
@@ -22,14 +20,9 @@ namespace HandControl.Model
     ///     \date Март 2019 года
     ///     \authors Paul Rozhkin(blackiiifox@gmail.com)
     /// </summary>
-    public class GestureModel : BaseModel, ICloneable, IBinarySerialize, IEquatable<GestureModel>
+    public class GestureModel : BaseModel, ICloneable, IEquatable<GestureModel>
     {
         #region Fields
-
-        /// <summary>
-        ///     Название жеста. Выступает в качестве идентификатора в системе.
-        /// </summary>
-        private string name = string.Empty;
 
         #endregion
 
@@ -65,16 +58,7 @@ namespace HandControl.Model
         /// <summary>
         ///     Gets or sets имя жеста, должно быть уникальным.
         /// </summary>
-        public string Name
-        {
-            get => name;
-
-            set
-            {
-                var lastName = name;
-                name = value;
-            }
-        }
+        public string Name { get; set; } = string.Empty;
 
         /// <summary>
         ///     Gets or sets информацию о жесте, такую как время создания/изменения жеста, кол-во действий, кол-во повторений
@@ -153,10 +137,6 @@ namespace HandControl.Model
         {
             var hashCode = -677228334;
             hashCode = hashCode * -1521134295 + Id.GetHashCode();
-            ////hashCode = (hashCode * -1521134295) + EqualityComparer<string>.Default.GetHashCode(this.Name);
-            hashCode = hashCode * -1521134295 + InfoGesture.GetHashCode();
-            for (var i = 0; i < ListMotions.Count; i++)
-                hashCode = hashCode * -1521134295 + ListMotions[i].GetHashCode();
 
             return hashCode;
         }
@@ -169,58 +149,6 @@ namespace HandControl.Model
         public override bool Equals(object obj)
         {
             return Equals(obj as GestureModel);
-        }
-
-        /// <summary>
-        ///     Выполняет сериализацию экземпляра <see cref="GestureModel" /> в бинарный формат.
-        /// </summary>
-        /// <returns>Экземпляр <see cref="GestureModel" />, представленный в виде бинарного потока.</returns>
-        public byte[] BinarySerialize()
-        {
-            using (var m = new MemoryStream())
-            {
-                using (var writer = new BinaryWriter(m))
-                {
-                    writer.Write(Id.ToByteArray());
-                    var nameBts = Encoding.UTF8.GetBytes(Name);
-                    writer.Write((byte) nameBts.Length);
-                    writer.Write(nameBts);
-                    writer.Write(InfoGesture.BinarySerialize());
-
-                    if (InfoGesture.NumberOfMotions != ListMotions.Count)
-                        throw new ArgumentException("NumberOfMotions and ListMotions count do not match.");
-                    for (var i = 0; i < InfoGesture.NumberOfMotions; i++)
-                        writer.Write(ListMotions[i].BinarySerialize());
-                }
-
-                return m.ToArray();
-            }
-        }
-
-        /// <summary>
-        ///     Выполняет десериализацию экземпляра <see cref="GestureModel" /> из бинарного потока.
-        /// </summary>
-        /// <param name="data">Бинарный поток.</param>
-        public void BinaryDesserialize(byte[] data)
-        {
-            using (var m = new MemoryStream(data))
-            {
-                using (var reader = new BinaryReader(m))
-                {
-                    Id = new Guid(reader.ReadBytes(16));
-                    int lengthName = reader.ReadByte();
-                    Name = Encoding.UTF8.GetString(reader.ReadBytes(lengthName));
-                    InfoGesture.BinaryDesserialize(reader.ReadBytes(11));
-
-                    ListMotions.Clear();
-                    for (var i = 0; i < InfoGesture.NumberOfMotions; i++)
-                    {
-                        var motion = ActionModel.GetDefault(i);
-                        motion.BinaryDesserialize(reader.ReadBytes(9));
-                        ListMotions.Add(motion);
-                    }
-                }
-            }
         }
 
         /// <summary>
@@ -256,7 +184,7 @@ namespace HandControl.Model
         /// <summary>
         ///     Класс содержащий единичное положение протеза.
         /// </summary>
-        public class ActionModel : BaseModel, ICloneable, IBinarySerialize, IEquatable<ActionModel>
+        public class ActionModel : BaseModel, ICloneable, IEquatable<ActionModel>
         {
             #region Constructors
 
@@ -368,6 +296,7 @@ namespace HandControl.Model
                     DelMotion = 0,
                     StatePosBrush = 0
                 };
+
                 return result;
             }
 
@@ -402,50 +331,6 @@ namespace HandControl.Model
                 }
 
                 return maxId + 1;
-            }
-
-            /// <summary>
-            ///     Выполняет сериализацию экземпляра <see cref="ActionModel" /> в бинарный формат.
-            /// </summary>
-            /// <returns>Экземпляр <see cref="ActionModel" />, представленный в виде бинарного потока.</returns>
-            public byte[] BinarySerialize()
-            {
-                using (var m = new MemoryStream())
-                {
-                    using (var writer = new BinaryWriter(m))
-                    {
-                        writer.Write((byte) PointerFinger);
-                        writer.Write((byte) MiddleFinger);
-                        writer.Write((byte) RingFinder);
-                        writer.Write((byte) LittleFinger);
-                        writer.Write((byte) ThumbFinger);
-                        writer.Write((ushort) StatePosBrush);
-                        writer.Write((ushort) DelMotion);
-                    }
-
-                    return m.ToArray();
-                }
-            }
-
-            /// <summary>
-            ///     Выполняет десериализацию экземпляра <see cref="ActionModel" /> из бинарного потока.
-            /// </summary>
-            /// <param name="data">Бинарный поток.</param>
-            public void BinaryDesserialize(byte[] data)
-            {
-                using (var m = new MemoryStream(data))
-                {
-                    using (var reader = new BinaryReader(m))
-                    {
-                        PointerFinger = reader.ReadByte();
-                        MiddleFinger = reader.ReadByte();
-                        RingFinder = reader.ReadByte();
-                        LittleFinger = reader.ReadByte();
-                        ThumbFinger = reader.ReadByte();
-                        StatePosBrush = reader.ReadUInt16();
-                        DelMotion = reader.ReadUInt16();
-                    }
-                }
             }
 
             /// <summary>
@@ -529,7 +414,7 @@ namespace HandControl.Model
         /// <summary>
         ///     Класс содержащий информацию о жесте <see cref="GestureModel" />.
         /// </summary>
-        public class InfoGestureModel : BaseModel, ICloneable, IBinarySerialize, IEquatable<InfoGestureModel>
+        public class InfoGestureModel : BaseModel, ICloneable, IEquatable<InfoGestureModel>
         {
             #region Constructors
 
@@ -602,66 +487,6 @@ namespace HandControl.Model
             }
 
             /// <summary>
-            ///     Выполняет преобразование текущей даты и времени изменения в Unix время.
-            /// </summary>
-            /// <returns>Unix time.</returns>
-            private double TimeChangeToUnix()
-            {
-                var origin = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-                var diff = TimeChange.ToUniversalTime() - origin;
-                return Math.Floor(diff.TotalSeconds);
-            }
-
-            /// <summary>
-            ///     Выполняет установку последнего времени изменения из unix времени.
-            /// </summary>
-            private void TimeChangeFromUnix(double dateTime)
-            {
-                var outer = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-                TimeChange = outer.AddSeconds(dateTime).ToLocalTime();
-            }
-
-            /// <summary>
-            ///     Выполняет сериализацию экземпляра <see cref="InfoGestureModel" /> в бинарный формат.
-            /// </summary>
-            /// <returns>Экземпляр <see cref="InfoGestureModel" />, представленный в виде бинарного потока.</returns>
-            public byte[] BinarySerialize()
-            {
-                using (var m = new MemoryStream())
-                {
-                    using (var writer = new BinaryWriter(m))
-                    {
-                        //double unixTime = (this.TimeChange - new DateTime(1970, 1, 1)).TotalSeconds;
-
-                        writer.Write((uint) TimeChangeToUnix());
-                        writer.Write(Convert.ToByte(IterableGesture));
-                        writer.Write((byte) NumberOfGestureRepetitions);
-                        writer.Write((byte) NumberOfMotions);
-                    }
-
-                    return m.ToArray();
-                }
-            }
-
-            /// <summary>
-            ///     Выполняет десериализацию экземпляра <see cref="InfoGestureModel" /> из бинарного потока.
-            /// </summary>
-            /// <param name="data">Бинарный поток.</param>
-            public void BinaryDesserialize(byte[] data)
-            {
-                using (var m = new MemoryStream(data))
-                {
-                    using (var reader = new BinaryReader(m))
-                    {
-                        TimeChangeFromUnix(reader.ReadUInt32());
-                        IterableGesture = Convert.ToBoolean(reader.ReadByte());
-                        NumberOfGestureRepetitions = reader.ReadByte();
-                        NumberOfMotions = reader.ReadByte();
-                    }
-                }
-            }
-
-            /// <summary>
             ///     Полное клонирование экземпляра InfoCommandModel.
             /// </summary>
             /// <returns>Клонированный экземпляр InfoCommandModel.</returns>
@@ -677,10 +502,6 @@ namespace HandControl.Model
             public override int GetHashCode()
             {
                 var hashCode = 374632536;
-                ////hashCode = (hashCode * -1521134295) + this.IterableGesture.GetHashCode();
-                ////hashCode = (hashCode * -1521134295) + this.NumberOfGestureRepetitions.GetHashCode();
-                ////hashCode = (hashCode * -1521134295) + this.NumberOfMotions.GetHashCode();
-                ////hashCode = (hashCode * -1521134295) + EqualityComparer<DateTime>.Default.GetHashCode(this.TimeChange);
                 return hashCode;
             }
 

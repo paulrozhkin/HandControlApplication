@@ -4,7 +4,7 @@
 // </copyright> 
 // -------------------------------------------------------------------------------------
 
-namespace HandControl.Model
+namespace HandControl.Model.Dto
 {
     /// <summary>
     ///     Интерфейс предназначенный для бинарной сериализации экземпляров.
@@ -21,6 +21,6 @@ namespace HandControl.Model
         ///     Выполняет десериализацию экземпляра из бинарного массива.
         /// </summary>
         /// <param name="data">Бинарный массив.</param>
-        void BinaryDesserialize(byte[] data);
+        void BinaryDeserialize(byte[] data);
     }
 }

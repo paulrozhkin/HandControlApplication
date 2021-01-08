@@ -2,12 +2,12 @@
     x:Class="HandControl.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:converters="clr-namespace:HandControl.Services"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:HandControl"
     xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:viewModel="clr-namespace:HandControl.ViewModel"
+    xmlns:converters="clr-namespace:HandControl.Services.Converters"
     Title="HandControl"
     Width="1024"
     Height="768"
@@ -17,7 +17,7 @@
     mc:Ignorable="d">
 
     <Window.Resources>
-        <converters:IdToNameMotionConverter x:Key="idToNameMotionConverter" />
+        <converters:IdToNameMotionConverter x:Key="IdToNameMotionConverter" />
 
         <Style x:Key="StyleListBox" TargetType="{x:Type ListBoxItem}">
             <Setter Property="Template">
@@ -581,7 +581,7 @@
                                         VerticalAlignment="Center"
                                         Background="Transparent"
                                         FontFamily="{StaticResource SFUIDisplayMedium}"
-                                        Text="{Binding Id, Converter={StaticResource idToNameMotionConverter}, Mode=TwoWay}">
+                                        Text="{Binding Id, Converter={StaticResource IdToNameMotionConverter}, Mode=TwoWay}">
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
                                                 <Setter Property="TextBlock.Foreground" Value="White" />
