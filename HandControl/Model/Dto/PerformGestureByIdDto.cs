@@ -2,9 +2,8 @@
 
 namespace HandControl.Model.Dto
 {
-    public class DeleteGestureDto
+    public class PerformGestureByIdDto
     {
-        public DateTime TimeSync { get; set; }
         public Guid Id { get; set; }
     }
 }

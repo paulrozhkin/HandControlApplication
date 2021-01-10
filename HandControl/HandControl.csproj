@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\PropertyChanged.Fody.3.3.1\build\PropertyChanged.Fody.props" Condition="Exists('..\packages\PropertyChanged.Fody.3.3.1\build\PropertyChanged.Fody.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -81,8 +81,20 @@
     <Reference Include="MaterialDesignThemes.Wpf, Version=3.2.0.1979, Culture=neutral, PublicKeyToken=df2a72020bd7962a, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignThemes.3.2.0\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Xaml.Behaviors, Version=1.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.19\lib\net45\Microsoft.Xaml.Behaviors.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Prism, Version=8.0.0.1909, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.Core.8.0.0.1909\lib\net47\Prism.dll</HintPath>
+    </Reference>
+    <Reference Include="Prism.Unity.Wpf, Version=8.0.0.1909, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.Unity.8.0.0.1909\lib\net47\Prism.Unity.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="Prism.Wpf, Version=8.0.0.1909, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.Wpf.8.0.0.1909\lib\net47\Prism.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="PropertyChanged, Version=3.3.1.0, Culture=neutral, PublicKeyToken=ee3ee20bcf148ddd, processorArchitecture=MSIL">
       <HintPath>..\packages\PropertyChanged.Fody.3.3.1\lib\net40\PropertyChanged.dll</HintPath>
@@ -137,6 +149,12 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="Unity.Abstractions, Version=5.11.6.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.Abstractions.5.11.6\lib\net47\Unity.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Container, Version=5.11.8.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.Container.5.11.8\lib\net47\Unity.Container.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -148,39 +166,45 @@
     </ApplicationDefinition>
     <Compile Include="Model\BaseModel.cs" />
     <Compile Include="Model\BluetoothDto\PackageDto.cs" />
+    <Compile Include="Model\Dto\SetSettingsDto.cs" />
+    <Compile Include="Model\Dto\SetPositionsDto.cs" />
     <Compile Include="Model\Dto\GestureActionDto.cs" />
     <Compile Include="Model\Dto\DeleteGestureDto.cs" />
     <Compile Include="Model\Dto\GestureDto.cs" />
     <Compile Include="Model\Dto\GetGesturesDto.cs" />
+    <Compile Include="Model\Dto\PerformGestureRawDto.cs" />
     <Compile Include="Model\Dto\SaveGestureDto.cs" />
+    <Compile Include="Model\Dto\PerformGestureByIdDto.cs" />
+    <Compile Include="Model\Dto\GetSettingsDto.cs" />
+    <Compile Include="Model\Dto\UpdateLastTimeSyncDto.cs" />
     <Compile Include="Model\Enums\CommandType.cs" />
     <Compile Include="Model\Device.cs" />
+    <Compile Include="Model\Enums\DriverStatus.cs" />
+    <Compile Include="Model\Enums\ModeType.cs" />
     <Compile Include="Model\Enums\ModuleStatus.cs" />
     <Compile Include="Model\Protobuf\Enums.cs" />
     <Compile Include="Model\Protobuf\Gestures.cs" />
     <Compile Include="Model\Protobuf\Settings.cs" />
     <Compile Include="Model\Protobuf\Telemetry.cs" />
     <Compile Include="Model\Protobuf\Uuid.cs" />
-    <Compile Include="Model\Repositories\GestureRepositories\GestureRepositoryFactory.cs" />
-    <Compile Include="Model\Repositories\IEntitySpecification.cs" />
-    <Compile Include="Model\Repositories\GestureRepositories\GestureFileSystemRepository.cs" />
-    <Compile Include="Model\Repositories\GestureRepositories\IGestureRepository.cs" />
-    <Compile Include="Model\Repositories\IRepository.cs" />
-    <Compile Include="Model\Repositories\GestureRepositories\Specifications\GesturesSpecificationByAll.cs" />
-    <Compile Include="Model\Repositories\GestureRepositories\Specifications\GesturesSpecificationById.cs" />
-    <Compile Include="Model\Repositories\GestureRepositories\Specifications\GesturesSpecificationByName.cs" />
+    <Compile Include="Services\LocalStorage\GesturesLocalStorage.cs" />
+    <Compile Include="Services\LocalStorage\IGesturesLocalStorage.cs" />
     <Compile Include="Model\Dto\IBinarySerialize.cs" />
     <Compile Include="Model\Dto\TelemetryDto.cs" />
     <Compile Include="Services\Crc8Calculator.cs" />
-    <Compile Include="Services\IODevice\DeviceBluetooth.cs" />
-    <Compile Include="Services\IProtocolParser.cs" />
-    <Compile Include="Services\IReceiverBluetoothService.cs" />
-    <Compile Include="Services\IBluetoothService.cs" />
+    <Compile Include="Services\ProstheticServices\GestureService.cs" />
+    <Compile Include="Services\IFileSystemFacade.cs" />
+    <Compile Include="Services\ProstheticServices\IGestureService.cs" />
+    <Compile Include="Services\IODevice\Bluetooth\DeviceBluetooth.cs" />
+    <Compile Include="Services\ProstheticServices\IProstheticConnector.cs" />
+    <Compile Include="Services\IODevice\IProtocolParser.cs" />
+    <Compile Include="Services\IODevice\Bluetooth\IBluetoothService.cs" />
     <Compile Include="Services\Mappers\IMapperFabric.cs" />
     <Compile Include="Services\Mappers\MapperFabric.cs" />
-    <Compile Include="Services\ProtocolParser.cs" />
-    <Compile Include="Services\ReceiverBluetoothService.cs" />
-    <Compile Include="Services\IODevice\BluetoothService.cs" />
+    <Compile Include="Services\IODevice\ProtocolParser.cs" />
+    <Compile Include="Services\IODevice\Bluetooth\BluetoothService.cs" />
+    <Compile Include="Services\ProstheticServices\IProstheticManager.cs" />
+    <Compile Include="Services\ProstheticServices\ProstheticConnector.cs" />
     <Compile Include="Services\UnixTimestampConverter.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Page Include="View\MainWindow.xaml">
@@ -192,7 +216,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Model\GestureModel.cs" />
-    <Compile Include="Services\ProstheticManager.cs" />
+    <Compile Include="Services\ProstheticServices\ProstheticManager.cs" />
     <Compile Include="Services\Converters\IdToNameMotionConverter.cs" />
     <Compile Include="Services\FileSystemFacade.cs" />
     <Compile Include="Services\IODevice\IIoDevice.cs">

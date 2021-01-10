@@ -9,7 +9,7 @@ using HandControl.Model;
 using InTheHand.Net;
 using InTheHand.Net.Sockets;
 
-namespace HandControl.Services.IODevice
+namespace HandControl.Services.IODevice.Bluetooth
 {
     /// <summary>
     ///     Класса имплементирующий интерфейс IBluetoothService.
@@ -63,7 +63,7 @@ namespace HandControl.Services.IODevice
         ///     Gets only authenticated devices.
         /// </summary>
         /// <returns>The list of the devices.</returns>
-        public async Task<IList<Device>> GetAuthenticDevices()
+        public async Task<IList<Device>> GetAuthenticDevicesAsync()
         {
             return await GetDevices(true);
         }
@@ -72,12 +72,12 @@ namespace HandControl.Services.IODevice
         ///     Gets all devices.
         /// </summary>
         /// <returns>The list of the devices.</returns>
-        public async Task<IList<Device>> GetAllDevices()
+        public async Task<IList<Device>> GetAllDevicesAsync()
         {
             return await GetDevices(false);
         }
 
-        public async Task<bool> Connect(Device device)
+        public async Task<bool> ConnectAsync(Device device)
         {
             var task = Task.Run(() =>
             {
@@ -126,7 +126,7 @@ namespace HandControl.Services.IODevice
         /// <param name="device">The device.</param>
         /// <param name="content">The content.</param>
         /// <returns>If was sent or not.</returns>
-        public Task Send(byte[] content)
+        public Task SendAsync(byte[] content)
         {
             if (_bluetoothStream == null) throw new InvalidOperationException("Not connected");
 

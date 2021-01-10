@@ -51,11 +51,16 @@
         /// <summary>
         ///     Исполнение жеста.
         /// </summary>
-        PerformGestureRaw = 0x10,
+        PerformGestureRaw = 0x0A,
 
         /// <summary>
-        ///     Установки переданных положений пальцев на протез.
+        ///     Установка переданных положений пальцев на протез.
         /// </summary>
-        SetPositions = 0x11
+        SetPositions = 0x0B,
+
+        /// <summary>
+        ///     Обновить время синхронизации жестов на протезе.
+        /// </summary>
+        UpdateLastTimeSync = 0x0C
     }
 }

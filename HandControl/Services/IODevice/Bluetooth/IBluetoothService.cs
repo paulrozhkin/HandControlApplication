@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using HandControl.Model;
 
-namespace HandControl.Services
+namespace HandControl.Services.IODevice.Bluetooth
 {
     /// <summary>
     ///     Define the sender Bluetooth service interface.
@@ -17,7 +17,7 @@ namespace HandControl.Services
         /// </summary>
         /// <param name="device"></param>
         /// <returns>Result of connect</returns>
-        Task<bool> Connect(Device device);
+        Task<bool> ConnectAsync(Device device);
 
         /// <summary>
         ///     Disconnect device.
@@ -28,19 +28,19 @@ namespace HandControl.Services
         ///     Gets the devices.
         /// </summary>
         /// <returns>The list of the devices.</returns>
-        Task<IList<Device>> GetAuthenticDevices();
+        Task<IList<Device>> GetAuthenticDevicesAsync();
 
         /// <summary>
         ///     Gets all devices.
         /// </summary>
         /// <returns>The list of the devices.</returns>
-        Task<IList<Device>> GetAllDevices();
+        Task<IList<Device>> GetAllDevicesAsync();
 
         /// <summary>
         ///     Sends the string UTF8 data to the Receiver.
         /// </summary>
         /// <param name="content">The bytes content.</param>
         /// <returns>If was sent or not.</returns>
-        Task Send(byte[] content);
+        Task SendAsync(byte[] content);
     }
 }

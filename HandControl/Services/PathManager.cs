@@ -6,14 +6,12 @@ namespace HandControl.Services
 {
     public static class PathManager
     {
-        public static readonly string MainDataPath = AppDomain.CurrentDomain.BaseDirectory + "\\Data\\";
-        private static readonly string FileGesturesName = "\\gesture.json";
-        private static readonly string FolderGesturesName = "Gestures\\";
-        private static readonly string FolderConfig = "config\\";
-        private static readonly string FolderIODeviceConfig = "IODeviceConfig\\";
-
-        public static string Txt = ".txt";
-        public static string Json = ".json";
+        private static readonly string MainDataPath = AppDomain.CurrentDomain.BaseDirectory + "\\Data\\";
+        private const string FileGesturesName = "\\gesture.bin";
+        private const string FolderGesturesName = "Gestures\\";
+        private const string FolderConfig = "config\\";
+        private const string FolderIoDeviceConfig = "IODeviceConfig\\";
+        private const string FileGesturesInfoName = "gesturesInfo.json";
 
         public static List<string> GetGesturesFilesPaths()
         {
@@ -49,12 +47,29 @@ namespace HandControl.Services
             return gestureFolderPath;
         }
 
-        public static string IODevicePath(string nameDevice)
+        public static string GetGestureInfoPath()
         {
-            var IODeviceFolderPath = MainDataPath + FolderConfig + FolderIODeviceConfig;
-            if (!Directory.Exists(IODeviceFolderPath))
-                Directory.CreateDirectory(IODeviceFolderPath);
-            var configFilePath = IODeviceFolderPath + "IODevice" + nameDevice + ".conf";
+            var gesturesPaths = $"{MainDataPath}{FolderGesturesName}";
+            if (!Directory.Exists(gesturesPaths))
+            {
+                Directory.CreateDirectory(gesturesPaths);
+            }
+
+            var configFilePath = $"{gesturesPaths}{FileGesturesInfoName}";
+            if (!File.Exists(configFilePath))
+            {
+                File.Create(configFilePath).Close();
+            }
+
+            return configFilePath;
+        }
+
+        public static string IoDevicePath(string nameDevice)
+        {
+            var ioDeviceFolderPath = MainDataPath + FolderConfig + FolderIoDeviceConfig;
+            if (!Directory.Exists(ioDeviceFolderPath))
+                Directory.CreateDirectory(ioDeviceFolderPath);
+            var configFilePath = ioDeviceFolderPath + "IODevice" + nameDevice + ".conf";
             if (!File.Exists(configFilePath)) File.Create(configFilePath).Close();
 
             return configFilePath;

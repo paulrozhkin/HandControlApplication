@@ -17,7 +17,7 @@ using HandControl.Model.Enums;
 using InTheHand.Net.Bluetooth;
 using Newtonsoft.Json;
 
-namespace HandControl.Services.IODevice
+namespace HandControl.Services.IODevice.Bluetooth
 {
     /// <summary>
     ///     Класса имплементирующий интерфейс IIoDevice.
@@ -62,16 +62,6 @@ namespace HandControl.Services.IODevice
 
         #endregion
 
-        #region Events
-
-#pragma warning disable
-        /// <summary>
-        ///     Имплементация INotifyPropertyChanged.
-        /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        #endregion
-
         #region Properties
 
         public IObservable<bool> IsConnectedStatusChanged { get; }
@@ -105,12 +95,12 @@ namespace HandControl.Services.IODevice
             _service.Dispose();
         }
 
-        public Task<byte[]> SendToDevice(CommandType command)
+        public Task<byte[]> SendToDeviceAsync(CommandType command)
         {
-            return SendToDevice(command, null);
+            return SendToDeviceAsync(command, null);
         }
 
-        public async Task<byte[]> SendToDevice(CommandType command, byte[] payload)
+        public async Task<byte[]> SendToDeviceAsync(CommandType command, byte[] payload)
         {
             await _semaphoreSendPackage.WaitAsync();
 
@@ -122,7 +112,7 @@ namespace HandControl.Services.IODevice
                 }
 
                 var package = _protocolParser.CreatePackage(command, payload);
-                await _service.Send(package);
+                await _service.SendAsync(package);
 
                 _packageResponseCompletionSource = new TaskCompletionSource<byte[]>();
                 var cancellationTokenSource = new CancellationTokenSource();
@@ -144,13 +134,13 @@ namespace HandControl.Services.IODevice
             }
         }
 
-        private async Task ConnectToDeviceAsync()
+        public async Task ConnectDeviceAsync()
         {
             while (!IsBluetoothConnected)
             {
                 if (BluetoothRadio.IsSupported.Equals(true))
                 {
-                    var listDevices = await _service.GetAuthenticDevices();
+                    var listDevices = await _service.GetAuthenticDevicesAsync();
 
                     foreach (var device in listDevices)
                         if (device.DeviceName.Equals(_bluetoothInfo.NameDevice))
@@ -165,7 +155,7 @@ namespace HandControl.Services.IODevice
 
                             _device = device;
 
-                            var status = await _service.Connect(device);
+                            var status = await _service.ConnectAsync(device);
 
                             if (status)
                             {
@@ -186,7 +176,7 @@ namespace HandControl.Services.IODevice
         {
             while (true)
             {
-                var listDevices = await _service.GetAuthenticDevices();
+                var listDevices = await _service.GetAuthenticDevicesAsync();
 
                 foreach (var device in listDevices)
                     if (device.DeviceName.Equals(_bluetoothInfo.NameDevice))
@@ -194,7 +184,7 @@ namespace HandControl.Services.IODevice
                         {
                             _service.Disconnect();
                             IsBluetoothConnected = false;
-                            _ = ConnectToDeviceAsync();
+                            _ = ConnectDeviceAsync();
                             Thread.CurrentThread.Interrupt();
                         }
 
@@ -210,11 +200,6 @@ namespace HandControl.Services.IODevice
             }
         }
 
-        public void ConnectDevice()
-        {
-            _ = ConnectToDeviceAsync();
-        }
-
         public void DisconnectDevice()
         {
             _service.Disconnect();
@@ -223,13 +208,19 @@ namespace HandControl.Services.IODevice
         private void DataReceivedHandler(PackageDto package)
         {
             if (_packageResponseCompletionSource == null)
+            {
                 throw new InvalidOperationException("The package was not expected to be received.");
+            }
 
             if (package.Command == CommandType.Error)
+            {
                 _packageResponseCompletionSource.SetException(new Exception("Prosthetic error code"));
+            }
 
             if (package.Crc != package.ReceivedCrc)
+            {
                 _packageResponseCompletionSource.SetException(new Exception("Crc not equals"));
+            }
 
             _packageResponseCompletionSource.SetResult(package.Payload);
         }
@@ -271,7 +262,7 @@ namespace HandControl.Services.IODevice
             public static BluetoothInfo InfoLoad()
             {
                 var info =
-                    (BluetoothInfo) JsonSerDer.LoadObject<BluetoothInfo>(PathManager.IODevicePath("Bluetooth"));
+                    (BluetoothInfo) JsonSerDer.LoadObject<BluetoothInfo>(PathManager.IoDevicePath("Bluetooth"));
 
                 if (info == null)
                 {
@@ -288,7 +279,7 @@ namespace HandControl.Services.IODevice
             /// <param name="info">Сохраняемый экземпляр <see cref="BluetoothInfo" />.</param>
             private static void InfoSave(BluetoothInfo info)
             {
-                JsonSerDer.SaveObject(info, PathManager.IODevicePath("Bluetooth"));
+                JsonSerDer.SaveObject(info, PathManager.IoDevicePath("Bluetooth"));
             }
 
             /// <summary>

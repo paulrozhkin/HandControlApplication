@@ -1,19 +1,18 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using HandControl.ViewModel;
 
-namespace HandControl
+namespace HandControl.View
 {
     /// <summary>
     ///     Логика взаимодействия для MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly MainWindowViewModel dataModel = new MainWindowViewModel();
-
-        public MainWindow()
+        public MainWindow(MainWindowViewModel mainWindowViewModel)
         {
+            DataContext = mainWindowViewModel ?? throw new ArgumentNullException(nameof(mainWindowViewModel));
             InitializeComponent();
-            DataContext = dataModel;
         }
     }
 }

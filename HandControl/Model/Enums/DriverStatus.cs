@@ -1,11 +1,12 @@
 ﻿namespace HandControl.Model.Enums
 {
-    public enum ModuleStatus
+    public enum DriverStatus
     {
         Initialization,
-        Work,
         Error,
         ConnectionError,
-        Disabled
+        Disabled,
+        Sleep,
+        SettingPosition
     }
 }

@@ -6,11 +6,14 @@ namespace HandControl.Services
 {
     public static class JsonSerDer
     {
+        // TODO: переписать
+        private static IFileSystemFacade _fileSystemFacade = new FileSystemFacade();
+
         public static bool SaveObject(object obj, string path)
         {
             try
             {
-                FileSystemFacade.WriteData(path, JsonConvert.SerializeObject(obj));
+                _fileSystemFacade.WriteData(path, JsonConvert.SerializeObject(obj));
                 return true;
             }
             catch (Exception e)
@@ -24,9 +27,13 @@ namespace HandControl.Services
         {
             try
             {
-                if (FileSystemFacade.ReadData(path) == "")
+                var content = _fileSystemFacade.ReadData(path);
+                if (content == "")
+                {
                     return null;
-                return JsonConvert.DeserializeObject<T>(FileSystemFacade.ReadData(path));
+                }
+
+                return JsonConvert.DeserializeObject<T>(content);
             }
             catch (Exception e)
             {

@@ -2,7 +2,7 @@
 using HandControl.Model.BluetoothDto;
 using HandControl.Model.Enums;
 
-namespace HandControl.Services
+namespace HandControl.Services.IODevice
 {
     public interface IProtocolParser
     {

@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Threading;
 using HandControl.Model.BluetoothDto;
 using HandControl.Model.Enums;
 
-namespace HandControl.Services
+namespace HandControl.Services.IODevice
 {
     public class ProtocolParser : IProtocolParser
     {
+        private SemaphoreSlim _receiveSemaphoreSlim = new SemaphoreSlim(1);
+
         public ProtocolParser()
         {
             _state = ProtocolState.Sfd;
@@ -52,11 +55,21 @@ namespace HandControl.Services
 
         #region Methods
 
-        public void Update(byte[] data)
+        public async void Update(byte[] data)
         {
-            if (data == null) throw new ArgumentNullException(nameof(data));
+            if (data == null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
 
-            foreach (var dataByte in data) Update(dataByte);
+            await _receiveSemaphoreSlim.WaitAsync();
+            
+            foreach (var dataByte in data)
+            {
+                Update(dataByte);
+            }
+
+            _receiveSemaphoreSlim.Release();
         }
 
         public void Update(byte data)

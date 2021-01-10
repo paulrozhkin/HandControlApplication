@@ -13,15 +13,10 @@ namespace HandControl.Services
     /// <summary>
     ///     Класс, предоставляющий упрощенный доступ к файловой системе ПК.
     /// </summary>
-    public static class FileSystemFacade
+    public class FileSystemFacade : IFileSystemFacade
     {
-        /// <summary>
-        ///     Выполняет чтение строковых данных из файла.
-        ///     При ошибке выполнения выдает исключение.
-        /// </summary>
-        /// <param name="path">Путь к файлу.</param>
-        /// <returns>Строки, содержащиеся в файле.</returns>
-        public static string ReadData(string path)
+        /// <inheritdoc/>
+        public string ReadData(string path)
         {
             var str = string.Empty;
             try
@@ -40,13 +35,8 @@ namespace HandControl.Services
             }
         }
 
-        /// <summary>
-        ///     Выполняет запись строковых данных в файла.
-        ///     При ошибке выполнения выдает исключение.
-        /// </summary>
-        /// <param name="path">Путь к файлу.</param>
-        /// <param name="data">Строка для записи.</param>
-        public static void WriteData(string path, string data)
+        /// <inheritdoc/>
+        public void WriteData(string path, string data)
         {
             using (var wrt = new StreamWriter(path))
             {
@@ -60,7 +50,7 @@ namespace HandControl.Services
         /// </summary>
         /// <param name="path">Путь к файлу.</param>
         /// <returns>Поток байт, содержащихся в файле.</returns>
-        public static byte[] ReadBinaryData(string path)
+        public byte[] ReadBinaryData(string path)
         {
             var data = File.ReadAllBytes(path);
             return data;
@@ -72,7 +62,7 @@ namespace HandControl.Services
         /// </summary>
         /// <param name="path">Путь к файлу.</param>
         /// <param name="binaryData">Поток байт для записи.</param>
-        public static void WriteBinaryData(string path, byte[] binaryData)
+        public void WriteBinaryData(string path, byte[] binaryData)
         {
             File.WriteAllBytes(path, binaryData);
         }
@@ -82,7 +72,7 @@ namespace HandControl.Services
         ///     При ошибке выполнения выдает исключение.
         /// </summary>
         /// <param name="path">Путь к файлу.</param>
-        public static void DeleteFile(string path)
+        public void DeleteFile(string path)
         {
             File.Delete(path);
         }
@@ -91,7 +81,7 @@ namespace HandControl.Services
         ///     Удаление директории из файловой системы.
         /// </summary>
         /// <param name="path">Путь к удаляемой директории.</param>
-        public static void DeleteFolder(string path)
+        public void DeleteFolder(string path)
         {
             Directory.Delete(path, true);
         }

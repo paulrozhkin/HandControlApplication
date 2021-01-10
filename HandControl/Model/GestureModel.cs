@@ -230,11 +230,6 @@ namespace HandControl.Model
             public int LittleFinger { get; set; }
 
             /// <summary>
-            ///     Gets or sets положение кисти в градусах.
-            /// </summary>
-            public int StatePosBrush { get; set; }
-
-            /// <summary>
             ///     Gets or sets задержка между действиями в секундах.
             /// </summary>
             public double DelMotionSec
@@ -293,8 +288,7 @@ namespace HandControl.Model
                     MiddleFinger = 0,
                     RingFinder = 0,
                     LittleFinger = 0,
-                    DelMotion = 0,
-                    StatePosBrush = 0
+                    DelMotion = 0
                 };
 
                 return result;
@@ -347,9 +341,10 @@ namespace HandControl.Model
                     MiddleFinger = MiddleFinger,
                     RingFinder = RingFinder,
                     LittleFinger = LittleFinger,
-                    DelMotion = DelMotion,
-                    StatePosBrush = StatePosBrush
+                    DelMotion = DelMotion
+
                 };
+
                 return result;
             }
 
@@ -398,9 +393,6 @@ namespace HandControl.Model
                            ReferenceEquals(RingFinder, other.RingFinder) ||
                            RingFinder.Equals(other.RingFinder))
                        && (
-                           ReferenceEquals(StatePosBrush, other.StatePosBrush) ||
-                           StatePosBrush.Equals(other.StatePosBrush))
-                       && (
                            ReferenceEquals(ThumbFinger, other.ThumbFinger) ||
                            ThumbFinger.Equals(other.ThumbFinger))
                        && (
@@ -440,11 +432,6 @@ namespace HandControl.Model
             public int NumberOfGestureRepetitions { get; set; }
 
             /// <summary>
-            ///     Gets or sets количество действий в жесте.
-            /// </summary>
-            public int NumberOfMotions { get; set; }
-
-            /// <summary>
             ///     Gets or sets время последнего изменения/создания жеста.
             /// </summary>
             public DateTime TimeChange { get; set; }
@@ -464,7 +451,6 @@ namespace HandControl.Model
                     TimeChange = DateTime.Now,
                     IterableGesture = false,
                     NumberOfGestureRepetitions = 1,
-                    NumberOfMotions = 0
                 };
                 return result;
             }
@@ -534,10 +520,7 @@ namespace HandControl.Model
                            IterableGesture.Equals(other.IterableGesture))
                        && (
                            ReferenceEquals(NumberOfGestureRepetitions, other.NumberOfGestureRepetitions) ||
-                           NumberOfGestureRepetitions.Equals(other.NumberOfGestureRepetitions))
-                       && (
-                           ReferenceEquals(NumberOfMotions, other.NumberOfMotions) ||
-                           NumberOfMotions.Equals(other.NumberOfMotions));
+                           NumberOfGestureRepetitions.Equals(other.NumberOfGestureRepetitions));
             }
 
             #endregion

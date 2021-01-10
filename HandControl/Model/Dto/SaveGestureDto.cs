@@ -2,7 +2,7 @@
 
 namespace HandControl.Model.Dto
 {
-    public class SaveGesturesDto
+    public class SaveGestureDto
     {
         public DateTime TimeSync { get; set; }
         public GestureDto Gesture { get; set; }

@@ -5,9 +5,7 @@
 // -------------------------------------------------------------------------------------
 
 using System;
-using System.ComponentModel;
 using System.Threading.Tasks;
-using HandControl.Model;
 using HandControl.Model.BluetoothDto;
 using HandControl.Model.Enums;
 
@@ -36,7 +34,7 @@ namespace HandControl.Services.IODevice
         ///     Выполняет подключение к устройству.
         /// </summary>
         /// <returns></returns>
-        void ConnectDevice();
+        Task ConnectDeviceAsync();
 
         /// <summary>
         ///     Выполняет отключение от устройству.
@@ -49,13 +47,13 @@ namespace HandControl.Services.IODevice
         /// <param name="command">Команда протеза.</param>
         /// <param name="payload">Отправляемые данные в byte</param>
         /// <returns>Ответ с протеза.</returns>
-        Task<byte[]> SendToDevice(CommandType command, byte[] payload);
+        Task<byte[]> SendToDeviceAsync(CommandType command, byte[] payload);
 
         /// <summary>
         ///     Отправка данных на устройство.
         /// </summary>
         /// <param name="command">Команда протеза.</param>
         /// <returns>Ответ с протеза.</returns>
-        Task<byte[]> SendToDevice(CommandType command);
+        Task<byte[]> SendToDeviceAsync(CommandType command);
     }
 }

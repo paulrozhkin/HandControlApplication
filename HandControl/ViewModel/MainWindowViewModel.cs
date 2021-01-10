@@ -8,13 +8,13 @@ using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Reactive.Linq;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using HandControl.Model;
-using HandControl.Model.Repositories;
-using HandControl.Model.Repositories.GestureRepositories;
-using HandControl.Model.Repositories.GestureRepositories.Specifications;
 using HandControl.Services;
+using HandControl.Services.ProstheticServices;
 
 namespace HandControl.ViewModel
 {
@@ -36,15 +36,12 @@ namespace HandControl.ViewModel
         private GestureModel _selectedGestureField;
 
         /// <summary>
-        ///     Репозиторий жестов системы.
-        /// </summary>
-        private readonly IGestureRepository _gestureRepositoryField;
-
-        /// <summary>
         ///     Коллекция действий выбранного жеста <see cref="SelectedGesture" />.
         /// </summary>
         private ObservableCollection<GestureModel.ActionModel> _listMotionsField =
             new ObservableCollection<GestureModel.ActionModel>();
+
+        private IGestureService _gestureService;
 
         #endregion
 
@@ -53,29 +50,35 @@ namespace HandControl.ViewModel
         /// <summary>
         ///     Initializes a new instance of the <see cref="MainWindowViewModel" /> class.
         /// </summary>
-        public MainWindowViewModel()
+        public MainWindowViewModel(IProstheticManager prostheticManager, IGestureService gestureService)
         {
-            Prosthetic = ProstheticManager.GetInstance();
+            Prosthetic = prostheticManager ?? throw new ArgumentNullException(nameof(prostheticManager));
             Prosthetic.IsConnectionChanged.Subscribe(ProstheticConnectionChangeHandler);
-            Prosthetic.Connect();
+            _gestureService = gestureService ?? throw new ArgumentNullException(nameof(gestureService));
 
-            IEntitySpecification<GestureModel> specGetByAll = new GesturesSpecificationByAll();
+            gestureService.Gestures.ObserveOn(Application.Current.Dispatcher).Subscribe(GestureAddOrUpdateHandler);
 
-            _gestureRepositoryField = new GestureRepositoryFactory().Create();
-            ListGesture = new ObservableCollection<GestureModel>(_gestureRepositoryField.Query(specGetByAll));
+            //IEntitySpecification<GestureModel> specGetByAll = new GesturesSpecificationByAll();
+
+            //ListGesture = new ObservableCollection<GestureModel>(_gestureRepositoryField.Query(specGetByAll));
+            ListGesture = new ObservableCollection<GestureModel>();
             ListGestureView = CollectionViewSource.GetDefaultView(ListGesture);
 
+            //SortGestures(ListGesture, 0, ListGesture.Count() - 1);
+        }
+
+        private void GestureAddOrUpdateHandler(GestureModel gesture)
+        {
+            var gestureInUiResult = ListGesture.Where(x => x.Id == gesture.Id);
+            var inUiResult = gestureInUiResult as GestureModel[] ?? gestureInUiResult.ToArray();
+            if (inUiResult.Any())
+            {
+                var gestureInUi = inUiResult.Single();
+                ListGesture.Remove(gestureInUi);
+            }
+
+            ListGesture.Add(gesture);
             SortGestures(ListGesture, 0, ListGesture.Count() - 1);
-
-            //var bytes = this.ListGesture[0].BinarySerialize();
-            //ProstheticManager.GetInstance().ExecuteTheGesture("asd");
-            //// ProstheticManager.MotionListRequestCommand();
-            //// ProstheticManager.SaveCommandsToVoice(Commands);
-            //// ProstheticManager.SaveCommands(commands);
-
-            //// ProstheticManager.ExecuteTheCommand("ModeVoice");
-            //// ProstheticManager.ExecuteTheCommand(commands[0]);
-            //// ProstheticManager.ExecuteTheRaw(15000);
         }
 
         #endregion
@@ -90,7 +93,7 @@ namespace HandControl.ViewModel
         /// <summary>
         ///     Gets or sets интерфейс для управления протезом руки.
         /// </summary>
-        public ProstheticManager Prosthetic { get; set; }
+        public IProstheticManager Prosthetic { get; set; }
 
         /// <summary>
         ///     Gets or sets Список жестов протеза.
@@ -249,13 +252,12 @@ namespace HandControl.ViewModel
         }
 
         /// <summary>
-        ///     Создания новой команды.
+        ///     Создания нового жеста.
         /// </summary>
         private void AddGesture()
         {
             var newGesture = GestureModel.GetDefault(Guid.NewGuid(), GetNewNameGesture());
             ListGesture.Add(newGesture);
-            _gestureRepositoryField.Add(newGesture);
             SortGestures(ListGesture, 0, ListGesture.Count() - 1);
             SelectedGesture = newGesture;
         }
@@ -294,13 +296,20 @@ namespace HandControl.ViewModel
         ///     Сохранение жеста. Выполняет обновление жеста в <see cref="ListGesture" /> и добавление в репозиторий
         ///     <see cref="_gestureRepositoryField" />.
         /// </summary>
-        private void SaveGesture()
+        private async void SaveGesture()
         {
             SelectedGesture.ListMotions = SelectedListMotions.ToList();
             SelectedGesture.InfoGesture.TimeChange = DateTime.Now;
-            SelectedGesture.InfoGesture.NumberOfMotions = SelectedListMotions.Count();
-            _gestureRepositoryField.Add(SelectedGesture);
-            ////GestureModel.Save(SelectedGesture);
+
+            try
+            {
+                await _gestureService.AddGestureAsync(SelectedGesture);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show($"Ошибка сохранения жеста. {e.Message}");
+                return;
+            }
 
             var stateFountGesture = false;
             for (var i = 0; i < ListGesture.Count; i++)
@@ -321,10 +330,20 @@ namespace HandControl.ViewModel
         ///     <see cref="_gestureRepositoryField" />.
         /// </summary>
         /// <param name="id">Id удаляемого жеста.</param>
-        private void DeleteGesture(Guid id)
+        private async void DeleteGesture(Guid id)
         {
             var gesture = ListGesture.FirstOrDefault(gestureItem => gestureItem.Id.Equals(id));
-            _gestureRepositoryField.Remove(gesture);
+
+            try
+            {
+                await _gestureService.RemoveGestureAsync(gesture);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show($"Ошибка удаления жеста. {e.Message}");
+                return;
+            }
+
             ListGesture.Remove(gesture);
             SortGestures(ListGesture, 0, ListGesture.Count() - 1);
         }
@@ -365,7 +384,7 @@ namespace HandControl.ViewModel
         /// </summary>
         private async void HandHandler()
         {
-            var gestures = await Prosthetic.GetGestures();
+            //var gestures = await Prosthetic.GetGestures();
             ////ProstheticManager.GetInstance().ExecuteTheGesture("Сжать");
             ////Prosthetic.SaveGestures(ListGesture);
             ////ProstheticManager.GetInstance().ExecuteTheGesture("Сжать");

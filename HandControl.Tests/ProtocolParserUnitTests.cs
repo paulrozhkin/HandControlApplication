@@ -9,6 +9,7 @@ using HandControl.Model;
 using HandControl.Model.BluetoothDto;
 using HandControl.Model.Enums;
 using HandControl.Services;
+using HandControl.Services.IODevice;
 using Microsoft.Reactive.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
