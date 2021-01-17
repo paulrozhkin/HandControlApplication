@@ -186,6 +186,14 @@ namespace HandControl.Model
         /// </summary>
         public class ActionModel : BaseModel, ICloneable, IEquatable<ActionModel>
         {
+            private const int MinPosition = 0;
+            private const int MaxPosition = 180;
+            private int _thumbFinger;
+            private int _pointerFinger;
+            private int _middleFinger;
+            private int _ringFinger;
+            private int _littleFinger;
+
             #region Constructors
 
             /// <summary>
@@ -207,27 +215,127 @@ namespace HandControl.Model
             /// <summary>
             ///     Gets or sets положение большого пальца в градусах.
             /// </summary>
-            public int ThumbFinger { get; set; }
+            public int ThumbFinger
+            {
+                get => _thumbFinger;
+                set
+                {
+                    if (value < MinPosition)
+                    {
+                        _thumbFinger = MinPosition;
+                        return;
+                    }
+
+                    if (value > MaxPosition)
+                    {
+                        _thumbFinger = MaxPosition;
+                        return;
+                    }
+
+                    _thumbFinger = value;
+                    OnPropertyChanged(nameof(ThumbFinger));
+                }
+            }
 
             /// <summary>
             ///     Gets or sets положение указательного пальца в градусах.
             /// </summary>
-            public int PointerFinger { get; set; }
+            public int PointerFinger
+            {
+                get => _pointerFinger;
+                set
+                {
+                    if (value < MinPosition)
+                    {
+                        _pointerFinger = MinPosition;
+                        return;
+                    }
+
+                    if (value > MaxPosition)
+                    {
+                        _pointerFinger = MaxPosition;
+                        return;
+                    }
+
+                    _pointerFinger = value;
+                    OnPropertyChanged(nameof(PointerFinger));
+                }
+            }
 
             /// <summary>
             ///     Gets or sets положение среднего пальца в градусах.
             /// </summary>
-            public int MiddleFinger { get; set; }
+            public int MiddleFinger
+            {
+                get => _middleFinger;
+                set
+                {
+                    if (value < MinPosition)
+                    {
+                        _middleFinger = MinPosition;
+                        return;
+                    }
+
+                    if (value > MaxPosition)
+                    {
+                        _middleFinger = MaxPosition;
+                        return;
+                    }
+
+                    _middleFinger = value;
+                    OnPropertyChanged(nameof(MiddleFinger));
+                }
+            }
 
             /// <summary>
             ///     Gets or sets положение безымянного пальца в градусах.
             /// </summary>
-            public int RingFinder { get; set; }
+            public int RingFinder
+            {
+                get => _ringFinger;
+                set
+                {
+                    if (value < MinPosition)
+                    {
+                        _ringFinger = MinPosition;
+                        return;
+                    }
+
+                    if (value > MaxPosition)
+                    {
+                        _ringFinger = MaxPosition;
+                        return;
+                    }
+
+                    _ringFinger = value;
+                    OnPropertyChanged(nameof(RingFinder));
+                }
+            }
 
             /// <summary>
             ///     Gets or sets положение мезинца в градусах.
             /// </summary>
-            public int LittleFinger { get; set; }
+            public int LittleFinger
+            {
+                get => _littleFinger;
+                set
+                {
+                    if (value < MinPosition)
+                    {
+                        _littleFinger = MinPosition;
+                        return;
+                    }
+
+                    if (value > MaxPosition)
+                    {
+                        _littleFinger = MaxPosition;
+                        return;
+                    }
+
+                    _littleFinger = value;
+                    OnPropertyChanged(nameof(LittleFinger));
+                }
+            }
 
             /// <summary>
             ///     Gets or sets задержка между действиями в секундах.
@@ -408,6 +516,8 @@ namespace HandControl.Model
         /// </summary>
         public class InfoGestureModel : BaseModel, ICloneable, IEquatable<InfoGestureModel>
         {
+            private int _numberOfGestureRepetitions;
+
             #region Constructors
 
             /// <summary>
@@ -429,7 +539,27 @@ namespace HandControl.Model
             /// <summary>
             ///     Gets or sets количество повторений жеста.
             /// </summary>
-            public int NumberOfGestureRepetitions { get; set; }
+            public int NumberOfGestureRepetitions
+            {
+                get => _numberOfGestureRepetitions;
+                set
+                {
+                    if (value < 0)
+                    {
+                        _numberOfGestureRepetitions = 0;
+                        return;
+                    }
+
+                    if (value > 255)
+                    {
+                        _numberOfGestureRepetitions = 255;
+                        return;
+                    }
+
+                    _numberOfGestureRepetitions = value;
+                    OnPropertyChanged(nameof(NumberOfGestureRepetitions));
+                }
+            }
 
             /// <summary>
             ///     Gets or sets время последнего изменения/создания жеста.

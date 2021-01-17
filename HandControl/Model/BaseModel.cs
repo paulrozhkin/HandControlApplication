@@ -6,6 +6,7 @@
 
 using System;
 using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace HandControl.Model
 {
@@ -26,5 +27,10 @@ namespace HandControl.Model
         ///     Имплементация интерфейса INotifyPropertyChanged.
         /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

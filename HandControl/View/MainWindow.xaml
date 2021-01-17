@@ -402,6 +402,8 @@
                 FontSize="14"
                 Foreground="White"
                 MaxLength="4"
+                LostFocus="Number_OnLostFocus"
+                PreviewTextInput="NumberPreviewTextInput"
                 Text="{Binding SelectedGesture.InfoGesture.NumberOfGestureRepetitions}" />
         </Grid>
 
@@ -693,6 +695,8 @@
                             BorderBrush="Transparent"
                             FontSize="24"
                             MaxLength="3"
+                            LostFocus="Number_OnLostFocus"
+                            PreviewTextInput="NumberPreviewTextInput"
                             Text="{Binding SelectedAction.ThumbFinger}"
                             TextAlignment="Center" />
 
@@ -736,6 +740,8 @@
                             BorderBrush="Transparent"
                             FontSize="24"
                             MaxLength="3"
+                            PreviewTextInput="NumberPreviewTextInput"
+                            LostFocus="Number_OnLostFocus"
                             Text="{Binding SelectedAction.PointerFinger}"
                             TextAlignment="Center" />
 
@@ -779,6 +785,8 @@
                             BorderBrush="Transparent"
                             FontSize="24"
                             MaxLength="3"
+                            PreviewTextInput="NumberPreviewTextInput"
+                            LostFocus="Number_OnLostFocus"
                             Text="{Binding SelectedAction.MiddleFinger}"
                             TextAlignment="Center" />
 
@@ -824,6 +832,8 @@
                             BorderBrush="Transparent"
                             FontSize="24"
                             MaxLength="3"
+                            LostFocus="Number_OnLostFocus"
+                            PreviewTextInput="NumberPreviewTextInput"
                             Text="{Binding SelectedAction.RingFinder}"
                             TextAlignment="Center" />
 
@@ -868,6 +878,8 @@
                             BorderBrush="Transparent"
                             FontSize="24"
                             MaxLength="3"
+                            LostFocus="Number_OnLostFocus"
+                            PreviewTextInput="NumberPreviewTextInput"
                             Text="{Binding SelectedAction.LittleFinger}"
                             TextAlignment="Center" />
 
@@ -905,13 +917,15 @@
                             Text="Задержка" />
 
                         <TextBox
-                            Width="60"
+                            Width="90"
                             Margin="0,-15,0,0"
                             HorizontalAlignment="Center"
                             Background="Transparent"
                             BorderBrush="Transparent"
                             FontSize="24"
                             MaxLength="5"
+                            LostFocus="Number_OnLostFocus"
+                            PreviewTextInput="DelayPreviewTextInput"
                             Text="{Binding SelectedAction.DelMotionSec}"
                             TextAlignment="Center" />
 
