@@ -25,22 +25,26 @@ namespace HandControl.Model.Protobuf {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "Cg90ZWxlbWV0cnkucHJvdG8SCXRlbGVtZXRyeRoLZW51bXMucHJvdG8aCnV1",
-            "aWQucHJvdG8i3gMKCVRlbGVtZXRyeRIbChN0ZWxlbWV0cnlfZnJlcXVlbmN5",
-            "GAEgASgFEisKCmVtZ19zdGF0dXMYAiABKA4yFy5lbnVtcy5Nb2R1bGVTdGF0",
-            "dXNUeXBlEi8KDmRpc3BsYXlfc3RhdHVzGAMgASgOMhcuZW51bXMuTW9kdWxl",
-            "U3RhdHVzVHlwZRIsCgtneXJvX3N0YXR1cxgEIAEoDjIXLmVudW1zLk1vZHVs",
-            "ZVN0YXR1c1R5cGUSLgoNZHJpdmVyX3N0YXR1cxgFIAEoDjIXLmVudW1zLkRy",
-            "aXZlclN0YXR1c1R5cGUSFgoObGFzdF90aW1lX3N5bmMYBiABKAMSCwoDZW1n",
-            "GAcgASgFEiYKEmV4ZWN1dGFibGVfZ2VzdHVyZRgIIAEoCzIKLnV1aWQuVVVJ",
-            "RBINCgVwb3dlchgJIAEoBRIfChdwb2ludGVyX2Zpbmdlcl9wb3NpdGlvbhgK",
-            "IAEoBRIeChZtaWRkbGVfZmluZ2VyX3Bvc2l0aW9uGAsgASgFEhwKFHJpbmdf",
-            "ZmluZ2VyX3Bvc2l0aW9uGAwgASgFEh4KFmxpdHRsZV9maW5nZXJfcG9zaXRp",
-            "b24YDSABKAUSHQoVdGh1bWJfZmluZ2VyX3Bvc2l0aW9uGA4gASgFQh2qAhpI",
-            "YW5kQ29udHJvbC5Nb2RlbC5Qcm90b2J1ZmIGcHJvdG8z"));
+            "aWQucHJvdG8iwQMKCVRlbGVtZXRyeRIrCgplbWdfc3RhdHVzGAEgASgOMhcu",
+            "ZW51bXMuTW9kdWxlU3RhdHVzVHlwZRIvCg5kaXNwbGF5X3N0YXR1cxgCIAEo",
+            "DjIXLmVudW1zLk1vZHVsZVN0YXR1c1R5cGUSLAoLZ3lyb19zdGF0dXMYAyAB",
+            "KA4yFy5lbnVtcy5Nb2R1bGVTdGF0dXNUeXBlEi4KDWRyaXZlcl9zdGF0dXMY",
+            "BCABKA4yFy5lbnVtcy5Ecml2ZXJTdGF0dXNUeXBlEhYKDmxhc3RfdGltZV9z",
+            "eW5jGAUgASgDEgsKA2VtZxgGIAEoBRImChJleGVjdXRhYmxlX2dlc3R1cmUY",
+            "ByABKAsyCi51dWlkLlVVSUQSDQoFcG93ZXIYCCABKAUSHwoXcG9pbnRlcl9m",
+            "aW5nZXJfcG9zaXRpb24YCSABKAUSHgoWbWlkZGxlX2Zpbmdlcl9wb3NpdGlv",
+            "bhgKIAEoBRIcChRyaW5nX2Zpbmdlcl9wb3NpdGlvbhgLIAEoBRIeChZsaXR0",
+            "bGVfZmluZ2VyX3Bvc2l0aW9uGAwgASgFEh0KFXRodW1iX2Zpbmdlcl9wb3Np",
+            "dGlvbhgNIAEoBSI3CgxHZXRUZWxlbWV0cnkSJwoJdGVsZW1ldHJ5GAEgASgL",
+            "MhQudGVsZW1ldHJ5LlRlbGVtZXRyeSIlCg5TdGFydFRlbGVtZXRyeRITCgtp",
+            "bnRlcnZhbF9tcxgBIAEoBUIdqgIaSGFuZENvbnRyb2wuTW9kZWwuUHJvdG9i",
+            "dWZiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::HandControl.Model.Protobuf.EnumsReflection.Descriptor, global::HandControl.Model.Protobuf.UuidReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::HandControl.Model.Protobuf.Telemetry), global::HandControl.Model.Protobuf.Telemetry.Parser, new[]{ "TelemetryFrequency", "EmgStatus", "DisplayStatus", "GyroStatus", "DriverStatus", "LastTimeSync", "Emg", "ExecutableGesture", "Power", "PointerFingerPosition", "MiddleFingerPosition", "RingFingerPosition", "LittleFingerPosition", "ThumbFingerPosition" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::HandControl.Model.Protobuf.Telemetry), global::HandControl.Model.Protobuf.Telemetry.Parser, new[]{ "EmgStatus", "DisplayStatus", "GyroStatus", "DriverStatus", "LastTimeSync", "Emg", "ExecutableGesture", "Power", "PointerFingerPosition", "MiddleFingerPosition", "RingFingerPosition", "LittleFingerPosition", "ThumbFingerPosition" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HandControl.Model.Protobuf.GetTelemetry), global::HandControl.Model.Protobuf.GetTelemetry.Parser, new[]{ "Telemetry" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HandControl.Model.Protobuf.StartTelemetry), global::HandControl.Model.Protobuf.StartTelemetry.Parser, new[]{ "IntervalMs" }, null, null, null, null)
           }));
     }
     #endregion
@@ -76,7 +80,6 @@ namespace HandControl.Model.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public Telemetry(Telemetry other) : this() {
-      telemetryFrequency_ = other.telemetryFrequency_;
       emgStatus_ = other.emgStatus_;
       displayStatus_ = other.displayStatus_;
       gyroStatus_ = other.gyroStatus_;
@@ -98,19 +101,8 @@ namespace HandControl.Model.Protobuf {
       return new Telemetry(this);
     }
 
-    /// <summary>Field number for the "telemetry_frequency" field.</summary>
-    public const int TelemetryFrequencyFieldNumber = 1;
-    private int telemetryFrequency_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int TelemetryFrequency {
-      get { return telemetryFrequency_; }
-      set {
-        telemetryFrequency_ = value;
-      }
-    }
-
     /// <summary>Field number for the "emg_status" field.</summary>
-    public const int EmgStatusFieldNumber = 2;
+    public const int EmgStatusFieldNumber = 1;
     private global::HandControl.Model.Protobuf.ModuleStatusType emgStatus_ = global::HandControl.Model.Protobuf.ModuleStatusType.ModuleStatusInitialization;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::HandControl.Model.Protobuf.ModuleStatusType EmgStatus {
@@ -121,7 +113,7 @@ namespace HandControl.Model.Protobuf {
     }
 
     /// <summary>Field number for the "display_status" field.</summary>
-    public const int DisplayStatusFieldNumber = 3;
+    public const int DisplayStatusFieldNumber = 2;
     private global::HandControl.Model.Protobuf.ModuleStatusType displayStatus_ = global::HandControl.Model.Protobuf.ModuleStatusType.ModuleStatusInitialization;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::HandControl.Model.Protobuf.ModuleStatusType DisplayStatus {
@@ -132,7 +124,7 @@ namespace HandControl.Model.Protobuf {
     }
 
     /// <summary>Field number for the "gyro_status" field.</summary>
-    public const int GyroStatusFieldNumber = 4;
+    public const int GyroStatusFieldNumber = 3;
     private global::HandControl.Model.Protobuf.ModuleStatusType gyroStatus_ = global::HandControl.Model.Protobuf.ModuleStatusType.ModuleStatusInitialization;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::HandControl.Model.Protobuf.ModuleStatusType GyroStatus {
@@ -143,7 +135,7 @@ namespace HandControl.Model.Protobuf {
     }
 
     /// <summary>Field number for the "driver_status" field.</summary>
-    public const int DriverStatusFieldNumber = 5;
+    public const int DriverStatusFieldNumber = 4;
     private global::HandControl.Model.Protobuf.DriverStatusType driverStatus_ = global::HandControl.Model.Protobuf.DriverStatusType.DriverStatusInitialization;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::HandControl.Model.Protobuf.DriverStatusType DriverStatus {
@@ -154,7 +146,7 @@ namespace HandControl.Model.Protobuf {
     }
 
     /// <summary>Field number for the "last_time_sync" field.</summary>
-    public const int LastTimeSyncFieldNumber = 6;
+    public const int LastTimeSyncFieldNumber = 5;
     private long lastTimeSync_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public long LastTimeSync {
@@ -165,7 +157,7 @@ namespace HandControl.Model.Protobuf {
     }
 
     /// <summary>Field number for the "emg" field.</summary>
-    public const int EmgFieldNumber = 7;
+    public const int EmgFieldNumber = 6;
     private int emg_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int Emg {
@@ -176,7 +168,7 @@ namespace HandControl.Model.Protobuf {
     }
 
     /// <summary>Field number for the "executable_gesture" field.</summary>
-    public const int ExecutableGestureFieldNumber = 8;
+    public const int ExecutableGestureFieldNumber = 7;
     private global::HandControl.Model.Protobuf.UUID executableGesture_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::HandControl.Model.Protobuf.UUID ExecutableGesture {
@@ -187,7 +179,7 @@ namespace HandControl.Model.Protobuf {
     }
 
     /// <summary>Field number for the "power" field.</summary>
-    public const int PowerFieldNumber = 9;
+    public const int PowerFieldNumber = 8;
     private int power_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int Power {
@@ -198,7 +190,7 @@ namespace HandControl.Model.Protobuf {
     }
 
     /// <summary>Field number for the "pointer_finger_position" field.</summary>
-    public const int PointerFingerPositionFieldNumber = 10;
+    public const int PointerFingerPositionFieldNumber = 9;
     private int pointerFingerPosition_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int PointerFingerPosition {
@@ -209,7 +201,7 @@ namespace HandControl.Model.Protobuf {
     }
 
     /// <summary>Field number for the "middle_finger_position" field.</summary>
-    public const int MiddleFingerPositionFieldNumber = 11;
+    public const int MiddleFingerPositionFieldNumber = 10;
     private int middleFingerPosition_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int MiddleFingerPosition {
@@ -220,7 +212,7 @@ namespace HandControl.Model.Protobuf {
     }
 
     /// <summary>Field number for the "ring_finger_position" field.</summary>
-    public const int RingFingerPositionFieldNumber = 12;
+    public const int RingFingerPositionFieldNumber = 11;
     private int ringFingerPosition_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int RingFingerPosition {
@@ -231,7 +223,7 @@ namespace HandControl.Model.Protobuf {
     }
 
     /// <summary>Field number for the "little_finger_position" field.</summary>
-    public const int LittleFingerPositionFieldNumber = 13;
+    public const int LittleFingerPositionFieldNumber = 12;
     private int littleFingerPosition_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int LittleFingerPosition {
@@ -242,7 +234,7 @@ namespace HandControl.Model.Protobuf {
     }
 
     /// <summary>Field number for the "thumb_finger_position" field.</summary>
-    public const int ThumbFingerPositionFieldNumber = 14;
+    public const int ThumbFingerPositionFieldNumber = 13;
     private int thumbFingerPosition_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int ThumbFingerPosition {
@@ -265,7 +257,6 @@ namespace HandControl.Model.Protobuf {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (TelemetryFrequency != other.TelemetryFrequency) return false;
       if (EmgStatus != other.EmgStatus) return false;
       if (DisplayStatus != other.DisplayStatus) return false;
       if (GyroStatus != other.GyroStatus) return false;
@@ -285,7 +276,6 @@ namespace HandControl.Model.Protobuf {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (TelemetryFrequency != 0) hash ^= TelemetryFrequency.GetHashCode();
       if (EmgStatus != global::HandControl.Model.Protobuf.ModuleStatusType.ModuleStatusInitialization) hash ^= EmgStatus.GetHashCode();
       if (DisplayStatus != global::HandControl.Model.Protobuf.ModuleStatusType.ModuleStatusInitialization) hash ^= DisplayStatus.GetHashCode();
       if (GyroStatus != global::HandControl.Model.Protobuf.ModuleStatusType.ModuleStatusInitialization) hash ^= GyroStatus.GetHashCode();
@@ -315,60 +305,56 @@ namespace HandControl.Model.Protobuf {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (TelemetryFrequency != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(TelemetryFrequency);
-      }
       if (EmgStatus != global::HandControl.Model.Protobuf.ModuleStatusType.ModuleStatusInitialization) {
-        output.WriteRawTag(16);
+        output.WriteRawTag(8);
         output.WriteEnum((int) EmgStatus);
       }
       if (DisplayStatus != global::HandControl.Model.Protobuf.ModuleStatusType.ModuleStatusInitialization) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(16);
         output.WriteEnum((int) DisplayStatus);
       }
       if (GyroStatus != global::HandControl.Model.Protobuf.ModuleStatusType.ModuleStatusInitialization) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(24);
         output.WriteEnum((int) GyroStatus);
       }
       if (DriverStatus != global::HandControl.Model.Protobuf.DriverStatusType.DriverStatusInitialization) {
-        output.WriteRawTag(40);
+        output.WriteRawTag(32);
         output.WriteEnum((int) DriverStatus);
       }
       if (LastTimeSync != 0L) {
-        output.WriteRawTag(48);
+        output.WriteRawTag(40);
         output.WriteInt64(LastTimeSync);
       }
       if (Emg != 0) {
-        output.WriteRawTag(56);
+        output.WriteRawTag(48);
         output.WriteInt32(Emg);
       }
       if (executableGesture_ != null) {
-        output.WriteRawTag(66);
+        output.WriteRawTag(58);
         output.WriteMessage(ExecutableGesture);
       }
       if (Power != 0) {
-        output.WriteRawTag(72);
+        output.WriteRawTag(64);
         output.WriteInt32(Power);
       }
       if (PointerFingerPosition != 0) {
-        output.WriteRawTag(80);
+        output.WriteRawTag(72);
         output.WriteInt32(PointerFingerPosition);
       }
       if (MiddleFingerPosition != 0) {
-        output.WriteRawTag(88);
+        output.WriteRawTag(80);
         output.WriteInt32(MiddleFingerPosition);
       }
       if (RingFingerPosition != 0) {
-        output.WriteRawTag(96);
+        output.WriteRawTag(88);
         output.WriteInt32(RingFingerPosition);
       }
       if (LittleFingerPosition != 0) {
-        output.WriteRawTag(104);
+        output.WriteRawTag(96);
         output.WriteInt32(LittleFingerPosition);
       }
       if (ThumbFingerPosition != 0) {
-        output.WriteRawTag(112);
+        output.WriteRawTag(104);
         output.WriteInt32(ThumbFingerPosition);
       }
       if (_unknownFields != null) {
@@ -380,60 +366,56 @@ namespace HandControl.Model.Protobuf {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (TelemetryFrequency != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(TelemetryFrequency);
-      }
       if (EmgStatus != global::HandControl.Model.Protobuf.ModuleStatusType.ModuleStatusInitialization) {
-        output.WriteRawTag(16);
+        output.WriteRawTag(8);
         output.WriteEnum((int) EmgStatus);
       }
       if (DisplayStatus != global::HandControl.Model.Protobuf.ModuleStatusType.ModuleStatusInitialization) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(16);
         output.WriteEnum((int) DisplayStatus);
       }
       if (GyroStatus != global::HandControl.Model.Protobuf.ModuleStatusType.ModuleStatusInitialization) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(24);
         output.WriteEnum((int) GyroStatus);
       }
       if (DriverStatus != global::HandControl.Model.Protobuf.DriverStatusType.DriverStatusInitialization) {
-        output.WriteRawTag(40);
+        output.WriteRawTag(32);
         output.WriteEnum((int) DriverStatus);
       }
       if (LastTimeSync != 0L) {
-        output.WriteRawTag(48);
+        output.WriteRawTag(40);
         output.WriteInt64(LastTimeSync);
       }
       if (Emg != 0) {
-        output.WriteRawTag(56);
+        output.WriteRawTag(48);
         output.WriteInt32(Emg);
       }
       if (executableGesture_ != null) {
-        output.WriteRawTag(66);
+        output.WriteRawTag(58);
         output.WriteMessage(ExecutableGesture);
       }
       if (Power != 0) {
-        output.WriteRawTag(72);
+        output.WriteRawTag(64);
         output.WriteInt32(Power);
       }
       if (PointerFingerPosition != 0) {
-        output.WriteRawTag(80);
+        output.WriteRawTag(72);
         output.WriteInt32(PointerFingerPosition);
       }
       if (MiddleFingerPosition != 0) {
-        output.WriteRawTag(88);
+        output.WriteRawTag(80);
         output.WriteInt32(MiddleFingerPosition);
       }
       if (RingFingerPosition != 0) {
-        output.WriteRawTag(96);
+        output.WriteRawTag(88);
         output.WriteInt32(RingFingerPosition);
       }
       if (LittleFingerPosition != 0) {
-        output.WriteRawTag(104);
+        output.WriteRawTag(96);
         output.WriteInt32(LittleFingerPosition);
       }
       if (ThumbFingerPosition != 0) {
-        output.WriteRawTag(112);
+        output.WriteRawTag(104);
         output.WriteInt32(ThumbFingerPosition);
       }
       if (_unknownFields != null) {
@@ -445,9 +427,6 @@ namespace HandControl.Model.Protobuf {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (TelemetryFrequency != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(TelemetryFrequency);
-      }
       if (EmgStatus != global::HandControl.Model.Protobuf.ModuleStatusType.ModuleStatusInitialization) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) EmgStatus);
       }
@@ -497,9 +476,6 @@ namespace HandControl.Model.Protobuf {
     public void MergeFrom(Telemetry other) {
       if (other == null) {
         return;
-      }
-      if (other.TelemetryFrequency != 0) {
-        TelemetryFrequency = other.TelemetryFrequency;
       }
       if (other.EmgStatus != global::HandControl.Model.Protobuf.ModuleStatusType.ModuleStatusInitialization) {
         EmgStatus = other.EmgStatus;
@@ -558,61 +534,57 @@ namespace HandControl.Model.Protobuf {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            TelemetryFrequency = input.ReadInt32();
-            break;
-          }
-          case 16: {
             EmgStatus = (global::HandControl.Model.Protobuf.ModuleStatusType) input.ReadEnum();
             break;
           }
-          case 24: {
+          case 16: {
             DisplayStatus = (global::HandControl.Model.Protobuf.ModuleStatusType) input.ReadEnum();
             break;
           }
-          case 32: {
+          case 24: {
             GyroStatus = (global::HandControl.Model.Protobuf.ModuleStatusType) input.ReadEnum();
             break;
           }
-          case 40: {
+          case 32: {
             DriverStatus = (global::HandControl.Model.Protobuf.DriverStatusType) input.ReadEnum();
             break;
           }
-          case 48: {
+          case 40: {
             LastTimeSync = input.ReadInt64();
             break;
           }
-          case 56: {
+          case 48: {
             Emg = input.ReadInt32();
             break;
           }
-          case 66: {
+          case 58: {
             if (executableGesture_ == null) {
               ExecutableGesture = new global::HandControl.Model.Protobuf.UUID();
             }
             input.ReadMessage(ExecutableGesture);
             break;
           }
-          case 72: {
+          case 64: {
             Power = input.ReadInt32();
             break;
           }
-          case 80: {
+          case 72: {
             PointerFingerPosition = input.ReadInt32();
             break;
           }
-          case 88: {
+          case 80: {
             MiddleFingerPosition = input.ReadInt32();
             break;
           }
-          case 96: {
+          case 88: {
             RingFingerPosition = input.ReadInt32();
             break;
           }
-          case 104: {
+          case 96: {
             LittleFingerPosition = input.ReadInt32();
             break;
           }
-          case 112: {
+          case 104: {
             ThumbFingerPosition = input.ReadInt32();
             break;
           }
@@ -631,62 +603,411 @@ namespace HandControl.Model.Protobuf {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 8: {
-            TelemetryFrequency = input.ReadInt32();
-            break;
-          }
-          case 16: {
             EmgStatus = (global::HandControl.Model.Protobuf.ModuleStatusType) input.ReadEnum();
             break;
           }
-          case 24: {
+          case 16: {
             DisplayStatus = (global::HandControl.Model.Protobuf.ModuleStatusType) input.ReadEnum();
             break;
           }
-          case 32: {
+          case 24: {
             GyroStatus = (global::HandControl.Model.Protobuf.ModuleStatusType) input.ReadEnum();
             break;
           }
-          case 40: {
+          case 32: {
             DriverStatus = (global::HandControl.Model.Protobuf.DriverStatusType) input.ReadEnum();
             break;
           }
-          case 48: {
+          case 40: {
             LastTimeSync = input.ReadInt64();
             break;
           }
-          case 56: {
+          case 48: {
             Emg = input.ReadInt32();
             break;
           }
-          case 66: {
+          case 58: {
             if (executableGesture_ == null) {
               ExecutableGesture = new global::HandControl.Model.Protobuf.UUID();
             }
             input.ReadMessage(ExecutableGesture);
             break;
           }
-          case 72: {
+          case 64: {
             Power = input.ReadInt32();
             break;
           }
-          case 80: {
+          case 72: {
             PointerFingerPosition = input.ReadInt32();
             break;
           }
-          case 88: {
+          case 80: {
             MiddleFingerPosition = input.ReadInt32();
             break;
           }
-          case 96: {
+          case 88: {
             RingFingerPosition = input.ReadInt32();
             break;
           }
-          case 104: {
+          case 96: {
             LittleFingerPosition = input.ReadInt32();
             break;
           }
-          case 112: {
+          case 104: {
             ThumbFingerPosition = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  public sealed partial class GetTelemetry : pb::IMessage<GetTelemetry>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<GetTelemetry> _parser = new pb::MessageParser<GetTelemetry>(() => new GetTelemetry());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<GetTelemetry> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::HandControl.Model.Protobuf.TelemetryReflection.Descriptor.MessageTypes[1]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GetTelemetry() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GetTelemetry(GetTelemetry other) : this() {
+      telemetry_ = other.telemetry_ != null ? other.telemetry_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GetTelemetry Clone() {
+      return new GetTelemetry(this);
+    }
+
+    /// <summary>Field number for the "telemetry" field.</summary>
+    public const int TelemetryFieldNumber = 1;
+    private global::HandControl.Model.Protobuf.Telemetry telemetry_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::HandControl.Model.Protobuf.Telemetry Telemetry {
+      get { return telemetry_; }
+      set {
+        telemetry_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as GetTelemetry);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(GetTelemetry other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(Telemetry, other.Telemetry)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (telemetry_ != null) hash ^= Telemetry.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (telemetry_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Telemetry);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (telemetry_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(Telemetry);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (telemetry_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Telemetry);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(GetTelemetry other) {
+      if (other == null) {
+        return;
+      }
+      if (other.telemetry_ != null) {
+        if (telemetry_ == null) {
+          Telemetry = new global::HandControl.Model.Protobuf.Telemetry();
+        }
+        Telemetry.MergeFrom(other.Telemetry);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (telemetry_ == null) {
+              Telemetry = new global::HandControl.Model.Protobuf.Telemetry();
+            }
+            input.ReadMessage(Telemetry);
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            if (telemetry_ == null) {
+              Telemetry = new global::HandControl.Model.Protobuf.Telemetry();
+            }
+            input.ReadMessage(Telemetry);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  public sealed partial class StartTelemetry : pb::IMessage<StartTelemetry>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<StartTelemetry> _parser = new pb::MessageParser<StartTelemetry>(() => new StartTelemetry());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<StartTelemetry> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::HandControl.Model.Protobuf.TelemetryReflection.Descriptor.MessageTypes[2]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public StartTelemetry() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public StartTelemetry(StartTelemetry other) : this() {
+      intervalMs_ = other.intervalMs_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public StartTelemetry Clone() {
+      return new StartTelemetry(this);
+    }
+
+    /// <summary>Field number for the "interval_ms" field.</summary>
+    public const int IntervalMsFieldNumber = 1;
+    private int intervalMs_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int IntervalMs {
+      get { return intervalMs_; }
+      set {
+        intervalMs_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as StartTelemetry);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(StartTelemetry other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (IntervalMs != other.IntervalMs) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (IntervalMs != 0) hash ^= IntervalMs.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (IntervalMs != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(IntervalMs);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (IntervalMs != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(IntervalMs);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (IntervalMs != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(IntervalMs);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(StartTelemetry other) {
+      if (other == null) {
+        return;
+      }
+      if (other.IntervalMs != 0) {
+        IntervalMs = other.IntervalMs;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            IntervalMs = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 8: {
+            IntervalMs = input.ReadInt32();
             break;
           }
         }

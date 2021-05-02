@@ -24,21 +24,18 @@ namespace HandControl.Model.Protobuf {
     static SettingsReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "Cg5zZXR0aW5ncy5wcm90bxIIc2V0dGluZ3MaC2VudW1zLnByb3RvIokBCgtH",
-            "ZXRTZXR0aW5ncxIiCgl0eXBlX3dvcmsYASABKA4yDy5lbnVtcy5Nb2RlVHlw",
-            "ZRISCgplbmFibGVfZW1nGAIgASgIEhYKDmVuYWJsZV9kaXNwbGF5GAMgASgI",
-            "EhMKC2VuYWJsZV9neXJvGAQgASgIEhUKDWVuYWJsZV9kcml2ZXIYBSABKAgi",
-            "uQEKC1NldFNldHRpbmdzEiIKCXR5cGVfd29yaxgBIAEoDjIPLmVudW1zLk1v",
-            "ZGVUeXBlEhsKE3RlbGVtZXRyeV9mcmVxdWVuY3kYAiABKAUSEgoKZW5hYmxl",
-            "X2VtZxgDIAEoCBIWCg5lbmFibGVfZGlzcGxheRgEIAEoCBITCgtlbmFibGVf",
-            "Z3lybxgFIAEoCBIVCg1lbmFibGVfZHJpdmVyGAYgASgIEhEKCXBvd2VyX29m",
-            "ZhgHIAEoCEIdqgIaSGFuZENvbnRyb2wuTW9kZWwuUHJvdG9idWZiBnByb3Rv",
-            "Mw=="));
+            "Cg5zZXR0aW5ncy5wcm90bxIIc2V0dGluZ3MiZQoLR2V0U2V0dGluZ3MSEgoK",
+            "ZW5hYmxlX2VtZxgBIAEoCBIWCg5lbmFibGVfZGlzcGxheRgCIAEoCBITCgtl",
+            "bmFibGVfZ3lybxgDIAEoCBIVCg1lbmFibGVfZHJpdmVyGAQgASgIIngKC1Nl",
+            "dFNldHRpbmdzEhIKCmVuYWJsZV9lbWcYASABKAgSFgoOZW5hYmxlX2Rpc3Bs",
+            "YXkYAiABKAgSEwoLZW5hYmxlX2d5cm8YAyABKAgSFQoNZW5hYmxlX2RyaXZl",
+            "chgEIAEoCBIRCglwb3dlcl9vZmYYBSABKAhCHaoCGkhhbmRDb250cm9sLk1v",
+            "ZGVsLlByb3RvYnVmYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
-          new pbr::FileDescriptor[] { global::HandControl.Model.Protobuf.EnumsReflection.Descriptor, },
+          new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::HandControl.Model.Protobuf.GetSettings), global::HandControl.Model.Protobuf.GetSettings.Parser, new[]{ "TypeWork", "EnableEmg", "EnableDisplay", "EnableGyro", "EnableDriver" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::HandControl.Model.Protobuf.SetSettings), global::HandControl.Model.Protobuf.SetSettings.Parser, new[]{ "TypeWork", "TelemetryFrequency", "EnableEmg", "EnableDisplay", "EnableGyro", "EnableDriver", "PowerOff" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::HandControl.Model.Protobuf.GetSettings), global::HandControl.Model.Protobuf.GetSettings.Parser, new[]{ "EnableEmg", "EnableDisplay", "EnableGyro", "EnableDriver" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::HandControl.Model.Protobuf.SetSettings), global::HandControl.Model.Protobuf.SetSettings.Parser, new[]{ "EnableEmg", "EnableDisplay", "EnableGyro", "EnableDriver", "PowerOff" }, null, null, null, null)
           }));
     }
     #endregion
@@ -74,7 +71,6 @@ namespace HandControl.Model.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GetSettings(GetSettings other) : this() {
-      typeWork_ = other.typeWork_;
       enableEmg_ = other.enableEmg_;
       enableDisplay_ = other.enableDisplay_;
       enableGyro_ = other.enableGyro_;
@@ -87,19 +83,8 @@ namespace HandControl.Model.Protobuf {
       return new GetSettings(this);
     }
 
-    /// <summary>Field number for the "type_work" field.</summary>
-    public const int TypeWorkFieldNumber = 1;
-    private global::HandControl.Model.Protobuf.ModeType typeWork_ = global::HandControl.Model.Protobuf.ModeType.ModeMio;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::HandControl.Model.Protobuf.ModeType TypeWork {
-      get { return typeWork_; }
-      set {
-        typeWork_ = value;
-      }
-    }
-
     /// <summary>Field number for the "enable_emg" field.</summary>
-    public const int EnableEmgFieldNumber = 2;
+    public const int EnableEmgFieldNumber = 1;
     private bool enableEmg_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool EnableEmg {
@@ -110,7 +95,7 @@ namespace HandControl.Model.Protobuf {
     }
 
     /// <summary>Field number for the "enable_display" field.</summary>
-    public const int EnableDisplayFieldNumber = 3;
+    public const int EnableDisplayFieldNumber = 2;
     private bool enableDisplay_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool EnableDisplay {
@@ -121,7 +106,7 @@ namespace HandControl.Model.Protobuf {
     }
 
     /// <summary>Field number for the "enable_gyro" field.</summary>
-    public const int EnableGyroFieldNumber = 4;
+    public const int EnableGyroFieldNumber = 3;
     private bool enableGyro_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool EnableGyro {
@@ -132,7 +117,7 @@ namespace HandControl.Model.Protobuf {
     }
 
     /// <summary>Field number for the "enable_driver" field.</summary>
-    public const int EnableDriverFieldNumber = 5;
+    public const int EnableDriverFieldNumber = 4;
     private bool enableDriver_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool EnableDriver {
@@ -155,7 +140,6 @@ namespace HandControl.Model.Protobuf {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (TypeWork != other.TypeWork) return false;
       if (EnableEmg != other.EnableEmg) return false;
       if (EnableDisplay != other.EnableDisplay) return false;
       if (EnableGyro != other.EnableGyro) return false;
@@ -166,7 +150,6 @@ namespace HandControl.Model.Protobuf {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (TypeWork != global::HandControl.Model.Protobuf.ModeType.ModeMio) hash ^= TypeWork.GetHashCode();
       if (EnableEmg != false) hash ^= EnableEmg.GetHashCode();
       if (EnableDisplay != false) hash ^= EnableDisplay.GetHashCode();
       if (EnableGyro != false) hash ^= EnableGyro.GetHashCode();
@@ -187,24 +170,20 @@ namespace HandControl.Model.Protobuf {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (TypeWork != global::HandControl.Model.Protobuf.ModeType.ModeMio) {
-        output.WriteRawTag(8);
-        output.WriteEnum((int) TypeWork);
-      }
       if (EnableEmg != false) {
-        output.WriteRawTag(16);
+        output.WriteRawTag(8);
         output.WriteBool(EnableEmg);
       }
       if (EnableDisplay != false) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(16);
         output.WriteBool(EnableDisplay);
       }
       if (EnableGyro != false) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(24);
         output.WriteBool(EnableGyro);
       }
       if (EnableDriver != false) {
-        output.WriteRawTag(40);
+        output.WriteRawTag(32);
         output.WriteBool(EnableDriver);
       }
       if (_unknownFields != null) {
@@ -216,24 +195,20 @@ namespace HandControl.Model.Protobuf {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (TypeWork != global::HandControl.Model.Protobuf.ModeType.ModeMio) {
-        output.WriteRawTag(8);
-        output.WriteEnum((int) TypeWork);
-      }
       if (EnableEmg != false) {
-        output.WriteRawTag(16);
+        output.WriteRawTag(8);
         output.WriteBool(EnableEmg);
       }
       if (EnableDisplay != false) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(16);
         output.WriteBool(EnableDisplay);
       }
       if (EnableGyro != false) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(24);
         output.WriteBool(EnableGyro);
       }
       if (EnableDriver != false) {
-        output.WriteRawTag(40);
+        output.WriteRawTag(32);
         output.WriteBool(EnableDriver);
       }
       if (_unknownFields != null) {
@@ -245,9 +220,6 @@ namespace HandControl.Model.Protobuf {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (TypeWork != global::HandControl.Model.Protobuf.ModeType.ModeMio) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) TypeWork);
-      }
       if (EnableEmg != false) {
         size += 1 + 1;
       }
@@ -270,9 +242,6 @@ namespace HandControl.Model.Protobuf {
     public void MergeFrom(GetSettings other) {
       if (other == null) {
         return;
-      }
-      if (other.TypeWork != global::HandControl.Model.Protobuf.ModeType.ModeMio) {
-        TypeWork = other.TypeWork;
       }
       if (other.EnableEmg != false) {
         EnableEmg = other.EnableEmg;
@@ -301,22 +270,18 @@ namespace HandControl.Model.Protobuf {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            TypeWork = (global::HandControl.Model.Protobuf.ModeType) input.ReadEnum();
-            break;
-          }
-          case 16: {
             EnableEmg = input.ReadBool();
             break;
           }
-          case 24: {
+          case 16: {
             EnableDisplay = input.ReadBool();
             break;
           }
-          case 32: {
+          case 24: {
             EnableGyro = input.ReadBool();
             break;
           }
-          case 40: {
+          case 32: {
             EnableDriver = input.ReadBool();
             break;
           }
@@ -335,22 +300,18 @@ namespace HandControl.Model.Protobuf {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 8: {
-            TypeWork = (global::HandControl.Model.Protobuf.ModeType) input.ReadEnum();
-            break;
-          }
-          case 16: {
             EnableEmg = input.ReadBool();
             break;
           }
-          case 24: {
+          case 16: {
             EnableDisplay = input.ReadBool();
             break;
           }
-          case 32: {
+          case 24: {
             EnableGyro = input.ReadBool();
             break;
           }
-          case 40: {
+          case 32: {
             EnableDriver = input.ReadBool();
             break;
           }
@@ -390,8 +351,6 @@ namespace HandControl.Model.Protobuf {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public SetSettings(SetSettings other) : this() {
-      typeWork_ = other.typeWork_;
-      telemetryFrequency_ = other.telemetryFrequency_;
       enableEmg_ = other.enableEmg_;
       enableDisplay_ = other.enableDisplay_;
       enableGyro_ = other.enableGyro_;
@@ -405,30 +364,8 @@ namespace HandControl.Model.Protobuf {
       return new SetSettings(this);
     }
 
-    /// <summary>Field number for the "type_work" field.</summary>
-    public const int TypeWorkFieldNumber = 1;
-    private global::HandControl.Model.Protobuf.ModeType typeWork_ = global::HandControl.Model.Protobuf.ModeType.ModeMio;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public global::HandControl.Model.Protobuf.ModeType TypeWork {
-      get { return typeWork_; }
-      set {
-        typeWork_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "telemetry_frequency" field.</summary>
-    public const int TelemetryFrequencyFieldNumber = 2;
-    private int telemetryFrequency_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int TelemetryFrequency {
-      get { return telemetryFrequency_; }
-      set {
-        telemetryFrequency_ = value;
-      }
-    }
-
     /// <summary>Field number for the "enable_emg" field.</summary>
-    public const int EnableEmgFieldNumber = 3;
+    public const int EnableEmgFieldNumber = 1;
     private bool enableEmg_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool EnableEmg {
@@ -439,7 +376,7 @@ namespace HandControl.Model.Protobuf {
     }
 
     /// <summary>Field number for the "enable_display" field.</summary>
-    public const int EnableDisplayFieldNumber = 4;
+    public const int EnableDisplayFieldNumber = 2;
     private bool enableDisplay_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool EnableDisplay {
@@ -450,7 +387,7 @@ namespace HandControl.Model.Protobuf {
     }
 
     /// <summary>Field number for the "enable_gyro" field.</summary>
-    public const int EnableGyroFieldNumber = 5;
+    public const int EnableGyroFieldNumber = 3;
     private bool enableGyro_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool EnableGyro {
@@ -461,7 +398,7 @@ namespace HandControl.Model.Protobuf {
     }
 
     /// <summary>Field number for the "enable_driver" field.</summary>
-    public const int EnableDriverFieldNumber = 6;
+    public const int EnableDriverFieldNumber = 4;
     private bool enableDriver_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool EnableDriver {
@@ -472,7 +409,7 @@ namespace HandControl.Model.Protobuf {
     }
 
     /// <summary>Field number for the "power_off" field.</summary>
-    public const int PowerOffFieldNumber = 7;
+    public const int PowerOffFieldNumber = 5;
     private bool powerOff_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public bool PowerOff {
@@ -495,8 +432,6 @@ namespace HandControl.Model.Protobuf {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (TypeWork != other.TypeWork) return false;
-      if (TelemetryFrequency != other.TelemetryFrequency) return false;
       if (EnableEmg != other.EnableEmg) return false;
       if (EnableDisplay != other.EnableDisplay) return false;
       if (EnableGyro != other.EnableGyro) return false;
@@ -508,8 +443,6 @@ namespace HandControl.Model.Protobuf {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (TypeWork != global::HandControl.Model.Protobuf.ModeType.ModeMio) hash ^= TypeWork.GetHashCode();
-      if (TelemetryFrequency != 0) hash ^= TelemetryFrequency.GetHashCode();
       if (EnableEmg != false) hash ^= EnableEmg.GetHashCode();
       if (EnableDisplay != false) hash ^= EnableDisplay.GetHashCode();
       if (EnableGyro != false) hash ^= EnableGyro.GetHashCode();
@@ -531,32 +464,24 @@ namespace HandControl.Model.Protobuf {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (TypeWork != global::HandControl.Model.Protobuf.ModeType.ModeMio) {
-        output.WriteRawTag(8);
-        output.WriteEnum((int) TypeWork);
-      }
-      if (TelemetryFrequency != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(TelemetryFrequency);
-      }
       if (EnableEmg != false) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(8);
         output.WriteBool(EnableEmg);
       }
       if (EnableDisplay != false) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(16);
         output.WriteBool(EnableDisplay);
       }
       if (EnableGyro != false) {
-        output.WriteRawTag(40);
+        output.WriteRawTag(24);
         output.WriteBool(EnableGyro);
       }
       if (EnableDriver != false) {
-        output.WriteRawTag(48);
+        output.WriteRawTag(32);
         output.WriteBool(EnableDriver);
       }
       if (PowerOff != false) {
-        output.WriteRawTag(56);
+        output.WriteRawTag(40);
         output.WriteBool(PowerOff);
       }
       if (_unknownFields != null) {
@@ -568,32 +493,24 @@ namespace HandControl.Model.Protobuf {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (TypeWork != global::HandControl.Model.Protobuf.ModeType.ModeMio) {
-        output.WriteRawTag(8);
-        output.WriteEnum((int) TypeWork);
-      }
-      if (TelemetryFrequency != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(TelemetryFrequency);
-      }
       if (EnableEmg != false) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(8);
         output.WriteBool(EnableEmg);
       }
       if (EnableDisplay != false) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(16);
         output.WriteBool(EnableDisplay);
       }
       if (EnableGyro != false) {
-        output.WriteRawTag(40);
+        output.WriteRawTag(24);
         output.WriteBool(EnableGyro);
       }
       if (EnableDriver != false) {
-        output.WriteRawTag(48);
+        output.WriteRawTag(32);
         output.WriteBool(EnableDriver);
       }
       if (PowerOff != false) {
-        output.WriteRawTag(56);
+        output.WriteRawTag(40);
         output.WriteBool(PowerOff);
       }
       if (_unknownFields != null) {
@@ -605,12 +522,6 @@ namespace HandControl.Model.Protobuf {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (TypeWork != global::HandControl.Model.Protobuf.ModeType.ModeMio) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) TypeWork);
-      }
-      if (TelemetryFrequency != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(TelemetryFrequency);
-      }
       if (EnableEmg != false) {
         size += 1 + 1;
       }
@@ -636,12 +547,6 @@ namespace HandControl.Model.Protobuf {
     public void MergeFrom(SetSettings other) {
       if (other == null) {
         return;
-      }
-      if (other.TypeWork != global::HandControl.Model.Protobuf.ModeType.ModeMio) {
-        TypeWork = other.TypeWork;
-      }
-      if (other.TelemetryFrequency != 0) {
-        TelemetryFrequency = other.TelemetryFrequency;
       }
       if (other.EnableEmg != false) {
         EnableEmg = other.EnableEmg;
@@ -673,30 +578,22 @@ namespace HandControl.Model.Protobuf {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            TypeWork = (global::HandControl.Model.Protobuf.ModeType) input.ReadEnum();
-            break;
-          }
-          case 16: {
-            TelemetryFrequency = input.ReadInt32();
-            break;
-          }
-          case 24: {
             EnableEmg = input.ReadBool();
             break;
           }
-          case 32: {
+          case 16: {
             EnableDisplay = input.ReadBool();
             break;
           }
-          case 40: {
+          case 24: {
             EnableGyro = input.ReadBool();
             break;
           }
-          case 48: {
+          case 32: {
             EnableDriver = input.ReadBool();
             break;
           }
-          case 56: {
+          case 40: {
             PowerOff = input.ReadBool();
             break;
           }
@@ -715,30 +612,22 @@ namespace HandControl.Model.Protobuf {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 8: {
-            TypeWork = (global::HandControl.Model.Protobuf.ModeType) input.ReadEnum();
-            break;
-          }
-          case 16: {
-            TelemetryFrequency = input.ReadInt32();
-            break;
-          }
-          case 24: {
             EnableEmg = input.ReadBool();
             break;
           }
-          case 32: {
+          case 16: {
             EnableDisplay = input.ReadBool();
             break;
           }
-          case 40: {
+          case 24: {
             EnableGyro = input.ReadBool();
             break;
           }
-          case 48: {
+          case 32: {
             EnableDriver = input.ReadBool();
             break;
           }
-          case 56: {
+          case 40: {
             PowerOff = input.ReadBool();
             break;
           }

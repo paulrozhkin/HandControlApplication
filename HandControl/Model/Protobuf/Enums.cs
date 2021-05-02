@@ -24,31 +24,24 @@ namespace HandControl.Model.Protobuf {
     static EnumsReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "CgtlbnVtcy5wcm90bxIFZW51bXMqOgoITW9kZVR5cGUSDAoITU9ERV9NSU8Q",
-            "ABIRCg1NT0RFX0NPTU1BTkRTEAESDQoJTU9ERV9BVVRPEAIqpQEKEE1vZHVs",
-            "ZVN0YXR1c1R5cGUSIAocTU9EVUxFX1NUQVRVU19JTklUSUFMSVpBVElPThAA",
-            "EhYKEk1PRFVMRV9TVEFUVVNfV09SSxABEhcKE01PRFVMRV9TVEFUVVNfRVJS",
-            "T1IQAhIiCh5NT0RVTEVfU1RBVFVTX0NPTk5FQ1RJT05fRVJST1IQAxIaChZN",
-            "T0RVTEVfU1RBVFVTX0RJU0FCTEVEEAQqygEKEERyaXZlclN0YXR1c1R5cGUS",
-            "IAocRFJJVkVSX1NUQVRVU19JTklUSUFMSVpBVElPThAAEhcKE0RSSVZFUl9T",
-            "VEFUVVNfRVJST1IQARIiCh5EUklWRVJfU1RBVFVTX0NPTk5FQ1RJT05fRVJS",
-            "T1IQAhIaChZEUklWRVJfU1RBVFVTX0RJU0FCTEVEEAMSFwoTRFJJVkVSX1NU",
-            "QVRVU19TTEVFUBAEEiIKHkRSSVZFUl9TVEFUVVNfU0VUVElOR19QT1NJVElP",
-            "ThAFQh2qAhpIYW5kQ29udHJvbC5Nb2RlbC5Qcm90b2J1ZmIGcHJvdG8z"));
+            "CgtlbnVtcy5wcm90bxIFZW51bXMqpQEKEE1vZHVsZVN0YXR1c1R5cGUSIAoc",
+            "TU9EVUxFX1NUQVRVU19JTklUSUFMSVpBVElPThAAEhYKEk1PRFVMRV9TVEFU",
+            "VVNfV09SSxABEhcKE01PRFVMRV9TVEFUVVNfRVJST1IQAhIiCh5NT0RVTEVf",
+            "U1RBVFVTX0NPTk5FQ1RJT05fRVJST1IQAxIaChZNT0RVTEVfU1RBVFVTX0RJ",
+            "U0FCTEVEEAQqygEKEERyaXZlclN0YXR1c1R5cGUSIAocRFJJVkVSX1NUQVRV",
+            "U19JTklUSUFMSVpBVElPThAAEhcKE0RSSVZFUl9TVEFUVVNfRVJST1IQARIi",
+            "Ch5EUklWRVJfU1RBVFVTX0NPTk5FQ1RJT05fRVJST1IQAhIaChZEUklWRVJf",
+            "U1RBVFVTX0RJU0FCTEVEEAMSFwoTRFJJVkVSX1NUQVRVU19TTEVFUBAEEiIK",
+            "HkRSSVZFUl9TVEFUVVNfU0VUVElOR19QT1NJVElPThAFQh2qAhpIYW5kQ29u",
+            "dHJvbC5Nb2RlbC5Qcm90b2J1ZmIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::HandControl.Model.Protobuf.ModeType), typeof(global::HandControl.Model.Protobuf.ModuleStatusType), typeof(global::HandControl.Model.Protobuf.DriverStatusType), }, null, null));
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::HandControl.Model.Protobuf.ModuleStatusType), typeof(global::HandControl.Model.Protobuf.DriverStatusType), }, null, null));
     }
     #endregion
 
   }
   #region Enums
-  public enum ModeType {
-    [pbr::OriginalName("MODE_MIO")] ModeMio = 0,
-    [pbr::OriginalName("MODE_COMMANDS")] ModeCommands = 1,
-    [pbr::OriginalName("MODE_AUTO")] ModeAuto = 2,
-  }
-
   public enum ModuleStatusType {
     [pbr::OriginalName("MODULE_STATUS_INITIALIZATION")] ModuleStatusInitialization = 0,
     [pbr::OriginalName("MODULE_STATUS_WORK")] ModuleStatusWork = 1,

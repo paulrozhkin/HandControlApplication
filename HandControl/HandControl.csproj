@@ -183,7 +183,9 @@
     <Compile Include="Model\Enums\ModeType.cs" />
     <Compile Include="Model\Enums\ModuleStatus.cs" />
     <Compile Include="Model\Protobuf\Enums.cs" />
+    <Compile Include="Model\Protobuf\Errors.cs" />
     <Compile Include="Model\Protobuf\Gestures.cs" />
+    <Compile Include="Model\Protobuf\Patterns.cs" />
     <Compile Include="Model\Protobuf\Settings.cs" />
     <Compile Include="Model\Protobuf\Telemetry.cs" />
     <Compile Include="Model\Protobuf\Uuid.cs" />
