@@ -11,7 +11,7 @@ namespace HandControl.Services.IODevice
 {
     public class ProtocolParser : IProtocolParser
     {
-        private SemaphoreSlim _receiveSemaphoreSlim = new SemaphoreSlim(1);
+        private readonly SemaphoreSlim _receiveSemaphoreSlim = new SemaphoreSlim(1);
 
         public ProtocolParser()
         {

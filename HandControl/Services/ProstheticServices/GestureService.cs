@@ -90,7 +90,13 @@ namespace HandControl.Services.ProstheticServices
                     GetAbsentAndOutDatedGestures(getGesturesRemote.Gestures, getLocalGestures.Gestures);
 
                 var (absentRemote, outdatedRemote) =
-                    GetAbsentAndOutDatedGestures(getGesturesRemote.Gestures, getLocalGestures.Gestures);
+                    GetAbsentAndOutDatedGestures(getLocalGestures.Gestures, getLocalGestures.Gestures);
+
+                //foreach (var gesture in absentRemote.Concat(outdatedRemote))
+                //{
+                //    await _prostheticConnector.SaveGesturesAsync(new SaveGestureDto()
+                //        { Gesture = gesture, TimeSync = newTimeSync });
+                //}
 
                 foreach (var gesture in absentLocal.Concat(outdatedLocal))
                 {

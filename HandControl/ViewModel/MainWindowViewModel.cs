@@ -58,13 +58,8 @@ namespace HandControl.ViewModel
 
             gestureService.Gestures.ObserveOn(Application.Current.Dispatcher).Subscribe(GestureAddOrUpdateHandler);
 
-            //IEntitySpecification<GestureModel> specGetByAll = new GesturesSpecificationByAll();
-
-            //ListGesture = new ObservableCollection<GestureModel>(_gestureRepositoryField.Query(specGetByAll));
             ListGesture = new ObservableCollection<GestureModel>();
             ListGestureView = CollectionViewSource.GetDefaultView(ListGesture);
-
-            //SortGestures(ListGesture, 0, ListGesture.Count() - 1);
         }
 
         private void GestureAddOrUpdateHandler(GestureModel gesture)

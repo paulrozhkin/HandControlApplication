@@ -101,7 +101,7 @@ namespace HandControl.Services.IODevice.Bluetooth
 
                     return true;
                 }
-                catch
+                catch (Exception e)
                 {
                     return false;
                 }
@@ -151,9 +151,6 @@ namespace HandControl.Services.IODevice.Bluetooth
                     BluetoothStreamReadHandler, _bluetoothStream);
 
                 _receivedDataSubject.OnNext(data);
-
-                Console.WriteLine("BYTES RECEIVED:{0}", bytesRead);
-                Console.WriteLine("DATA:{0}", data);
             }
         }
 
