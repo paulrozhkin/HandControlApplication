@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AutoFixture;
 using HandControl.Model;
@@ -277,6 +278,75 @@ namespace HandControl.Tests
 
             // Assert
             Assert.IsNotNull(getTelemetryDto.Telemetry);
+        }
+
+        [TestMethod]
+        public void GetMioPatternsMapTest()
+        {
+            // Arrange
+            var mapper = new MapperFabric().CreateMapper();
+
+            var id = Guid.NewGuid();
+
+            var getMioPatterns = new GetMioPatterns()
+            {
+                Patterns =
+                {
+                    new MioPattern()
+                    {
+                        GestureId = new UUID()
+                        {
+                            Value = id.ToString()
+                        },
+                        Pattern = 1
+                    }
+                }
+            };
+
+            // Act
+            var result = mapper.Map<GetMioPatterns, GetMioPatternsDto>(getMioPatterns);
+
+            // Assert
+            Assert.AreEqual(getMioPatterns.Patterns.Count, result.Patterns.Count());
+
+            var resultPatternDto = result.Patterns.First();
+            var expectedPattern = getMioPatterns.Patterns.First();
+            Assert.AreEqual(id, resultPatternDto.GestureId);
+            Assert.AreEqual(expectedPattern.Pattern, resultPatternDto.Pattern);
+        }
+
+        [TestMethod]
+        public void SetMioPatternsMapTest()
+        {
+            // Arrange
+            var mapper = new MapperFabric().CreateMapper();
+
+            var id = Guid.NewGuid();
+
+            var patternsDto = new List<MioPatternDto>
+            {
+                new MioPatternDto()
+                {
+                    GestureId = id,
+                    Pattern = 1
+                }
+            };
+
+            var setMioPatternsDto = new SetMioPatternsDto()
+            {
+                Patterns = patternsDto
+            };
+
+            // Act
+            var result = mapper.Map<SetMioPatternsDto, SetMioPatterns>(setMioPatternsDto);
+
+            // Assert
+            Assert.AreEqual(setMioPatternsDto.Patterns.Count(), result.Patterns.Count);
+
+            var resultPatterns = result.Patterns.First();
+            var expectedPatterns = setMioPatternsDto.Patterns.First();
+            Assert.AreEqual(expectedPatterns.GestureId.ToString(), resultPatterns.GestureId.Value);
+            Assert.AreEqual(expectedPatterns.Pattern, resultPatterns.Pattern);
         }
     }
 }

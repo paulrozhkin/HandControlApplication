@@ -44,6 +44,7 @@ namespace HandControl
             containerRegistry.RegisterSingleton<IIoDevice, DeviceBluetooth>();
             containerRegistry.RegisterSingleton<IProstheticConnector, ProstheticConnector>();
             containerRegistry.RegisterSingleton<IProstheticManager, ProstheticManager>();
+            containerRegistry.RegisterSingleton<IMioPatternsService, MioPatternsService>();
         }
     }
 }

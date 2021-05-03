@@ -65,6 +65,18 @@ namespace HandControl.Services.Mappers
                 cfg.CreateMap<StartTelemetryDto, StartTelemetry>();
                 cfg.CreateMap<GetTelemetry, GetTelemetryDto>();
 
+                cfg.CreateMap<MioPatternDto, MioPattern>()
+                    .ForMember(dest => dest.GestureId,
+                        opt => opt.MapFrom(src => new UUID() { Value = src.GestureId.ToString() }));
+
+                cfg.CreateMap<MioPattern, MioPatternDto>()
+                    .ForMember(dest => dest.GestureId,
+                        opt => opt.MapFrom(src => Guid.Parse(src.GestureId.Value)));
+
+                cfg.CreateMap<GetMioPatterns, GetMioPatternsDto>();
+
+                cfg.CreateMap<SetMioPatternsDto, SetMioPatterns>();
+
                 // Dto to Models
                 cfg.CreateMap<GestureActionDto, GestureModel.ActionModel>()
                     .ForMember(dest => dest.LittleFinger,

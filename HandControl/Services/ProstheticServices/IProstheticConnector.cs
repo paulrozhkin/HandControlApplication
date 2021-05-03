@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Windows.Documents;
 using HandControl.Model.Dto;
 
 namespace HandControl.Services.ProstheticServices
@@ -35,5 +37,9 @@ namespace HandControl.Services.ProstheticServices
         Task StartTelemetryAsync(int intervalMs);
 
         Task StopTelemetryAsync();
+
+        Task<GetMioPatternsDto> GetMioPatternsAsync();
+
+        Task SetMioPatternsAsync(SetMioPatternsDto mioPatterns);
     }
 }

@@ -68,14 +68,14 @@ namespace HandControl.Services.ProstheticServices
 
         public async Task<GetGesturesDto> GetGesturesAsync()
         {
-            var response = await _prostheticDevice.SendToDeviceAsync(CommandType.GetGestures);
+            var response = await _prostheticDevice.SendToDeviceAsync(CommandType.GetGestures).ConfigureAwait(false);
             var protobufModel = GetGestures.Parser.ParseFrom(response);
             return _mapper.Map<GetGestures, GetGesturesDto>(protobufModel);
         }
 
         public async Task<GetSettingsDto> GetSettingsAsync()
         {
-            var response = await _prostheticDevice.SendToDeviceAsync(CommandType.GetSettings);
+            var response = await _prostheticDevice.SendToDeviceAsync(CommandType.GetSettings).ConfigureAwait(false);
             var protobufModel = GetSettings.Parser.ParseFrom(response);
             return _mapper.Map<GetSettings, GetSettingsDto>(protobufModel);
         }
@@ -94,7 +94,7 @@ namespace HandControl.Services.ProstheticServices
 
         public async Task<TelemetryDto> GetTelemetryAsync()
         {
-            var response = await _prostheticDevice.SendToDeviceAsync(CommandType.GetTelemetry);
+            var response = await _prostheticDevice.SendToDeviceAsync(CommandType.GetTelemetry).ConfigureAwait(false);
             var protobufModel = GetTelemetry.Parser.ParseFrom(response);
             return _mapper.Map<Telemetry, TelemetryDto>(protobufModel.Telemetry);
         }
@@ -113,6 +113,18 @@ namespace HandControl.Services.ProstheticServices
         public Task StopTelemetryAsync()
         {
             return _prostheticDevice.SendToDeviceAsync(CommandType.StopTelemetry, null);
+        }
+
+        public async Task<GetMioPatternsDto> GetMioPatternsAsync()
+        {
+            var response = await _prostheticDevice.SendToDeviceAsync(CommandType.GetMioPatterns).ConfigureAwait(false);
+            var protobufModel = GetMioPatterns.Parser.ParseFrom(response);
+            return _mapper.Map<GetMioPatterns, GetMioPatternsDto>(protobufModel);
+        }
+
+        public Task SetMioPatternsAsync(SetMioPatternsDto mioPatterns)
+        {
+            throw new NotImplementedException();
         }
     }
 }

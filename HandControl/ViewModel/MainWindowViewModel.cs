@@ -15,6 +15,8 @@ using System.Windows.Input;
 using HandControl.Model;
 using HandControl.Services;
 using HandControl.Services.ProstheticServices;
+using HandControl.View;
+using MaterialDesignThemes.Wpf;
 
 namespace HandControl.ViewModel
 {
@@ -206,19 +208,19 @@ namespace HandControl.ViewModel
         }
 
         /// <summary>
+        ///     Gets команду удаления жеста.
+        /// </summary>
+        public ICommand ShowMioSettingsCommand
+        {
+            get { return new RelayCommand(obj => ShowMioSettingsAsync()); }
+        }
+
+        /// <summary>
         ///     Gets команду добавления жеста.
         /// </summary>
         public ICommand AddGestureCommand
         {
             get { return new RelayCommand(obj => AddGesture()); }
-        }
-
-        /// <summary>
-        ///     Gets команду обработки нажатия на кнопку работы с протезом.
-        /// </summary>
-        public ICommand HandCommand
-        {
-            get { return new RelayCommand(obj => HandHandler()); }
         }
 
         /// <summary>
@@ -377,12 +379,24 @@ namespace HandControl.ViewModel
         ///     Обработчик действия с протезом руки. Пока что, возможно, нужен для тестов.
         ///     //TODO: потом убрать
         /// </summary>
-        private async void HandHandler()
+        private async void ShowMioSettingsAsync()
         {
             //var gestures = await Prosthetic.GetGestures();
             ////ProstheticManager.GetInstance().ExecuteTheGesture("Сжать");
             ////Prosthetic.SaveGestures(ListGesture);
             ////ProstheticManager.GetInstance().ExecuteTheGesture("Сжать");
+            ///
+
+            if (!IsConnected)
+                return;
+
+            var view = new MioPatternsSettingsView()
+            {
+                DataContext = new MioPatternsSettingsViewModel(ListGesture.ToList(), Prosthetic.MioPatternsService)
+            };
+
+            //show the dialog
+            var result = await DialogHost.Show(view, "RootDialog");
         }
 
         /// <summary>

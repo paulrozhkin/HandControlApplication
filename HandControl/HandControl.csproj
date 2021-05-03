@@ -108,6 +108,7 @@
     </Reference>
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Memory.4.5.4\lib\net461\System.Memory.dll</HintPath>
     </Reference>
@@ -166,7 +167,10 @@
     </ApplicationDefinition>
     <Compile Include="Model\BaseModel.cs" />
     <Compile Include="Model\BluetoothDto\PackageDto.cs" />
+    <Compile Include="Model\Dto\GetMioPatternsDto.cs" />
     <Compile Include="Model\Dto\GetTelemetryDto.cs" />
+    <Compile Include="Model\Dto\MioPatternDto.cs" />
+    <Compile Include="Model\Dto\SetMioPatternsDto.cs" />
     <Compile Include="Model\Dto\SetSettingsDto.cs" />
     <Compile Include="Model\Dto\SetPositionsDto.cs" />
     <Compile Include="Model\Dto\GestureActionDto.cs" />
@@ -199,6 +203,7 @@
     <Compile Include="Services\IFileSystemFacade.cs" />
     <Compile Include="Services\ProstheticServices\IGestureService.cs" />
     <Compile Include="Services\IODevice\Bluetooth\DeviceBluetooth.cs" />
+    <Compile Include="Services\ProstheticServices\IMioPatternsService.cs" />
     <Compile Include="Services\ProstheticServices\IProstheticConnector.cs" />
     <Compile Include="Services\IODevice\IProtocolParser.cs" />
     <Compile Include="Services\IODevice\Bluetooth\IBluetoothService.cs" />
@@ -209,7 +214,11 @@
     <Compile Include="Services\ProstheticServices\IProstheticManager.cs" />
     <Compile Include="Services\ProstheticServices\ProstheticConnector.cs" />
     <Compile Include="Services\UnixTimestampConverter.cs" />
+    <Compile Include="ViewModel\MioPatternsSettingsViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
+    <Compile Include="View\MioPatternsSettingsView.xaml.cs">
+      <DependentUpon>MioPatternsSettingsView.xaml</DependentUpon>
+    </Compile>
     <Page Include="View\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -233,6 +242,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\MioPatternsSettingsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

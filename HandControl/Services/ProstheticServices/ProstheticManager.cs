@@ -5,9 +5,6 @@
 // -------------------------------------------------------------------------------------
 
 using System;
-using System.Diagnostics;
-using System.Reactive.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using HandControl.Model.Dto;
 
@@ -24,6 +21,7 @@ namespace HandControl.Services.ProstheticServices
         #region Fields
 
         private readonly IProstheticConnector _prostheticConnector;
+        private readonly IMioPatternsService _mioPatternsService;
         private GetSettingsDto _settings;
 
         #endregion
@@ -33,10 +31,12 @@ namespace HandControl.Services.ProstheticServices
         /// <summary>
         ///     Initializes a new instance of the <see cref="ProstheticManager" /> class.
         /// </summary>
-        public ProstheticManager(IGestureService gestureService, IProstheticConnector prostheticConnector)
+        public ProstheticManager(IGestureService gestureService, IProstheticConnector prostheticConnector,
+            IMioPatternsService mioPatternsService)
         {
             GestureService = gestureService ?? throw new ArgumentNullException(nameof(gestureService));
             _prostheticConnector = prostheticConnector ?? throw new ArgumentNullException(nameof(prostheticConnector));
+            _mioPatternsService = mioPatternsService ?? throw new ArgumentNullException(nameof(mioPatternsService));
             TelemetryReceived.Subscribe(TelemetryReceivedHandler);
         }
 
@@ -50,20 +50,24 @@ namespace HandControl.Services.ProstheticServices
 
         public IGestureService GestureService { get; }
 
+        public IMioPatternsService MioPatternsService { get; }
+
         #endregion
 
         #region Methods
 
         public async Task ConnectAsync()
         {
-            await _prostheticConnector.ConnectAsync();
-            _settings = await _prostheticConnector.GetSettingsAsync();
+            await _prostheticConnector.ConnectAsync().ConfigureAwait(false);
+            _settings = await _prostheticConnector.GetSettingsAsync().ConfigureAwait(false);
 
-            var telemetryDto = await _prostheticConnector.GetTelemetryAsync();
+            var telemetryDto = await _prostheticConnector.GetTelemetryAsync().ConfigureAwait(false);
             if (telemetryDto.LastTimeSync != GestureService.LastTimeSync)
             {
-                await GestureService.SyncGesturesAsync();
+                await GestureService.SyncGesturesAsync().ConfigureAwait(false);
             }
+
+            await MioPatternsService.GetMioPatternsAsync().ConfigureAwait(false);
         }
 
         private async void TelemetryReceivedHandler(TelemetryDto telemetryDto)
