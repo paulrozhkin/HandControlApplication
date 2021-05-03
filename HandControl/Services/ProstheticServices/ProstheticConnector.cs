@@ -124,7 +124,8 @@ namespace HandControl.Services.ProstheticServices
 
         public Task SetMioPatternsAsync(SetMioPatternsDto mioPatterns)
         {
-            throw new NotImplementedException();
+            var protobufModel = _mapper.Map<SetMioPatternsDto, SetMioPatterns>(mioPatterns);
+            return _prostheticDevice.SendToDeviceAsync(CommandType.SetMioPatterns, protobufModel.ToByteArray());
         }
     }
 }

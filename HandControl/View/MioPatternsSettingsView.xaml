@@ -24,10 +24,10 @@
                    Foreground="White" Grid.Row="0"
                    Text="Настройка паттернов" />
 
-        <ListView Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" ItemsSource="{Binding MioSettings}">
-            <ListView.ItemTemplate>
+        <ItemsControl Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top" ItemsSource="{Binding MioSettings}">
+            <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
+                    <Grid Margin="20 10 20 20">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="1*" />
                             <ColumnDefinition Width="2*" />
@@ -36,37 +36,64 @@
                         <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center"
                                    Text="{Binding Pattern, StringFormat={}Паттерн {0}:}" />
                         <ComboBox Grid.Column="1"
-                                  Margin="10 0 0 0"
+                                  MinWidth="100"
+                                  Margin="20 0 0 0"
                                   ItemsSource="{Binding ElementName=SettingsView, Path=DataContext.AllGestures}"
-                                  SelectedItem="{Binding Gesture}" />
+                                  SelectedItem="{Binding Gesture}"
+                                  Style="{StaticResource MaterialDesignFloatingHintComboBox}"
+                                  wpf:ColorZoneAssist.Mode="Inverted"
+                                  wpf:HintAssist.Hint="Выберите жест"
+                                  DisplayMemberPath="Name">
+                            <ComboBox.Resources>
+                                <SolidColorBrush x:Key="MaterialDesignPaper" Color="White"/>
+                            </ComboBox.Resources>
+
+                            <ComboBox.ItemContainerStyle>
+                                <Style TargetType="{x:Type ComboBoxItem}"
+                                       BasedOn="{StaticResource MaterialDesignComboBoxItemStyle}">
+                                    <Setter Property="Background" Value="Black" />
+                                </Style>
+                            </ComboBox.ItemContainerStyle>
+                        </ComboBox>
                     </Grid>
                 </DataTemplate>
-            </ListView.ItemTemplate>
+            </ItemsControl.ItemTemplate>
 
-            <ListBox.Style>
-                <Style TargetType="{x:Type ListBox}" BasedOn="{StaticResource MaterialDesignListBox}">
+            <ItemsControl.Style>
+                <Style TargetType="{x:Type ItemsControl}" >
                     <Setter Property="Foreground" Value="White"/>
-                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Setter Property="Visibility" Value="Visible"/>
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsLoaded}" Value="True">
-                            <Setter Property="Visibility" Value="Visible" />
+                        <DataTrigger Binding="{Binding IsLoaded}" Value="False">
+                            <Setter Property="Visibility" Value="Collapsed" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </ListBox.Style>
-        </ListView>
+            </ItemsControl.Style>
+        </ItemsControl>
 
         <ProgressBar
             Grid.Row="1"
-            Style="{StaticResource MaterialDesignCircularProgressBar}"
             Value="0"
             Height="50"
             Margin="25"
             Width="50"
-            IsIndeterminate="True" />
+            IsIndeterminate="True">
+
+            <ProgressBar.Style>
+                <Style TargetType="{x:Type ProgressBar}" BasedOn="{StaticResource MaterialDesignCircularProgressBar}" >
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsLoaded}" Value="False">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ProgressBar.Style>
+        </ProgressBar>
 
         <Grid Grid.Row="2"
-              Margin="0 16 0 0">
+              Margin="10 10 10 10">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />

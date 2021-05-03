@@ -21,7 +21,6 @@ namespace HandControl.Services.ProstheticServices
         #region Fields
 
         private readonly IProstheticConnector _prostheticConnector;
-        private readonly IMioPatternsService _mioPatternsService;
         private GetSettingsDto _settings;
 
         #endregion
@@ -36,7 +35,7 @@ namespace HandControl.Services.ProstheticServices
         {
             GestureService = gestureService ?? throw new ArgumentNullException(nameof(gestureService));
             _prostheticConnector = prostheticConnector ?? throw new ArgumentNullException(nameof(prostheticConnector));
-            _mioPatternsService = mioPatternsService ?? throw new ArgumentNullException(nameof(mioPatternsService));
+            MioPatternsService = mioPatternsService ?? throw new ArgumentNullException(nameof(mioPatternsService));
             TelemetryReceived.Subscribe(TelemetryReceivedHandler);
         }
 

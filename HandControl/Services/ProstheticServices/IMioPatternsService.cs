@@ -27,29 +27,40 @@ namespace HandControl.Services.ProstheticServices
 
         public async Task<IEnumerable<MioPatternDto>> GetMioPatternsAsync()
         {
-            await _semaphoreSlim.WaitAsync();
-            if (_cache == null)
+            try
             {
-                var result = await _prostheticConnector.GetMioPatternsAsync().ConfigureAwait(false);
-                _cache = result.Patterns;
-            }
+                await _semaphoreSlim.WaitAsync();
 
-            _semaphoreSlim.Release();
+                if (_cache == null)
+                {
+                    var result = await _prostheticConnector.GetMioPatternsAsync().ConfigureAwait(false);
+                    _cache = result.Patterns;
+                }
+            }
+            finally
+            {
+                _semaphoreSlim.Release();
+            }
 
             return _cache;
         }
 
         public async Task SetMioPatternsAsync(IEnumerable<MioPatternDto> mioPatterns)
         {
-            await _semaphoreSlim.WaitAsync();
-            var mioPatternDto = mioPatterns.ToList();
-            _cache = mioPatternDto;
+            try
+            {
+                await _semaphoreSlim.WaitAsync();
+                var mioPatternDto = mioPatterns.ToList();
+                _cache = mioPatternDto;
 
-            var setSettingsDto = new SetMioPatternsDto {Patterns = mioPatternDto};
+                var setSettingsDto = new SetMioPatternsDto {Patterns = mioPatternDto};
 
-            await _prostheticConnector.SetMioPatternsAsync(setSettingsDto).ConfigureAwait(false);
-
-            _semaphoreSlim.Release();
+                await _prostheticConnector.SetMioPatternsAsync(setSettingsDto).ConfigureAwait(false);
+            }
+            finally
+            {
+                _semaphoreSlim.Release();
+            }
         }
     }
 }

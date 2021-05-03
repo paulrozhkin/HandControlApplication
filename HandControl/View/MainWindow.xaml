@@ -429,8 +429,7 @@
                         <ColumnDefinition Width="200" />
                         <ColumnDefinition Width="180" />
                     </Grid.ColumnDefinitions>
-
-
+                    
                     <Grid Grid.Column="2">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="35" />
