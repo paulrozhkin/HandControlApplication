@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using HandControl.Model;
 using HandControl.Model.BluetoothDto;
 using HandControl.Model.Enums;
+using HandControl.Model.Protobuf;
 using InTheHand.Net.Bluetooth;
 using Newtonsoft.Json;
 
@@ -181,6 +182,7 @@ namespace HandControl.Services.IODevice.Bluetooth
                     if (device.DeviceName.Equals(_bluetoothInfo.NameDevice))
                         if (!device.IsConnected)
                         {
+                            
                             _service.Disconnect();
                             IsBluetoothConnected = false;
                             _ = ConnectDeviceAsync();
@@ -211,17 +213,29 @@ namespace HandControl.Services.IODevice.Bluetooth
                 throw new InvalidOperationException("The package was not expected to be received.");
             }
 
-            if (package.Command == CommandType.Error)
-            {
-                _packageResponseCompletionSource.SetException(new Exception("Prosthetic error code"));
-            }
-
             if (package.Crc != package.ReceivedCrc)
             {
                 _packageResponseCompletionSource.SetException(new Exception("Crc not equals"));
             }
-
-            _packageResponseCompletionSource.SetResult(package.Payload);
+            else
+            {
+                if (package.Command == CommandType.Error)
+                {
+                    try
+                    {
+                        var errorProtobuf = Error.Parser.ParseFrom(package.Payload);
+                        _packageResponseCompletionSource.SetException(new Exception($"Prosthetic error code cause: {errorProtobuf.Message}"));
+                    }
+                    catch
+                    {
+                        _packageResponseCompletionSource.SetException(new Exception("Prosthetic error code"));
+                    }
+                }
+                else
+                {
+                    _packageResponseCompletionSource.SetResult(package.Payload);
+                }
+            }
         }
 
         #endregion

@@ -91,5 +91,28 @@ namespace HandControl.Services.ProstheticServices
             var protobufModel = _mapper.Map<UpdateLastTimeSyncDto, UpdateLastTimeSync>(updateLastTimeSyncDto);
             return _prostheticDevice.SendToDeviceAsync(CommandType.UpdateLastTimeSync, protobufModel.ToByteArray());
         }
+
+        public async Task<TelemetryDto> GetTelemetryAsync()
+        {
+            var response = await _prostheticDevice.SendToDeviceAsync(CommandType.GetTelemetry);
+            var protobufModel = GetTelemetry.Parser.ParseFrom(response);
+            return _mapper.Map<Telemetry, TelemetryDto>(protobufModel.Telemetry);
+        }
+
+        public Task StartTelemetryAsync(int intervalMs)
+        {
+            var telemetry = new StartTelemetryDto()
+            {
+                IntervalMs = intervalMs
+            };
+
+            var protobufModel = _mapper.Map<StartTelemetryDto, StartTelemetry>(telemetry);
+            return _prostheticDevice.SendToDeviceAsync(CommandType.StartTelemetry, protobufModel.ToByteArray());
+        }
+
+        public Task StopTelemetryAsync()
+        {
+            return _prostheticDevice.SendToDeviceAsync(CommandType.StopTelemetry, null);
+        }
     }
 }

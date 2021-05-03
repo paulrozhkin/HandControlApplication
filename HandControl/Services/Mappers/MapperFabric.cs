@@ -62,6 +62,9 @@ namespace HandControl.Services.Mappers
                     .ForMember(dest => dest.LastTimeSync,
                         opt => opt.MapFrom(src => UnixTimestampConverter.DateTimeToUnix(src.LastTimeSync)));
 
+                cfg.CreateMap<StartTelemetryDto, StartTelemetry>();
+                cfg.CreateMap<GetTelemetry, GetTelemetryDto>();
+
                 // Dto to Models
                 cfg.CreateMap<GestureActionDto, GestureModel.ActionModel>()
                     .ForMember(dest => dest.LittleFinger,

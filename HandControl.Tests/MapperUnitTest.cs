@@ -7,7 +7,6 @@ using HandControl.Model.Enums;
 using HandControl.Model.Protobuf;
 using HandControl.Services.Mappers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ModeType = HandControl.Model.Enums.ModeType;
 
 namespace HandControl.Tests
 {
@@ -35,7 +34,6 @@ namespace HandControl.Tests
 
             var telemetry = new Telemetry()
             {
-                TelemetryFrequency = 1,
                 EmgStatus = ModuleStatusType.ModuleStatusWork,
                 DisplayStatus = ModuleStatusType.ModuleStatusConnectionError,
                 GyroStatus = ModuleStatusType.ModuleStatusDisabled,
@@ -58,7 +56,6 @@ namespace HandControl.Tests
             var telemetryDto = mapper.Map<Telemetry, TelemetryDto>(telemetry);
 
             // Assert
-            Assert.AreEqual(1, telemetryDto.TelemetryFrequency);
             Assert.AreEqual(ModuleStatus.Work, telemetryDto.EmgStatus);
             Assert.AreEqual(ModuleStatus.ConnectionError, telemetryDto.DisplayStatus);
             Assert.AreEqual(ModuleStatus.Disabled, telemetryDto.GyroStatus);
@@ -86,8 +83,6 @@ namespace HandControl.Tests
                 EnableDriver = true,
                 EnableEmg = false,
                 EnableGyro = true,
-                TypeWork = ModeType.Mio,
-                TelemetryFrequency = 1000,
                 PowerOff = true
             };
 
@@ -99,8 +94,6 @@ namespace HandControl.Tests
             Assert.AreEqual(true, settings.EnableDriver);
             Assert.AreEqual(false, settings.EnableEmg);
             Assert.AreEqual(true, settings.EnableGyro);
-            Assert.AreEqual(Model.Protobuf.ModeType.ModeMio, settings.TypeWork);
-            Assert.AreEqual(1000, settings.TelemetryFrequency);
             Assert.AreEqual(true, settings.PowerOff);
         }
 
@@ -116,7 +109,6 @@ namespace HandControl.Tests
                 EnableDriver = true,
                 EnableEmg = false,
                 EnableGyro = true,
-                TypeWork = Model.Protobuf.ModeType.ModeMio
             };
 
             // Act
@@ -127,7 +119,6 @@ namespace HandControl.Tests
             Assert.AreEqual(true, settingsDto.EnableDriver);
             Assert.AreEqual(false, settingsDto.EnableEmg);
             Assert.AreEqual(true, settingsDto.EnableGyro);
-            Assert.AreEqual(ModeType.Mio, settingsDto.TypeWork);
         }
 
         [TestMethod]
@@ -259,36 +250,33 @@ namespace HandControl.Tests
         }
 
         [TestMethod]
-        public void GestureDtoToModelMapTest()
+        public void StartTelemetryMapTest()
         {
             // Arrange
             var mapper = new MapperFabric().CreateMapper();
             var fixture = new Fixture();
-            var gestureDto = fixture.Create<GestureDto>();
+            var startTelemetryDto = fixture.Create<StartTelemetryDto>();
 
             // Act
-            var gestureModel = mapper.Map<GestureDto, GestureModel>(gestureDto);
+            var startTelemetry = mapper.Map<StartTelemetryDto, StartTelemetry>(startTelemetryDto);
 
             // Assert
-            Assert.AreEqual(gestureDto.Id, gestureModel.Id);
-            Assert.AreEqual(gestureDto.LastTimeSync, gestureModel.InfoGesture.TimeChange);
-            Assert.AreEqual(gestureDto.Iterable, gestureModel.InfoGesture.IterableGesture);
-            Assert.AreEqual(gestureDto.Repetitions, gestureModel.InfoGesture.NumberOfGestureRepetitions);
-            Assert.AreEqual(gestureDto.Actions.Count(), gestureModel.ListMotions.Count);
+            Assert.AreEqual(startTelemetryDto.IntervalMs, startTelemetry.IntervalMs);
+        }
 
-            var actionsDto = gestureDto.Actions.ToList();
-            for (var i = 0; i < gestureModel.ListMotions.Count; i++)
-            {
-                var actionDtoModel = actionsDto[i];
-                var actionModel = gestureModel.ListMotions[i];
+        [TestMethod]
+        public void GetTelemetryMapTest()
+        {
+            // Arrange
+            var mapper = new MapperFabric().CreateMapper();
+            var fixture = new Fixture();
+            var getTelemetry = fixture.Create<GetTelemetry>();
 
-                Assert.AreEqual(actionDtoModel.LittleFingerPosition, actionModel.LittleFinger);
-                Assert.AreEqual(actionDtoModel.RingFingerPosition, actionModel.RingFinder);
-                Assert.AreEqual(actionDtoModel.MiddleFingerPosition, actionModel.MiddleFinger);
-                Assert.AreEqual(actionDtoModel.PointerFingerPosition, actionModel.PointerFinger);
-                Assert.AreEqual(actionDtoModel.ThumbFingerPosition, actionModel.ThumbFinger);
-                Assert.AreEqual(actionDtoModel.Delay, actionModel.DelMotion);
-            }
+            // Act
+            var getTelemetryDto = mapper.Map<GetTelemetry, GetTelemetryDto>(getTelemetry);
+
+            // Assert
+            Assert.IsNotNull(getTelemetryDto.Telemetry);
         }
     }
 }

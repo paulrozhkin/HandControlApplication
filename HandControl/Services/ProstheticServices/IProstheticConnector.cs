@@ -29,5 +29,11 @@ namespace HandControl.Services.ProstheticServices
         Task SetSettingsAsync(SetSettingsDto setSettingsDto);
 
         Task UpdateLastTimeSyncAsync(UpdateLastTimeSyncDto updateLastTimeSyncDto);
+
+        Task<TelemetryDto> GetTelemetryAsync();
+
+        Task StartTelemetryAsync(int intervalMs);
+
+        Task StopTelemetryAsync();
     }
 }

@@ -5,8 +5,6 @@ namespace HandControl.Model.Dto
 {
     public class TelemetryDto
     {
-        public int TelemetryFrequency { get; set; }
-
         public ModuleStatus EmgStatus { get; set; }
         public ModuleStatus DisplayStatus { get; set; }
 

@@ -166,6 +166,7 @@
     </ApplicationDefinition>
     <Compile Include="Model\BaseModel.cs" />
     <Compile Include="Model\BluetoothDto\PackageDto.cs" />
+    <Compile Include="Model\Dto\GetTelemetryDto.cs" />
     <Compile Include="Model\Dto\SetSettingsDto.cs" />
     <Compile Include="Model\Dto\SetPositionsDto.cs" />
     <Compile Include="Model\Dto\GestureActionDto.cs" />
@@ -176,11 +177,11 @@
     <Compile Include="Model\Dto\SaveGestureDto.cs" />
     <Compile Include="Model\Dto\PerformGestureByIdDto.cs" />
     <Compile Include="Model\Dto\GetSettingsDto.cs" />
+    <Compile Include="Model\Dto\StartTelemetryDto.cs" />
     <Compile Include="Model\Dto\UpdateLastTimeSyncDto.cs" />
     <Compile Include="Model\Enums\CommandType.cs" />
     <Compile Include="Model\Device.cs" />
     <Compile Include="Model\Enums\DriverStatus.cs" />
-    <Compile Include="Model\Enums\ModeType.cs" />
     <Compile Include="Model\Enums\ModuleStatus.cs" />
     <Compile Include="Model\Protobuf\Enums.cs" />
     <Compile Include="Model\Protobuf\Errors.cs" />

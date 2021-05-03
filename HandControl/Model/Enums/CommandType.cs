@@ -8,59 +8,84 @@
         /// <summary>
         ///     Успешное выполнение команды
         /// </summary>
-        Ack = 0x01,
+        Ack = 1,
 
         /// <summary>
         ///     Ошибка выполнения команды
         /// </summary>
-        Error = 0x02,
+        Error = 2,
 
         /// <summary>
         ///     Телеметрия устройства
         /// </summary>
-        Telemetry = 0x03,
+        Telemetry = 3,
 
         /// <summary>
         ///     Получение настроек протеза
         /// </summary>
-        GetSettings = 0x04,
+        GetSettings = 4,
 
 
         /// <summary>
         ///     Установка настроек на протез
         /// </summary>
-        SetSettings = 0x05,
+        SetSettings = 5,
 
         /// <summary>
         ///     Получение всех жестов с протеза.
         /// </summary>
-        GetGestures = 0x06,
+        GetGestures = 6,
 
         /// <summary>
         ///     Сохранение жеста протеза.
         /// </summary>
-        SaveGestures = 0x07,
+        SaveGestures = 7,
 
-        DeleteGestures = 0x08,
+        DeleteGestures = 8,
 
         /// <summary>
         ///     Исполнение жеста по id.
         /// </summary>
-        PerformGestureId = 0x09,
+        PerformGestureId = 9,
 
         /// <summary>
         ///     Исполнение жеста.
         /// </summary>
-        PerformGestureRaw = 0x0A,
+        PerformGestureRaw = 10,
 
         /// <summary>
         ///     Установка переданных положений пальцев на протез.
         /// </summary>
-        SetPositions = 0x0B,
+        SetPositions = 11,
 
         /// <summary>
         ///     Обновить время синхронизации жестов на протезе.
         /// </summary>
-        UpdateLastTimeSync = 0x0C
+        UpdateLastTimeSync = 12,
+
+        /// <summary>
+        ///     Текущая телеметрия протеза.
+        /// </summary>
+        GetTelemetry = 13,
+
+        /// <summary>
+        ///     Начать отправку телеметрии на протезе.
+        /// </summary>
+        StartTelemetry = 14,
+
+        /// <summary>
+        ///     Остановить отправку телеметрии на протезе.
+        /// </summary>
+        StopTelemetry = 15,
+
+        /// <summary>
+        ///     Получить настройки паттернов протеза.
+        /// </summary>
+        GetMioPatterns = 16,
+
+        /// <summary>
+        ///     Установить настройки паттернов протеза.
+        /// </summary>
+        SetMioPatterns = 17,
     }
 }
